@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 const examSchema = new mongoose.Schema({
     exam: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref : 'Exam'
     },
 
     question: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref : 'Question'
     },
 
