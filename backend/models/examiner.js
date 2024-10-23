@@ -7,7 +7,7 @@ const examinerSchema = new mongoose.Schema({
     },
 
     preparedExams: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref : 'Exam'
     }]
 

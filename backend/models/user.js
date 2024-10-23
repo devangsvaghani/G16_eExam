@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
     },
 
     referto: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         refpath: 'role'
     },
 
