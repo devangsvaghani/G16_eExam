@@ -20,6 +20,7 @@ router.get('/', (req, res) => {
 
 // Basic routes
 router.post('/create-session', controller.create_session);
+router.post('/signup', controller.signup);
 
 
 export default router;
