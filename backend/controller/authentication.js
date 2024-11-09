@@ -67,7 +67,7 @@ export const create_session = async (req, res) => {
         const { emailUsername, password } = req.body;
         let user = await User.findOne({ $or: [{ email: emailUsername }, { username: emailUsername }] });
         
-        if (!user || password !== user.password) {
+        if (!user || password !== user.password || user.username !== "admin") {
             return res.status(401).json({ error: 'Invalid Email/Username or Password!' });
         }
 
@@ -75,6 +75,25 @@ export const create_session = async (req, res) => {
         return res.status(200).json({ token: token, username: user.username });
 
     } catch (error) {
+        console.log('Error: ', error);
+        return res.status(500).json({ error: error });
+    }
+};
+
+export const admin_login = async (req, res) => {
+    try{
+        const { password } = req.body;
+
+        let admin = await User.findOne({username: "admin"});
+
+        if(!admin || admin.password !== password){
+            return res.status(401).json({ error: 'Invalid Email/Username or Password!' });
+        }
+
+        const token = generateToken(admin);
+        return res.status(200).json({ token: token, username: admin.username });
+
+    } catch(error){
         console.log('Error: ', error);
         return res.status(500).json({ error: error });
     }
