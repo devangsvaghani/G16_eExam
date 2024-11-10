@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Homepage from './Components/Homepage/Homepage.jsx';
-import Login from './Components/Login/Login.jsx';
+// import Homepage from './Components/Homepage/Homepage.jsx';
+// import Login from './Components/Login/Login.jsx';
 import Dashboard from './Components/Dashboard/Dashboard.jsx';
-import StartExam from './Components/Exam/Startexam.jsx';
-import StudentProfile from './Components/Profile/StudentProfile.jsx';
+// import StartExam from './Components/Exam/Startexam.jsx';
+// import StudentProfile from './Components/Profile/StudentProfile.jsx';
 
 const App = () => {
   return (
@@ -15,9 +15,9 @@ const App = () => {
         <Route path="/login" element={<Login />} />
       </Routes>
     </Router> */}
-    {/* <Dashboard/> */}
+     <Dashboard/> 
     {/* <StartExam/> */}
-    <StudentProfile/>
+   {/* <StudentProfile/>*/}
     </>
   );
 };
