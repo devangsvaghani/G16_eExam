@@ -1,0 +1,205 @@
+/* Global Styles */
+body {
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Profile Card */
+.profile-card {
+    background-color: #F9F7F7; /* Soft white background for profile card */
+    display: flex;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    width: 800px;
+    padding: 10px 15px;
+    animation: fadeIn 0.8s ease-in-out;
+    gap : 20px;
+}
+
+/* Sidebar */
+.sbar {
+    background-color: #DBE2EF; /* Light blue background for sidebar */
+    padding: 10px;
+    width: 40%;
+    border-radius: 10px;
+    text-align: center;
+    order: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.content h2{
+    color:  #3F72AF;
+    text-align: center;
+    font-size: 30px;
+    margin-top: 10px;;
+}
+
+.profile-pic {
+    width: 70%;
+    border-radius: 50%;
+    margin-top: 10px;
+    border: 2px solid #3F72AF;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.profile-pic:hover {
+    border-color: #112D4E;
+    transform: scale(1.05);
+}
+
+.profile-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+    color: #112D4E; /* Dark blue text for sidebar */
+    transition: color 0.3s ease;
+}
+
+.profile-name:hover {
+    color: #3F72AF;
+}
+
+.profile-email {
+    color: #3F72AF; /* Blue-gray for email on sidebar */
+    font-size: 12px;
+}
+
+/* Content */
+.content {
+    flex-grow: 1;
+    order: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+h2 {
+    margin-top: 0;
+    font-size: 22px;
+    color: #112D4E;
+}
+
+/* Form */
+.profile-form {
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #3F72AF; /* Blue background for form fields */
+    padding: 6px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.form-group label {
+    flex: 0 0 100px;
+    text-align: left;
+    font-size: 13px;
+    color: #F9F7F7; /* White text for better contrast on blue fields */
+    font-weight: bold;
+}
+
+.form-group input {
+    flex: 1;
+    padding: 8px;
+    font-size: 13px;
+    border: 1px solid #DBE2EF;
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #3F72AF;
+    box-shadow: 0 0 5px rgba(63, 114, 175, 0.5);
+    outline: none;
+}
+
+/* Save Button */
+.save-button {
+    position: absolute;
+    bottom: 20px;
+    width: 75%;
+    padding: 12px;
+    background-color: #3F72AF;
+    color: #F9F7F7;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.save-button:hover {
+    background-color: #112D4E;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Keyframe Animation for Profile Card */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .profile-card {
+        flex-direction: column;
+        margin-left: 0;
+    }
+
+    .sidebar {
+        width: 100%;
+        order: 2;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        height: auto;
+    }
+
+    .content {
+        order: 1;
+        width: 100%;
+    }
+
+    .form-group {
+        flex-direction: column;
+    }
+
+    .form-group label {
+        text-align: left;
+        width: auto;
+        margin-bottom: 5px;
+    }
+
+    .save-button {
+        position: relative;
+        margin-top: 20px;
+    }
+}
