@@ -1,71 +1,91 @@
-// HomePage.jsx
-import React from 'react';
-import { Link } from 'react-router-dom'; // Import Link for navigation
-import './Homepage.css';
+// Homepage.jsx
+import React, { useState , useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import logo from '../assets/logo.jpg'; // Import the logo
+import logo from '../assets/logo.png';
+import './Homepage.css';
+import Login from '../Login/Login.jsx';
 
 const Homepage = () => {
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+
+  const handleLoginClick = () => {
+    setIsLoginOpen(true);
+    console.log(isLoginOpen);
+  };
+
+  const handleCloseLogin = () => {
+    setIsLoginOpen(false);
+  };
+
+  useEffect(() => {
+    if (isLoginOpen) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+  }, [isLoginOpen])
 
   return (
-    
-    <div className="homepage">
-      <Helmet>
-      <title>Online Examination System</title>
-      <link rel="icon" href={logo} type="image/x-icon" />
-      </Helmet>
-      <header className="header">
-        {/* Add the logo */}
-        <div className="logo-container">
-          <img src={logo} alt="Online Examination System Logo" className="logo" />
-        </div>
-        <h1>Online Examination System</h1>
-        <nav className="navbar">
-          <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#contact">Contact Us</a></li>
-            {/* Use Link for navigation to Login page */}
-            <li><Link to="/login">Login</Link></li>
-          </ul>
-        </nav>
-      </header>
+    <div>
+      <div className={`homepage ${isLoginOpen ? 'blur disable-background' : ''}`}>  
+        <Helmet>
+          <title>Online Examination System</title>
+          <link rel="icon" href={logo} type="image/x-icon" />
+        </Helmet>
 
-      <section className="hero" id="home">
-        <h2>Welcome to the Online Exams</h2>
-        <p>Take and create your tests and assessments from anywhere, anytime.</p>
-        <button className="cta-btn">Get Started</button>
-      </section>
+        <header className="header">
+          <div>
+            <img src={logo} alt="Online Examination System Logo" className="logo" />
+          </div>
+          <h1>Online Examination System</h1>
+          <nav className="navbar">
+            <ul>
+              <li><a href="#home">About</a></li>
+              <li><a href="#contact">Contact Us</a></li>
+              <li onClick={handleLoginClick}><a>Login</a></li> 
+            </ul>
+          </nav>
+        </header>
 
-      <section id="features" className="features">
-        <h3>Features</h3>
-        <div className="feature-grid">
-          <div className="feature-item">
-            <h4>Secure Assessments</h4>
-            <p>Your exams are protected with industry-leading security.</p>
-          </div>
-          <div className="feature-item">
-            <h4>Real-Time Results</h4>
-            <p>Get your scores as soon as you finish your exams.</p>
-          </div>
-          <div className="feature-item">
-            <h4>Multiple Question Types</h4>
-            <p>Supports multiple-choice, descriptive, true/false, and more.</p>
-          </div>
-          <div className="feature-item">
-            <h4>User-Friendly Interface</h4>
-            <p>Easily navigate through your exams with our intuitive UI.</p>
-          </div>
-        </div>
-      </section>
+        <section className="hero" id="home">
+          <h2>Welcome to the Online Exams</h2>
+          <p>Welcome to Online Examination System , a comprehensive online platform designed for creating, managing, and taking exams with ease. Perfect for educators, student and organization, our system offers a secure and intuitive environment for assessments of all kinds. With features like Secure Assessment ,
+          Real-Time Results, Multiple Question Types and User-Friendly Interface. we simplify the examination process while ensuring reliability and data privacy. Online Examination System empowers you to deliver efficient, fair and insightful testing experiences for both examiners and students. Start enhancing your assessment journey today!</p>
+          <button className="cta-btn" onClick={handleLoginClick}>Get Started</button>
+        </section>
 
-      <section id="contact" className="contact">
-        <h3>Contact Us</h3>
-        <p>For any inquiries, please reach out to us at: <strong>online@daiict.ac.in</strong></p>
-      </section>
+        <section id="features" className="features">
+          <h3>Features</h3>
+          <div className="feature-grid">
+            <div className="feature-item">
+              <h4>Exam Scheduling</h4>
+              <p>Schedule exams in advance with automated reminders for students.</p>
+            </div>
+            <div className="feature-item">
+              <h4>Real-Time Results</h4>
+              <p>Get your scores as soon as you finish your exams.</p>
+            </div>
+            <div className="feature-item">
+              <h4>Multiple Question Types</h4>
+              <p>Supports multiple-choice, descriptive, true/false, and more.</p>
+            </div>
+            <div className="feature-item">
+              <h4>User-Friendly Interface</h4>
+              <p>Easily navigate through your exams with our intuitive UI.</p>
+            </div>
+          </div>
+        </section>
 
-      <footer className="footer">
-        <p>&copy; 2024 Online Examination System. All rights reserved.</p>
-      </footer>
+        <section id="contact" className="contact">
+          <h3>Contact Us</h3>
+          <p>For any inquiries, please reach out to us at: <strong>admin@daiict.ac.in</strong></p>
+        </section>
+
+        <footer className="ft">
+          <p>&copy; 2024 Online Examination System. All rights reserved.</p>
+        </footer>
+      </div>
+        {isLoginOpen && <Login onClose={handleCloseLogin} />}  
     </div>
   );
 };

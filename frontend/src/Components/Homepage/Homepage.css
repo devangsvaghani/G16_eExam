@@ -22,16 +22,8 @@
     align-items: center;
   }
   
-  .logo-container {
-    margin-bottom: 10px;
-   
-  
-  }
-  
   .logo {
-    
-    
-    width: 100px;
+    width: 150px;
     height: auto;
   }
   
@@ -68,7 +60,7 @@
   .hero {
     text-align: center;
     background-color: #f8f9fa;
-    padding: 50px 20px;
+    padding: 50px 10%;
   }
   
   .hero h2 {
@@ -97,11 +89,9 @@
   }
   
   .features {
-    
     background-color: white;
     padding: 40px;
     text-align: center;
-  
   }
   
   .features h3 {
@@ -110,21 +100,15 @@
   }
   
   .feature-grid {
-   
-    
-    
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
-    
   }
 
   .feature-item {
-   
     background-color: #f4f4f4;
     padding: 20px;
     border-radius: 10px;
-    
   }
   
   .feature-item h4 {
@@ -147,20 +131,31 @@
     margin-bottom: 20px;
   }
   
-  .footer {
-    background-color: #343a40;
+  .ft{
+    background-color: #2a4a7b;
     color: white;
-    padding: 20px;
     text-align: center;
   }
   
-  .footer p {
-    margin: 0;
-  }
-  /* 
-   */
-   .feature-item:hover{
+  .feature-item:hover{
     background-color: #e8e8e1;
   }
   
+  .homepage {
+    transition: filter 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
   
+  .homepage.blur {
+    filter: blur(5px);
+  }
+  
+  .disable-background {
+    pointer-events: none;
+  }
+  
+.no-scroll {
+  overflow: hidden;
+}
