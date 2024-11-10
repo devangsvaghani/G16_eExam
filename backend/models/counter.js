@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const counterSchema = new Schema({
+const counterSchema = new  mongoose.Schema({
   _id: {
     type: String,
     required: true
