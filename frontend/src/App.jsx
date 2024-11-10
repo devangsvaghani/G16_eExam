@@ -4,6 +4,7 @@ import Homepage from './Components/Homepage/Homepage.jsx';
 import Login from './Components/Login/Login.jsx';
 import Dashboard from './Components/Dashboard/Dashboard.jsx';
 import StartExam from './Components/Exam/Startexam.jsx';
+import StudentProfile from './Components/Profile/StudentProfile.jsx';
 
 const App = () => {
   return (
@@ -15,7 +16,8 @@ const App = () => {
       </Routes>
     </Router> */}
     {/* <Dashboard/> */}
-    <StartExam/>
+    {/* <StartExam/> */}
+    <StudentProfile/>
     </>
   );
 };
