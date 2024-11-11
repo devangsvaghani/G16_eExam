@@ -8,6 +8,9 @@ import Dashboard from './Components/Dashboard/Dashboard.jsx';
 import QuestionBank from './Components/Questions/QuestionBank.jsx';
 import FetchedQuestions from './Components/Questions/FetchedQuestions.jsx';
 import OverallPerformance from './Components/Questions/OverallPerformance.jsx'
+import StudentExamPage from './Components/StudentExamPage/StudentExamPage.jsx';
+import ResultPage from './Components/ResultPage/ResultPage.jsx';
+
 const App = () => {
   return (
     <>
@@ -20,7 +23,9 @@ const App = () => {
     {/* <QuestionBank/> */}
      {/* <Dashboard/>  */}
      {/* <FetchedQuestions /> */}
-     <OverallPerformance />
+     {/* <OverallPerformance /> */}
+     {/* <ResultPage /> */}
+     <StudentExamPage />
     {/* <StartExam/> */}
    {/* <StudentProfile/>*/}
     </>
