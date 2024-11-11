@@ -5,7 +5,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './Components/Dashboard/Dashboard.jsx';
 // import StartExam from './Components/Exam/Startexam.jsx';
 // import StudentProfile from './Components/Profile/StudentProfile.jsx';
-
+import QuestionBank from './Components/Questions/QuestionBank.jsx';
+import FetchedQuestions from './Components/Questions/FetchedQuestions.jsx';
+import OverallPerformance from './Components/Questions/OverallPerformance.jsx'
 const App = () => {
   return (
     <>
@@ -15,7 +17,10 @@ const App = () => {
         <Route path="/login" element={<Login />} />
       </Routes>
     </Router> */}
-     <Dashboard/> 
+    {/* <QuestionBank/> */}
+     {/* <Dashboard/>  */}
+     {/* <FetchedQuestions /> */}
+     <OverallPerformance />
     {/* <StartExam/> */}
    {/* <StudentProfile/>*/}
     </>
