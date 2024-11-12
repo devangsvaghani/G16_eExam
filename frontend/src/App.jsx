@@ -2,15 +2,15 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // import Homepage from './Components/Homepage/Homepage.jsx';
 // import Login from './Components/Login/Login.jsx';
-import Dashboard from './Components/Dashboard/Dashboard.jsx';
+// import Dashboard from './Components/Dashboard/Dashboard.jsx';
 // import StartExam from './Components/Exam/Startexam.jsx';
 // import StudentProfile from './Components/Profile/StudentProfile.jsx';
-import QuestionBank from './Components/Questions/QuestionBank.jsx';
-import FetchedQuestions from './Components/Questions/FetchedQuestions.jsx';
-import OverallPerformance from './Components/Questions/OverallPerformance.jsx'
-import StudentExamPage from './Components/StudentExamPage/StudentExamPage.jsx';
-import ResultPage from './Components/ResultPage/ResultPage.jsx';
-
+// import QuestionBank from './Components/Questions/QuestionBank.jsx';
+// import FetchedQuestions from './Components/Questions/FetchedQuestions.jsx';
+// import OverallPerformance from './Components/Questions/OverallPerformance.jsx'
+// import StudentExamPage from './Components/StudentExamPage/StudentExamPage.jsx';
+// import ResultPage from './Components/ResultPage/ResultPage.jsx';
+import ExaminerProfile from './Components/Profile/ExaminerProfile.jsx';
 const App = () => {
   return (
     <>
@@ -25,9 +25,10 @@ const App = () => {
      {/* <FetchedQuestions /> */}
      {/* <OverallPerformance /> */}
      {/* <ResultPage /> */}
-     <StudentExamPage />
+     {/* <StudentExamPage /> */}
     {/* <StartExam/> */}
    {/* <StudentProfile/>*/}
+   <ExaminerProfile/>
     </>
   );
 };
