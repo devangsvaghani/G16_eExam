@@ -1,32 +1,54 @@
 import mongoose from "mongoose";
 
-const examSchema = new mongoose.Schema({
-    exam: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref : 'Exam'
-    },
-
-    question: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref : 'Question'
-    },
-
-    answer: {
-        type : String,
-        required : true
-    }
-});
-
 const studentSchema = new mongoose.Schema({
-    username: {
-        type : String,
-        required : true
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "User",
     },
 
-    givenExams: [examSchema]
+    batch: {
+        type: Number,
+        required: true
+    },
 
+    branch: {
+        type: String,
+        enum : ['ICT', 'CS', 'MnC', 'EVD'],
+        required: true
+    },
+
+    graduation: {
+        type: String,
+        enum : ['UG' , 'PG'],
+        required: true
+    },
+
+    givenExams: [
+        {
+            exam: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Exam",
+                required: true,
+            },
+            questions: [
+                {
+                    question: {
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: "Question",
+                        required: true,
+                    },
+
+                    answer: { // 0 for first option and so on..
+                        type: Number,
+                        required: true,
+                    },
+                },
+            ],
+        },
+    ],
 });
 
-const Student = mongoose.model('Student',studentSchema);
+const Student = mongoose.model("Student", studentSchema);
 
 export default Student;

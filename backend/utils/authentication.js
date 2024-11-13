@@ -9,11 +9,27 @@ export const generate_otp = () => {
     return otp;
 }
 
+// Generate 8 length random password
+export const generate_password = () => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let password = '';
+    for (let i = 0; i < 8; i++) {
+        password += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return password;
+}
+
+export const generate_student_id = (batch, programType, studentNo) => {
+    const typeCode = programType === 'UG' ? '0' : '1';
+    const studentNumber = studentNo.toString().padStart(4, '0'); // Ensure it's 4 digits
+    return `${batch}${typeCode}${studentNumber}`;
+}
+
 export const send_otp = async (email) => {
     try{
         
         const otp = generate_otp();
-
+        
         const mailOptions = {
             from: process.env.AUTH_EMAIL,
             to: email,

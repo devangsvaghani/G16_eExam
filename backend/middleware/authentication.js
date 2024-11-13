@@ -3,12 +3,11 @@ import { secretKey } from '../config/jwtConfig.js'
 
 export const authenticateToken = (req, res, next) => {
     const authHeader = req.header("Authorization");
-    // const role = req.header("Role");
+
     if(!authHeader) {
         return res.status(401).json({ message: "Missing Token!" });
     }
     let [bearer, token] = authHeader.split(" ");
-    // token = token.replace(/"/g, '');
 
     if(bearer !== "Bearer" || !token) {
         return res.status(401).json({ message: "Invalid token format!" });
@@ -27,12 +26,11 @@ export const authenticateToken = (req, res, next) => {
 
 export const authenticate_student_token = (req, res, next) => {
     const authHeader = req.header("Authorization");
-    // const role = req.header("Role");
+
     if(!authHeader) {
         return res.status(401).json({ message: "Missing Token!" });
     }
     let [bearer, token] = authHeader.split(" ");
-    // token = token.replace(/"/g, '');
 
     if(bearer !== "Bearer" || !token) {
         return res.status(401).json({ message: "Invalid token format!" });
@@ -56,12 +54,11 @@ export const authenticate_student_token = (req, res, next) => {
 
 export const authenticate_examiner_token = (req, res, next) => {
     const authHeader = req.header("Authorization");
-    // const role = req.header("Role");
+
     if(!authHeader) {
         return res.status(401).json({ message: "Missing Token!" });
     }
     let [bearer, token] = authHeader.split(" ");
-    // token = token.replace(/"/g, '');
 
     if(bearer !== "Bearer" || !token) {
         return res.status(401).json({ message: "Invalid token format!" });
@@ -85,12 +82,11 @@ export const authenticate_examiner_token = (req, res, next) => {
 
 export const authenticate_admin_token = (req, res, next) => {
     const authHeader = req.header("Authorization");
-    // const role = req.header("Role");
+
     if(!authHeader) {
         return res.status(401).json({ message: "Missing Token!" });
     }
     let [bearer, token] = authHeader.split(" ");
-    // token = token.replace(/"/g, '');
 
     if(bearer !== "Bearer" || !token) {
         return res.status(401).json({ message: "Invalid token format!" });

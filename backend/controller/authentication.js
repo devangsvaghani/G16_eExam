@@ -1,45 +1,76 @@
 import User from '../models/user.js'
+import Student from '../models/student.js'
+import Examiner from '../models/examiner.js'
 import Otp from '../models/otp.js'
-import {send_otp} from "../utils/authentication.js"
+import { send_otp, generate_password, generate_student_id } from "../utils/authentication.js"
 import { generateToken } from '../config/jwtUtils.js'
 import bcrypt from "bcrypt"
 
-export const create_user = async (req, res) => {
+// Log in for student and examiner
+export const create_session = async (req, res) => {
     try {
-        // console.log(req.body);
-        const { username, email, password, mobileno, dob, role} = req.body;
+        const { emailUsername, password } = req.body;
+        const user = await User.findOne({ $or: [{ email: emailUsername }, { username: emailUsername }] });
 
-        // Basic validations
-        if (!username || !email || !password || !mobileno || !dob || !role) {
-            return res.status(400).json({ error: 'All fields are required!' });
+        const pass_match = await bcrypt.compare(password, user.password);
+        if (!user || user.username === "admin" || !pass_match) {
+            return res.status(401).json({ message: 'Invalid Email/Username or Password!' });
         }
 
-        // Check username length (e.g., minimum 3, maximum 20 characters)
-        if (username.length < 3 || username.length > 20) {
-            return res.status(400).json({ error: 'Username must be between 3 and 20 characters.' });
+        const token = generateToken(user);
+        return res.status(200).json({ token: token, username: user.username, message: "Logged in successfully" });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
+    }
+};
+
+// Log in for Admin
+export const admin_login = async (req, res) => {
+    try{
+        const { password } = req.body;
+
+        const admin = await User.findOne({username: "admin"});
+
+        const pass_match = await bcrypt.compare(password, admin.password);
+        if(!admin || !pass_match){
+            return res.status(401).json({ message: 'Invalid Email/Username or Password!' });
         }
 
-        // Check password length (e.g., minimum 8 characters)
-        if (password.length < 8) {
-            return res.status(400).json({ error: 'Password must be at least 8 characters long.' });
+        const token = generateToken(admin);
+        return res.status(200).json({ token: token, message: "Logged in successfully" });
+
+    } catch(error){
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
+    }
+};
+
+export const create_student = async (req, res) => {
+    try {
+        const { firstname, lastname, middlename, dob, mobileno, email, gender, batch, branch, graduation } = req.body;
+
+        if(!firstname || !dob || !mobileno || !email || !gender || !batch || !branch || !graduation){
+            return res.status(400).json({ message: 'All fields are required!' });
         }
 
         // Email validation (basic regex pattern for email format)
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            return res.status(400).json({ error: 'Invalid email format.' });
+            return res.status(400).json({ message: 'Invalid email format.' });
         }
 
         // Check mobile number length (assuming mobile number should be exactly 10 digits)
         const mobilenoRegex = /^\d{10}$/;
         if (!mobilenoRegex.test(mobileno)) {
-            return res.status(400).json({ error: 'Mobile number must be exactly 10 digits.' });
+            return res.status(400).json({ message: 'Mobile number must be exactly 10 digits.' });
         }
 
         // DOB validation (expecting format 'DD-MM-YYYY')
         const dobRegex = /^\d{2}-\d{2}-\d{4}$/;
         if (!dobRegex.test(dob)) {
-            return res.status(400).json({ error: 'Invalid date of birth format. Use YYYY-MM-DD.' });
+            return res.status(400).json({ message: 'Invalid date of birth format. Use DD-MM-YYYY.' });
         }
 
         const [day, month, year] = dob.split('-').map(Number);
@@ -47,61 +78,159 @@ export const create_user = async (req, res) => {
 
         // Check for valid day, month, and year in dob
         if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
-            return res.status(400).json({ error: 'Invalid date of birth values.' });
+            return res.status(400).json({ message: 'Invalid date of birth values.' });
         }
-  
-        let user = await User.findOne({ $or: [{ email: req.body.email }, { username: req.body.username }] });
-        if (user || role === "Admin") {
-            return res.status(409).json({ error: 'User already exists!'});
-        }
-        
-        user = await User.create(req.body);
 
-        return res.status(201).json({ message: 'User created successfully!' });
+        const role = "Student";
+        const password = generate_password(8);
 
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const number_of_students = await Student.countDocuments();
+
+        const studentId = generate_student_id(batch, graduation, number_of_students + 1);
+
+        const user = new User({
+            username: studentId,
+            firstname,
+            lastname,
+            middlename,
+            dob,
+            mobileno,
+            email,
+            gender,
+            role,
+            password: hashedPassword,
+        });
+
+        const savedUser = await user.save();
+
+        const student = new Student({
+            user: savedUser._id,
+            batch: batch,
+            branch: branch,
+            graduation: graduation,
+            givenExams: []
+        });
+
+        await student.save();
+
+        return res.status(200).json({ message: "Student created successfully" });
     } catch (error) {
-        console.log(error.message);
-        return res.status(500).send({ error: error.message });
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 }
 
-export const create_session = async (req, res) => {
+export const create_examiner = async (req, res) => {
     try {
-        const { emailUsername, password } = req.body;
-        let user = await User.findOne({ $or: [{ email: emailUsername }, { username: emailUsername }] });
-        
-        if (!user || password !== user.password || user.username === "admin") {
-            return res.status(401).json({ error: 'Invalid Email/Username or Password!' });
+        const { username, firstname, lastname, middlename, dob, mobileno, email, gender } = req.body;
+
+        if(!username || !firstname || !dob || !mobileno || !email || !gender){
+            return res.status(400).json({ message: 'All fields are required!' });
         }
 
-        const token = generateToken(user);
-        return res.status(200).json({ token: token, username: user.username });
+        // Email validation (basic regex pattern for email format)
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ message: 'Invalid email format.' });
+        }
 
+        // Check mobile number length (assuming mobile number should be exactly 10 digits)
+        const mobilenoRegex = /^\d{10}$/;
+        if (!mobilenoRegex.test(mobileno)) {
+            return res.status(400).json({ message: 'Mobile number must be exactly 10 digits.' });
+        }
+
+        // DOB validation (expecting format 'DD-MM-YYYY')
+        const dobRegex = /^\d{2}-\d{2}-\d{4}$/;
+        if (!dobRegex.test(dob)) {
+            return res.status(400).json({ message: 'Invalid date of birth format. Use DD-MM-YYYY.' });
+        }
+
+        const [day, month, year] = dob.split('-').map(Number);
+        const date = new Date(year, month - 1, day); // Month is 0-indexed in JS Date
+
+        // Check for valid day, month, and year in dob
+        if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
+            return res.status(400).json({ message: 'Invalid date of birth values.' });
+        }
+
+        const role = "Examiner";
+        const password = generate_password(8);
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const user = new User({
+            username,
+            firstname,
+            lastname,
+            middlename,
+            dob,
+            mobileno,
+            email,
+            gender,
+            role,
+            password: hashedPassword,
+        });
+
+        const savedUser = await user.save();
+
+        const examiner = new Examiner({
+            user: savedUser._id,
+            prepaprepared_exams: [],
+            prepared_questions: []
+        });
+
+        await examiner.save();
+
+        return res.status(200).json({ message: "Examiner created successfully" });
     } catch (error) {
-        console.log('Error: ', error);
-        return res.status(500).json({ error: error });
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
-};
+}
 
-export const admin_login = async (req, res) => {
-    try{
-        const { password } = req.body;
+export const create_admin = async (req, res) => {
+    try {
+        const { username, firstname, mobileno, email, password } = req.body;
 
-        let admin = await User.findOne({username: "admin"});
-        // console.log(admin.password)
-        // console.log(password)
-        if(!admin || admin.password !== password){
-            return res.status(401).json({ error: 'Invalid Email/Username or Password!' });
+        if(!username || !firstname || !mobileno || !email || !password){
+            return res.status(400).json({ message: 'All fields are required!' });
         }
 
-        const token = generateToken(admin);
-        return res.status(200).json({ token: token, username: admin.username });
+        // Email validation (basic regex pattern for email format)
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ message: 'Invalid email format.' });
+        }
 
-    } catch(error){
-        console.log('Error: ', error);
-        return res.status(500).json({ error: error });
+        // Check mobile number length (assuming mobile number should be exactly 10 digits)
+        const mobilenoRegex = /^\d{10}$/;
+        if (!mobilenoRegex.test(mobileno)) {
+            return res.status(400).json({ message: 'Mobile number must be exactly 10 digits.' });
+        }
+
+        const role = "Admin";
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const user = new User({
+            username,
+            firstname,
+            mobileno,
+            email,
+            role,
+            password: hashedPassword,
+        });
+
+        await user.save();
+
+        return res.status(200).json({ message: "Admin created successfully" });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
-};
+}
 
 export const forgot_password = async (req, res) => {
     try {
@@ -135,7 +264,8 @@ export const forgot_password = async (req, res) => {
             },
         });
     } catch (error) {
-        return res.status(500).json({ status: "FAILED", message: "internal server error" });
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 };
 
@@ -186,10 +316,8 @@ export const verify_otp = async (req, res) => {
             message: "Password changed successfully."
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            message: "internal server error",
-        });
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 };
 
@@ -224,9 +352,7 @@ export const reset_password = async (req,res) => {
             message: "Password has been changed"
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            message: "internal server error",
-        });
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 }
