@@ -15,6 +15,8 @@ import React, { useState } from 'react';
 // import ResultPage from './Components/ResultPage/ResultPage.jsx';
 // import ExaminerProfile from './Components/Profile/ExaminerProfile.jsx';
 import Upcomingexam from './Components/Exam/Upcomingexam.jsx';
+import Pastexam from './Components/Exam/Pastexam.jsx';
+
 
 const App = () => {
   const [events, setEvents] = useState({}); // State to hold events
@@ -130,6 +132,68 @@ const App = () => {
       description: 'Midterm exam covering microeconomic principles.'
     }
   ];
+  const sampleResults = [
+    {
+      examName: "Math Exam",
+      date: "2024-10-10",
+      score: "85%",
+      status: "Passed"
+    },
+    {
+      examName: "Science Exam",
+      date: "2024-10-11",
+      score: "90%",
+      status: "Passed"
+    },
+    {
+      examName: "History Exam",
+      date: "2024-10-12",
+      score: "75%",
+      status: "Passed"
+    },
+    {
+      examName: "English Exam",
+      date: "2024-10-13",
+      score: "60%",
+      status: "Failed"
+    },
+    {
+      examName: "Computer Science Exam",
+      date: "2024-10-14",
+      score: "95%",
+      status: "Passed"
+    },
+    {
+      examName: "Geography Exam",
+      date: "2024-10-15",
+      score: "70%",
+      status: "Passed"
+    },
+    {
+      examName: "Physics Exam",
+      date: "2024-10-16",
+      score: "80%",
+      status: "Passed"
+    },
+    {
+      examName: "Chemistry Exam",
+      date: "2024-10-17",
+      score: "55%",
+      status: "Failed"
+    },
+    {
+      examName: "Biology Exam",
+      date: "2024-10-18",
+      score: "88%",
+      status: "Passed"
+    },
+    {
+      examName: "Literature Exam",
+      date: "2024-10-19",
+      score: "92%",
+      status: "Passed"
+    },
+  ];
   return (
     <>
     {/* <Router>
@@ -147,7 +211,9 @@ const App = () => {
     {/* <StartExam/> */}
    {/* <StudentProfile/>*/}
    {/* <ExaminerProfile/> */}
-   <Upcomingexam exams={exams} /> 
+   {/* <Upcomingexam exams={exams} />  */}
+   <Pastexam results={sampleResults} />
+
     </>
   );
 };
