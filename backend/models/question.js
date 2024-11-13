@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Counter from "./counter";
+import Counter from "./counter.js";
 
 const questionSchema = new mongoose.Schema({
     questionId: {
@@ -10,22 +10,35 @@ const questionSchema = new mongoose.Schema({
         type: String,
     },
 
-    images: [{
-        type: String
+    options : [{
+        type : String,
     }],
-
-    type: {
-        type: String,
-        enum: ['mcq', 'descriptive']
+    
+    points : {
+        type : Number,
+        required : true
     },
 
-    correctAns: {
-        type: String,
+    creator : {
+        type : String,
+        required : true
     },
 
-    tag: [{
-        type: String
-    }]
+    difficulty : {
+        type : String,
+        enum : ['Easy', 'Medium', 'Hard'],
+        required : true
+    },
+
+
+    answer: {
+        type: Number,
+        required : true
+    },
+
+    subject : {
+        type : String
+    }
 },{
     timestamps: true
 });

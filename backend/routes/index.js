@@ -2,8 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { authenticateToken, authenticate_admin_token } from '../middleware/authentication.js'
-
 import * as controller from '../controller/authentication.js';
+import {createQuestion, updateQuestion, deleteQuestion} from '../controller/questions.js'
+import {createExam,updateExam,deleteExam, examAddQuestion, deleteQuestionFromExam} from '../controller/exam.js'
+
 
 dotenv.config();
 const router = express.Router();
@@ -27,5 +29,15 @@ router.post('/forgot-password',controller.forgot_password);
 router.post('/verify-otp',controller.verify_otp)
 router.post('/reset-password', authenticateToken, controller.reset_password)
 
+router.post("/create-question", createQuestion);
+router.put("/update-question/:id", updateQuestion);
+router.delete("/delete-question/:id", deleteQuestion);
+
+router.post("/create-exam", createExam);
+router.put("/update-exam/:id", updateExam);
+router.delete("/delete-exam/:id", deleteExam);
+
+router.post('/:examId/add-question', examAddQuestion);
+router.delete('/:examId/delete-question/:questionId', deleteQuestionFromExam);
 
 export default router;
