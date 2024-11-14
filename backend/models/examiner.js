@@ -1,18 +1,23 @@
 import mongoose from "mongoose";
 
 const examinerSchema = new mongoose.Schema({
-    username: {
-        type : String,
-        required : true
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "User",
     },
 
-    preparedExams: [{
+    prepared_exams: [{
         type: mongoose.Schema.Types.ObjectId,
         ref : 'Exam'
-    }]
+    }],
 
+    prepared_questions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref : 'Question'
+    }],
 });
 
-const Examiner = mongoose.model('Examiner',examinerSchema);
+const Examiner = mongoose.model('Examiner', examinerSchema);
 
 export default Examiner;

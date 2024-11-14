@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
         type : String,
     },
 
+    middlename: {
+        type : String,
+    },
+
     dob: {
         type : Date,
     },
@@ -32,15 +36,15 @@ const userSchema = new mongoose.Schema({
         required: true
     },
 
+    gender: {
+        type : String,
+        enum : ['Male', 'Female', 'Other']
+    },
+
     role: {
         type : String,
         enum : ['Student' , 'Admin', 'Examiner'],
         required: true
-    },
-
-    referto: {
-        type: mongoose.Schema.Types.ObjectId,
-        refpath: 'role'
     },
 
     password: {
