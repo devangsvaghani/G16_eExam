@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Homepage from './Components/Homepage/Homepage.jsx';
-import Login from './Components/Login/Login.jsx';
-import Dashboard from './Components/Dashboard/Dashboard.jsx';
+// import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+// import Homepage from './Components/Homepage/Homepage.jsx';
+// import Login from './Components/Login/Login.jsx';
+// import Dashboard from './Components/Dashboard/Dashboard.jsx';
 // import StartExam from './Components/Exam/Startexam.jsx';
 // import StudentProfile from './Components/Profile/StudentProfile.jsx';
 // import QuestionBank from './Components/Questions/QuestionBank.jsx';
@@ -17,6 +17,7 @@ import Dashboard from './Components/Dashboard/Dashboard.jsx';
 // import Upcomingexam from './Components/Exam/Upcomingexam.jsx';
 // import Pastexam from './Components/Exam/Pastexam.jsx';
 // import Examinterface from './Components/Examinterface/Examinterface.jsx'
+import CreateStudent from './Components/Admindashboard/CreateStudent.jsx';
 
 
 const App = () => {
@@ -213,7 +214,8 @@ const App = () => {
    {/* <Upcomingexam exams={exams} />  */}
    {/* <Pastexam results={sampleResults} /> */}
       {/* <Examinterface/> */}
-      <Dashboard/>
+      {/* <Dashboard/> */}
+      <CreateStudent/>
     </>
   );
 };
