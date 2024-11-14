@@ -131,7 +131,8 @@ function Dashboard() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); 
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 700);
-  const [isprofileopen,setisprofileopen] = useState(false);
+  const { setIsLoggedIn, validateUser, LogOut, isLoggedIn } = useAuth();
+  const navigate = useNavigate();
 
   const items = [
     { id: "home", label: "Home" },
@@ -142,7 +143,7 @@ function Dashboard() {
   ];
 
   const handleopenprofile = () => {
-    setisprofileopen(!isprofileopen);
+    navigate('/profile');
   }
 
   useEffect(() => {
@@ -165,8 +166,6 @@ function Dashboard() {
           ☰
         </button>
       )}
-      {isprofileopen === true ? (<StudentProfile/>) : null}
-
 
       {/* Sidebar */}
       {(isSidebarOpen) && (
@@ -187,7 +186,7 @@ function Dashboard() {
               ))}
             </ul>
           </div>
-          <a className="logout">Log out</a>
+          <p className="logout" onClick={() => {LogOut()}}> Log out</p>
         </aside>
       )}
 
@@ -251,10 +250,10 @@ function Dashboard() {
           <div className="secondcol">
             <Calendar />
           <div className="percentageBox">
-            <div class="progress-circle">
+            <div className="progress-circle">
               <span>53%</span>
             </div>
-            <div class="title">Overall Performance</div>
+            <div className="title">Overall Performance</div>
           </div>
         </div>
 

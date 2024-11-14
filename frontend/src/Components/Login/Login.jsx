@@ -36,7 +36,7 @@ const Login = ({ onClose }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    setLoading(true);
+    // setLoading(true);
 
     if (!username || !password) {
       toast.error("Fields are missing");
@@ -71,10 +71,10 @@ const Login = ({ onClose }) => {
     catch (e) {
       // console.log(e.response);
       
-      toast.error((e?.response?.data?.error) || ("Internal server error"));
+      toast.error((e?.response?.data?.message) || ("Internal server error"));
     }
 
-    setLoading(false);
+    // setLoading(false);
   };
 
   const handleForgotPasswordClick = () => {
