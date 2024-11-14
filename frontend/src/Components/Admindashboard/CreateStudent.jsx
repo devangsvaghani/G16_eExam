@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './CreateStudent.css';
 
-const CreateStudent = () => {
+const CreateStudent = ({onClose}) => {
   const currentYear = new Date().getFullYear();
 
   const [formData, setFormData] = useState({
@@ -177,10 +177,9 @@ const CreateStudent = () => {
         </div>
 
         <div className="form-group">
-          <div className="half-width">
-            <label>Gender:</label>
-            <div className="radio-group">
-              <label>
+        <div className="radio-group">
+              <label>Gender:</label>
+              <div className='radio-group-div'>
                 <input
                   type="radio"
                   name="gender"
@@ -190,8 +189,6 @@ const CreateStudent = () => {
                   required
                 />
                 Male
-              </label>
-              <label>
                 <input
                   type="radio"
                   name="gender"
@@ -201,42 +198,35 @@ const CreateStudent = () => {
                   required
                 />
                 Female
-              </label>
+              </div>
             </div>
-          </div>
-          <div className="half-width">
-            <div className="checkbox-group">
-              <label>Graduation:</label>
-              <label>
+        <div className="radio-group">
+          <label>Graduation:</label>
+              <div className='radio-group-div'>
                 <input
-                  type="checkbox"
-                  name="studentType"
+                  type="radio"
+                  name="Graduation"
                   value="UG"
-                  checked={formData.studentType === 'UG'}
-                  onChange={(e) =>
-                    setFormData({ ...formData, studentType: e.target.checked ? 'UG' : '' })
-                  }
+                  checked={formData.gender === 'UG'}
+                  onChange={handleChange}
+                  required
                 />
                 UG
-              </label>
-              <label>
                 <input
-                  type="checkbox"
-                  name="studentType"
+                  type="radio"
+                  name="Graduation"
                   value="PG"
-                  checked={formData.studentType === 'PG'}
-                  onChange={(e) =>
-                    setFormData({ ...formData, studentType: e.target.checked ? 'PG' : '' })
-                  }
+                  checked={formData.gender === 'PG'}
+                  onChange={handleChange}
+                  required
                 />
                 PG
-              </label>
-            </div>
+              </div>
           </div>
         </div>
 
         <button type="submit" className="submit-btn">Create Student</button>
-        <button type="button" onClick={handleClose} className="close-btn">Close</button>
+        <button type="button" onClick={onClose} className="close-btn">Close</button>
       </form>
     </div>
   );

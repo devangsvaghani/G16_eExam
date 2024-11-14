@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './CreateExaminer.css';
 
-const CreateExaminer = () => {
+const CreateExaminer = ({onClose}) => {
   const currentYear = new Date().getFullYear();
 
   const [formData, setFormData] = useState({
@@ -48,7 +48,7 @@ const CreateExaminer = () => {
       dob: '',
       email: '',
       contact: '',
-      hireYear: '',
+      Username: '',
       role: '',
       gender: '',
       expertise: '',
@@ -58,7 +58,8 @@ const CreateExaminer = () => {
 
   return (
     <div className="create-examiner-container">
-      <h2 className="createexaminerheader">Create Examiner Profile</h2>
+
+      <h3 className="createexaminerheader">Create Examiner Profile</h3>
       <form onSubmit={handleSubmit} className="examiner-form">
         <div className="form-group">
           <div className="half-width">
@@ -144,14 +145,14 @@ const CreateExaminer = () => {
 
         <div className="form-group">
           <div className="half-width">
-            <label htmlFor="hireYear">Hire Year:</label>
+            <label htmlFor="hireYear">Username :</label>
             <input
-              type="number"
+              type="text"
               id="hireYear"
               name="hireYear"
               value={formData.hireYear}
               onChange={handleChange}
-              placeholder="Enter hire year"
+              placeholder="Enter Username"
               required
             />
           </div>
@@ -160,7 +161,7 @@ const CreateExaminer = () => {
           <div className="half-width">
             <div className="radio-group">
               <label>Gender:</label>
-              <label>
+              <div className='radio-group-div'>
                 <input
                   type="radio"
                   name="gender"
@@ -170,8 +171,6 @@ const CreateExaminer = () => {
                   required
                 />
                 Male
-              </label>
-              <label>
                 <input
                   type="radio"
                   name="gender"
@@ -181,7 +180,7 @@ const CreateExaminer = () => {
                   required
                 />
                 Female
-              </label>
+              </div>
             </div>
           </div>
 
@@ -193,7 +192,7 @@ const CreateExaminer = () => {
         </div>
 
         <button type="submit" className="submit-btn">Create Examiner Profile</button>
-        <button type="button" onClick={handleClose} className="close-btn">Close</button>
+        <button type="button" onClick={onClose} className="close-btn">Close</button>
       </form>
     </div>
   );
