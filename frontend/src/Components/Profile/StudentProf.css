@@ -1,5 +1,7 @@
 /* Global Styles */
-body {
+.studentpdiv {
+   align-items: center;
+    justify-content: center;
     margin: 0px;
     padding: 0px;
 }
@@ -14,7 +16,9 @@ body {
 }
 
 #profile-card {
-    background-color: #F9F7F7; 
+    
+    background-color: #F9F7F7;
+  
     display: flex;
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -22,6 +26,43 @@ body {
     padding: 10px 15px;
     animation: fadeIn 0.8s ease-in-out;
     gap : 20px;
+
+
+}
+#reset-button{
+   
+  
+    
+   
+
+     margin-top: 70%;
+    
+    
+     width: 75%;
+     padding: 12px;
+     background-color: #3F72AF;
+     color: #F9F7F7;
+     border: none;
+     border-radius: 8px;
+     font-size: 15px;
+     cursor: pointer;
+     text-align: center;
+     transition: all 0.3s ease;
+
+    
+    
+    
+   
+   
+   
+     
+ 
+
+}
+#reset-button:hover {
+    background-color: #112D4E;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 /* Sidebar */
@@ -160,40 +201,3 @@ body {
     }
 }
 
-/* Responsive Styling */
-/* @media (max-width: 768px) {
-    #profile-card {
-        flex-direction: column;
-        margin-left: 0;
-    }
-
-    #sidebar {
-        width: 100%;
-        order: 2;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-        border-top-left-radius: 10px;
-        border-bottom-left-radius: 10px;
-        height: auto;
-    }
-
-    #content {
-        order: 1;
-        width: 100%;
-    }
-
-    #form-group {
-        flex-direction: column;
-    }
-
-    #form-group label {
-        text-align: left;
-        width: auto;
-        margin-bottom: 5px;
-    }
-
-    #save-button {
-        position: relative;
-        margin-top: 20px;
-    }
-} */
