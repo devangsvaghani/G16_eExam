@@ -6,7 +6,7 @@ import { send_otp, generate_password, generate_student_id, generate_otp } from "
 import { generateToken } from '../config/jwtUtils.js'
 import bcrypt from "bcrypt"
 
-// Log in for student and examiner
+
 export const create_session = async (req, res) => {
     try {
         const { emailUsername, password } = req.body;
@@ -29,7 +29,6 @@ export const create_session = async (req, res) => {
     }
 };
 
-// Log in for Admin
 export const admin_login = async (req, res) => {
     try{
         const { password } = req.body;
@@ -98,7 +97,7 @@ export const create_student = async (req, res) => {
             firstname,
             lastname,
             middlename,
-            dob,
+            dob:date,
             mobileno,
             email,
             gender,
@@ -169,7 +168,7 @@ export const create_examiner = async (req, res) => {
             firstname,
             lastname,
             middlename,
-            dob,
+            dob:date,
             mobileno,
             email,
             gender,
@@ -336,7 +335,6 @@ export const resend_otp = async (req, res) => {
     }
 };
 
-// Verify OTP email function
 export const verify_otp = async (req, res) => {
     try {
         const { email, otp, password } = req.body;
@@ -421,38 +419,106 @@ export const reset_password = async (req,res) => {
     }
 }
 
-
-// Update user profile by username
 export const update_profile = async (req, res) => {
     try {
-        const { username } = req.params;  // Assuming username is passed in the URL params
+        const { username } = req.params;  
         const { firstname, lastname, middlename, dob, mobileno, gender } = req.body;
 
         if (!firstname && !lastname && !middlename && !dob && !mobileno && !gender) {
             return res.status(400).json({ message: "At least one field is required to update." });
         }
 
-        // Find the user by username
+        const mobilenoRegex = /^\d{10}$/;
+        if (!mobilenoRegex.test(mobileno)) {
+            return res.status(400).json({ message: 'Mobile number must be exactly 10 digits.' });
+        }
+
+        const dobRegex = /^\d{2}-\d{2}-\d{4}$/;
+        if (!dobRegex.test(dob)) {
+            return res.status(400).json({ message: 'Invalid date of birth format. Use DD-MM-YYYY.' });
+        }
+
+        const [day, month, year] = dob.split('-').map(Number);
+        const date = new Date(year, month - 1, day); // Month is 0-indexed in JS Date
+
+        // Check for valid day, month, and year in dob
+        if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
+            return res.status(400).json({ message: 'Invalid date of birth values.' });
+        }
+
+
         const user = await User.findOne({ username: username });
 
         if (!user) {
             return res.status(404).json({ message: "User not found." });
         }
 
-        // Update the fields
         if (firstname) user.firstname = firstname;
         if (lastname) user.lastname = lastname;
         if (middlename) user.middlename = middlename;
-        if (dob) user.dob = dob;
+        if (dob) user.dob = date;
         if (mobileno) user.mobileno = mobileno;
         if (gender) user.gender = gender;
 
-        // Save the updated user profile
         await user.save();
 
         return res.status(200).json({ message: "Profile updated successfully.", user });
     } catch (error) {
         console.error("Error updating profile:", error);
         return res.status(500).json({ message: "Failed to update profile." });
+    }
+};
+
+export const delete_student = async (req, res) => {
+    try {
+        const { username } = req.params; 
+
+        const user = await User.findOne({ username: username });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        const student = await Student.findOne({ user: user._id });
+
+        if (!student) {
+            return res.status(404).json({ message: "Student not found." });
+        }
+
+        await Student.deleteOne({ _id: student._id });
+
+        await User.deleteOne({ username: username });
+
+        return res.status(200).json({ message: "Student and associated User deleted successfully." });
+    } catch (error) {
+        console.error("Error deleting student:", error);
+        return res.status(500).json({ message: "Failed to delete student." });
+    }
+};
+
+export const delete_examiner = async (req, res) => {
+    try {
+        const { username } = req.params; 
+
+        const user = await User.findOne({ username: username });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        const examiner = await Examiner.findOne({ user: user._id });
+
+        if (!examiner) {
+            return res.status(404).json({ message: "Examiner not found." });
+        }
+
+        await Examiner.deleteOne({ _id: examiner._id });
+
+        await User.deleteOne({ username: username });
+
+        return res.status(200).json({ message: "Examiner and associated User deleted successfully." });
+    } catch (error) {
+        console.error("Error deleting examiner:", error);
+        return res.status(500).json({ message: "Failed to delete examiner." });
     }
 };
