@@ -25,10 +25,8 @@ export const generate_student_id = (batch, programType, studentNo) => {
     return `${batch}${typeCode}${studentNumber}`;
 }
 
-export const send_otp = async (email) => {
+export const send_otp = async (email, otp) => {
     try{
-        
-        const otp = generate_otp();
         
         const mailOptions = {
             from: process.env.AUTH_EMAIL,
@@ -36,20 +34,6 @@ export const send_otp = async (email) => {
             subject: "Password Reset OTP",
             html: password_reset_templet(otp)
         };
-        
-        // Hash the OTP
-        const saltRounds = 10;
-        const hashedOTP = await bcrypt.hash(otp, saltRounds);
-
-        // Save OTP to database
-        const otpRecord = new Otp({
-            email: email,
-            otp: hashedOTP,
-            createdAt: Date.now(),
-            expiresAt: Date.now() + 600000  // 10 minutes
-        });
-
-        await otpRecord.save();
 
         await transporter.sendMail(mailOptions);
         

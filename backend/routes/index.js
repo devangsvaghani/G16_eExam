@@ -3,13 +3,12 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { authenticateToken, authenticate_admin_token } from '../middleware/authentication.js'
 
-import * as controller from '../controller/authentication.js';
+import { create_session, admin_login, create_examiner, create_student, forgot_password, verify_otp, reset_password, create_admin, resend_otp} from '../controller/authentication.js'
 import {createQuestion, updateQuestion, deleteQuestion} from '../controller/questions.js'
 import {createExam,updateExam,deleteExam, examAddQuestion, deleteQuestionFromExam} from '../controller/exam.js'
 
 
 
-import { create_session, admin_login, create_examiner, create_student, forgot_password, verify_otp, reset_password, create_admin } from '../controller/authentication.js'
 
 
 dotenv.config();
@@ -34,6 +33,7 @@ router.post('/create-examiner', authenticate_admin_token, create_examiner);
 router.post('/create-admin', create_admin);
 router.post('/forgot-password', forgot_password);
 router.post('/verify-otp', verify_otp)
+router.post('/resend-otp', resend_otp)
 router.post('/reset-password', authenticateToken, reset_password)
 
 router.post("/create-question", createQuestion);
