@@ -1,29 +1,11 @@
 
-
 import React, { useState } from 'react';
 
-// import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-// import Homepage from './Components/Homepage/Homepage.jsx';
-// import Login from './Components/Login/Login.jsx';
-// import Dashboard from './Components/Dashboard/Dashboard.jsx';
-// import StartExam from './Components/Exam/Startexam.jsx';
-// import StudentProfile from './Components/Profile/StudentProfile.jsx';
-// import QuestionBank from './Components/Questions/QuestionBank.jsx';
-// import FetchedQuestions from './Components/Questions/FetchedQuestions.jsx';
-// import OverallPerformance from './Components/Questions/OverallPerformance.jsx'
-// import StudentExamPage from './Components/StudentExamPage/StudentExamPage.jsx';
-// import ResultPage from './Components/ResultPage/ResultPage.jsx';
-// import ExaminerProfile from './Components/Profile/ExaminerProfile.jsx';
-// import Upcomingexam from './Components/Exam/Upcomingexam.jsx';
-// import Pastexam from './Components/Exam/Pastexam.jsx';
-// import Examinterface from './Components/Examinterface/Examinterface.jsx'
-import CreateStudent from './Components/Admindashboard/CreateStudent.jsx';
-import CreateExaminer from './Components/Admindashboard/CreateExaminer.jsx';
+import Homepage from './Components/Homepage/Homepage';
+import Dashboard from './Components/Dashboard/Dashboard'
+import Profile from './Components/Profile/Profile';
 
-
-const App = () => {
-  const [events, setEvents] = useState({}); // State to hold events
-  // const exams = [
+// const exams = [
   //   {
   //     name: 'Mathematics Final Exam',
   //     date: '04/05/2023',
@@ -197,27 +179,16 @@ const App = () => {
   //     status: "Passed"
   //   },
   // ];
+
+const App = () => {
+
   return (
     <>
-      {/* <Routes>
+      <Routes>
         <Route path="/" element={<Homepage />} />
-        <Route path="/login" element={<Login />} />
-      </Routes> */}
-    {/* <QuestionBank/> */}
-     {/* <Dashboard/>  */}
-     {/* <FetchedQuestions /> */}
-     {/* <OverallPerformance /> */}
-     {/* <ResultPage /> */}
-     {/* <StudentExamPage /> */}
-    {/* <StartExam/> */}
-   {/* <StudentProfile/>*/}
-   {/* <ExaminerProfile/> */}
-   {/* <Upcomingexam exams={exams} />  */}
-   {/* <Pastexam results={sampleResults} /> */}
-      {/* <Examinterface/> */}
-      {/* <Dashboard/> */}
-      {/* <CreateStudent /> */}
-      <CreateExaminer/>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
     </>
   );
 };

@@ -58,6 +58,10 @@ body, html {
   font-weight: bold;
 }
 
+.logout:hover{
+    cursor: pointer;  
+}
+
 .sidebar-menu a:hover, .logout:hover {
   text-decoration: underline;
 }
