@@ -8,9 +8,8 @@ import {create_exam,update_exam,delete_exam, add_question_in_exam, delete_questi
 
 
 
-import { create_session, admin_login, create_examiner, create_student, forgot_password, verify_otp, reset_password, create_admin, update_profile, resend_otp } from '../controller/authentication.js'
-import {createQuestion, updateQuestion, deleteQuestion} from '../controller/questions.js'
-import {createExam,updateExam,deleteExam, examAddQuestion, deleteQuestionFromExam} from '../controller/exam.js'
+import { create_session, admin_login, create_examiner, create_student, forgot_password, verify_otp, reset_password, create_admin, update_profile, resend_otp, delete_student, delete_examiner } from '../controller/authentication.js'
+
 
 import {get_past_exams, get_upcoming_exams } from '../controller/past_upcoming_exams.js'
 
@@ -54,5 +53,8 @@ router.get('/past-exams', get_past_exams);
 router.get('/upcoming-exams', get_upcoming_exams);
 
 router.post('/update-profile/:username', update_profile);
+
+router.delete('/delete-student/:username', delete_student);
+router.delete('/delete-examiner/:username', delete_examiner);
 
 export default router;
