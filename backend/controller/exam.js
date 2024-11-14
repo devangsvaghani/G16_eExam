@@ -2,7 +2,7 @@ import Exam from "../models/exam.js";
 import Question from "../models/question.js";
 
 // Create a new exam
-export const createExam = async (req, res) => {
+export const create_exam = async (req, res) => {
     try {
         const {
             creator,
@@ -43,7 +43,7 @@ export const createExam = async (req, res) => {
 };
 
 // Update an existing exam by its ID
-export const updateExam = async (req, res) => {
+export const update_exam = async (req, res) => {
     try {
         const { id } = req.params;
         const {
@@ -93,7 +93,7 @@ export const updateExam = async (req, res) => {
 };
 
 // Delete an exam by its ID
-export const deleteExam = async (req, res) => {
+export const delete_exam = async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -115,7 +115,7 @@ export const deleteExam = async (req, res) => {
 };
 
 // Add a question to an exam
-export const examAddQuestion = async (req, res) => {
+export const add_question_in_exam = async (req, res) => {
     try {
         const { examId } = req.params; // Exam ID in URL
         const { questionId } = req.body; // Question ID in request body
@@ -141,7 +141,7 @@ export const examAddQuestion = async (req, res) => {
 };
 
 // Remove a question from an exam
-export const deleteQuestionFromExam = async (req, res) => {
+export const delete_question_from_exam = async (req, res) => {
     try {
         const { examId, questionId } = req.params;
 
