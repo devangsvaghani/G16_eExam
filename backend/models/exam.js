@@ -1,14 +1,18 @@
 import mongoose from "mongoose";
-import Counter from "./counter";
+import Counter from "./counter.js";
 
 const examSchema = new mongoose.Schema({
     examId: {
         type : Number,
     },
 
+    creator: {
+        type: String,
+        required: true
+    },
+
     questions: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref : 'Question'
+        type : Number
     }],
 
     startTime: {
@@ -26,10 +30,40 @@ const examSchema = new mongoose.Schema({
         required: true
     },
 
-    instructions: {
-        type: String,
+    semester : {
+        type : String,
+        required : true
+    },
+
+    examType : {
+        type : Number,
+        required : true
+    },
+
+    batch : {
+        type : String,
         required: true
-    }
+    },
+
+    branch : {
+        type : String,
+        required : true
+    },
+
+    total_points : {
+        type : String,
+        required : true
+    },
+
+    status : {
+        type : String,
+        enum : ['Pending' , 'Published'],
+        required: true
+    },
+
+    instructions: [{
+        type : String,
+    }]
 },{
     timestamps: true
 });
