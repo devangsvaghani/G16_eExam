@@ -1,17 +1,20 @@
 /* Main container styling */
 .create-examiner-container {
-    width: 80%;
-    max-width: 600px; /* Limit to a specific width for consistency */
-    margin: 2% auto;
-    padding: 2%;
+    width: 75%;
+    margin:auto;
+    padding: 20px;
     background-color: #ffffff;
     border-radius: 12px; /* Smooth rounded corners */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Softer shadow for a subtle elevation */
     transition: all 0.3s ease;
+    overflow-y: auto;
+    position: absolute;
+    max-height: 90%;
   }
+
   
   /* Heading styling */
-  .create-examiner-container h2 {
+  .create-examiner-container > h2 {
     text-align: center;
     font-size: 2em;
     color: #ffffff;
@@ -26,7 +29,6 @@
   .examiner-form {
     display: flex;
     flex-direction: column;
-    gap: 14px;
   }
   
   /* Label styling */
@@ -34,7 +36,7 @@
     font-size: 1.1em;
     font-weight: 500;
     color: #333;
-    margin-bottom: 5px;
+    margin-bottom: 0px;
     transition: color 0.3s ease;
   }
   
@@ -48,14 +50,17 @@
     background-color: #f9fafc;
     transition: all 0.3s ease;
   }
-  
-  /* Focus effect on inputs */
-  .examiner-form input:focus {
-    border-color: #4CAF50;
-    box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
-    background-color: #ffffff;
+
+  .createexaminerheader{
+    background-color: #3F72AF;
+    font-size: 30px;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    margin-bottom: 10px;
   }
   
+
   /* Placeholder text styling */
   .examiner-form input::placeholder {
     color: #aaa;
@@ -71,7 +76,6 @@
   
   .half-width {
     width: 48%;
-    padding: 0;
   }
   
   /* Radio button styling for gender */
@@ -88,6 +92,13 @@
     color: #555;
   }
   
+  .radio-group-div{
+    width:100%;
+  }
+
+  .radio-group-div > input {
+    width:20%;
+  }
   /* Select dropdown for role */
   .select-role {
     margin-bottom: 20px;
@@ -122,7 +133,7 @@
   /* Submit button styling */
   .submit-btn {
     width: 100%;
-    padding: 12px;
+    padding: 8px;
     background-color: #2a4a7b;
     color: #ffffff;
     border: none;
@@ -139,7 +150,7 @@
   /* Close button styling */
   .close-btn {
     width: 100%;
-    padding: 12px;
+    padding: 8px;
     background-color: #f4f4f4;
     color: #2a4a7b;
     border: 1px solid #2a4a7b;
@@ -196,7 +207,7 @@
     .submit-btn,
     .close-btn {
       font-size: 1em;
-      padding: 15px;
+      padding: 10px;
     }
   }
   
@@ -226,6 +237,6 @@
     font-size: 1.0em;
     font-weight: 500;
     color: #333;
-    margin-bottom: 5px;
+    margin-bottom: 0px;
   }
   
