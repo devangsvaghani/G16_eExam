@@ -1,7 +1,7 @@
  import Question from "../models/question.js";
 
 // Create a new question
-export const createQuestion = async (req, res) => {
+export const create_question = async (req, res) => {
     try {
         const { desc, options, points, creator, difficulty, answer, subject } = req.body;
 
@@ -32,7 +32,7 @@ export const createQuestion = async (req, res) => {
 
 
 // Update a question by its ID
-export const updateQuestion = async (req, res) => {
+export const update_question = async (req, res) => {
     try {
         const { id } = req.params; // ID of the question to update
         const { desc, options, points, creator, difficulty, answer, subject } = req.body;
@@ -71,7 +71,7 @@ export const updateQuestion = async (req, res) => {
 
 
 // Delete a question by its ID
-export const deleteQuestion = async (req, res) => {
+export const delete_question = async (req, res) => {
     try {
         const { id } = req.params; // ID of the question to delete
 

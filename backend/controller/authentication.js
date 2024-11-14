@@ -248,6 +248,7 @@ export const forgot_password = async (req, res) => {
 
         // Check if user exists
         const user = await User.findOne({ email: email });
+
         if (!user) {
             return res.status(401).json({message: "No account found with the provided email."});
         }
@@ -419,3 +420,39 @@ export const reset_password = async (req,res) => {
         return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 }
+
+
+// Update user profile by username
+export const update_profile = async (req, res) => {
+    try {
+        const { username } = req.params;  // Assuming username is passed in the URL params
+        const { firstname, lastname, middlename, dob, mobileno, gender } = req.body;
+
+        if (!firstname && !lastname && !middlename && !dob && !mobileno && !gender) {
+            return res.status(400).json({ message: "At least one field is required to update." });
+        }
+
+        // Find the user by username
+        const user = await User.findOne({ username: username });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        // Update the fields
+        if (firstname) user.firstname = firstname;
+        if (lastname) user.lastname = lastname;
+        if (middlename) user.middlename = middlename;
+        if (dob) user.dob = dob;
+        if (mobileno) user.mobileno = mobileno;
+        if (gender) user.gender = gender;
+
+        // Save the updated user profile
+        await user.save();
+
+        return res.status(200).json({ message: "Profile updated successfully.", user });
+    } catch (error) {
+        console.error("Error updating profile:", error);
+        return res.status(500).json({ message: "Failed to update profile." });
+    }
+};
