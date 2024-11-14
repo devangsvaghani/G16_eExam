@@ -2,7 +2,7 @@ import User from '../models/user.js'
 import Student from '../models/student.js'
 import Examiner from '../models/examiner.js'
 import Otp from '../models/otp.js'
-import { send_otp, generate_password, generate_student_id } from "../utils/authentication.js"
+import { send_otp, generate_password, generate_student_id, generate_otp } from "../utils/authentication.js"
 import { generateToken } from '../config/jwtUtils.js'
 import bcrypt from "bcrypt"
 
@@ -12,8 +12,11 @@ export const create_session = async (req, res) => {
         const { emailUsername, password } = req.body;
         const user = await User.findOne({ $or: [{ email: emailUsername }, { username: emailUsername }] });
 
+        if (!user || user.username === "admin") {
+            return res.status(401).json({ message: 'Invalid Email/Username or Password!' });
+        }
         const pass_match = await bcrypt.compare(password, user.password);
-        if (!user || user.username === "admin" || !pass_match) {
+        if (!pass_match) {
             return res.status(401).json({ message: 'Invalid Email/Username or Password!' });
         }
 
@@ -240,23 +243,35 @@ export const forgot_password = async (req, res) => {
         // Email validation (basic regex pattern for email format)
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            return res.status(400).json({ error: 'Invalid email format.' });
+            return res.status(400).json({ message: 'Invalid email format.' });
         }
 
         // Check if user exists
         const user = await User.findOne({ email: email });
 
         if (!user) {
-            return res.status(401).json({error: "No account found with the provided email."});
+            return res.status(401).json({message: "No account found with the provided email."});
         }
 
         const existing_otp = await Otp.findOne({email : email});
         if(existing_otp){
             return res.status(200).json({message : "Otp already sent"});
         }
+
+        const otp = generate_otp();
+
+        // Save OTP to database
+        const otpRecord = new Otp({
+            email: email,
+            otp: otp,
+            createdAt: Date.now(),
+            expiresAt: Date.now() + 600000  // 10 minutes
+        });
+
+        await otpRecord.save();
         
         // Send OTP email for password reset
-        await send_otp(user.email);
+        await send_otp(user.email, otp);
         
         return res.status(200).json({
             message: "Password reset OTP email sent",
@@ -270,7 +285,56 @@ export const forgot_password = async (req, res) => {
     }
 };
 
+export const resend_otp = async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) return res.status(400).send("An email is required.");
 
+        // Email validation (basic regex pattern for email format)
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ message: 'Invalid email format.' });
+        }
+
+        // Check if user exists
+        const user = await User.findOne({ email: email });
+        if (!user) {
+            return res.status(401).json({message: "No account found with the provided email."});
+        }
+
+        const existing_otp = await Otp.findOne({email : email});
+        if(existing_otp){
+            // Send OTP email for password reset
+            await send_otp(user.email, existing_otp.otp);
+
+            return res.status(200).json({message : "Otp resent successfully"});
+        }
+
+        const otp = generate_otp();
+
+        // Save OTP to database
+        const otpRecord = new Otp({
+            email: email,
+            otp: otp,
+            createdAt: Date.now(),
+            expiresAt: Date.now() + 600000  // 10 minutes
+        });
+
+        await otpRecord.save();
+        
+        await send_otp(user.email, otp);
+        
+        return res.status(200).json({
+            message: "Password reset OTP email sent",
+            data: {
+                email: user.email,
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
+    }
+};
 
 // Verify OTP email function
 export const verify_otp = async (req, res) => {
@@ -295,7 +359,7 @@ export const verify_otp = async (req, res) => {
 
         // OTP record exists
         const expiresAt = userOTPRecords.expiresAt;
-        const hashedOTP = userOTPRecords.otp;
+        const existing_otp = userOTPRecords.otp;
 
         if (expiresAt < Date.now()) {
             // OTP has expired
@@ -303,13 +367,12 @@ export const verify_otp = async (req, res) => {
             return res.status(409).json({ error: "Code has expired. Please request again" });
         }
 
-        // Verify the OTP
-        const validOTP = await bcrypt.compare(otp, hashedOTP);
-        if (!validOTP) {
+        if (otp !== existing_otp) {
             return res.status(401).json({ error: "Invalid OTP. Please try again." });
         }
 
-        await User.findOneAndUpdate({ email: email }, {password: password});
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await User.findOneAndUpdate({ email: email }, {password: hashedPassword});
 
         await Otp.deleteMany({ email });
 

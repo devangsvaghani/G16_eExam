@@ -55,7 +55,7 @@ export const password_reset_templet = (otp) => {
             Your OTP: <strong>${otp}</strong>
         </div>
         <div class="footer">
-            <p>This OTP will expire in 15 minutes.</p>
+            <p>This OTP will expire in 10 minutes.</p>
             <p>If you did not request this, please ignore this email.</p>
             <p>For support, contact us at <a href="mailto:support@yourdomain.com">support@yourdomain.com</a></p>
         </div>

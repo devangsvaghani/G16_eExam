@@ -51,7 +51,7 @@ const examSchema = new mongoose.Schema({
     },
 
     total_points : {
-        type : String,
+        type : Number,
         required : true
     },
 
