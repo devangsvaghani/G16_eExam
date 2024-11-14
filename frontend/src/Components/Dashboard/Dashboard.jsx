@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
 import logo from "../assets/logo.png";
+import user from "../assets/user.png";
+import { useAuth } from "../../context/auth.jsx";
+import { useNavigate } from "react-router-dom";
+import StudentProfile from "../Profile/StudentProf.jsx";
 
 const Calendar = () => {
   const today = new Date();
@@ -8,6 +12,15 @@ const Calendar = () => {
   const [events, setEvents] = useState({});
   const [selectedDate, setSelectedDate] = useState(null);
   const [eventText, setEventText] = useState("");
+  const { setIsLoggedIn, validateUser, isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (window.localStorage.getItem("token") === null) {
+      validateUser();
+      navigate("/");
+    }
+  }, []);
 
   const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
   const startDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
@@ -116,6 +129,9 @@ const Calendar = () => {
 
 function Dashboard() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true); 
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth < 700);
+  const [isprofileopen,setisprofileopen] = useState(false);
 
   const items = [
     { id: "home", label: "Home" },
@@ -125,95 +141,176 @@ function Dashboard() {
     { id: "profile", label: "Profile" },
   ];
 
+  const handleopenprofile = () => {
+    setisprofileopen(!isprofileopen);
+  }
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth < 700);
+      if (window.innerWidth >= 700) {
+        setIsSidebarOpen(true);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="dashboard">
-      <aside className="sidebar">
-        <div className="sidebar-menu">
-          <img src={logo} alt="" id="logo" />
-          <ul className="menu">
-            {items.map((item, index) => (
-              <li key={item.id}>
-                <a
-                  href={`#${item.id}`}
-                  className={activeIndex === index ? "active" : ""}
-                  onClick={() => setActiveIndex(index)}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <a className="logout">Log out</a>
-      </aside>
+    {isMobileView && (
+        <button className="togglebtn"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
+          ☰
+        </button>
+      )}
+      {isprofileopen === true ? (<StudentProfile/>) : null}
+
+
+      {/* Sidebar */}
+      {(isSidebarOpen) && (
+        <aside className="sidebar">
+          <div className="sidebar-menu">
+            <img src={logo} alt="Logo" id="logo" />
+            <ul className="menu">
+              {items.map((item, index) => (
+                <li key={item.id}>
+                  <a
+                    href={`#${item.id}`}
+                    className={activeIndex === index ? "active" : ""}
+                    onClick={() => setActiveIndex(index)}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <a className="logout">Log out</a>
+        </aside>
+      )}
 
       {/* Main Content */}
       <div className="main-content">
         {/* Top Bar */}
-        <header className="top-bar">Welcome, Nishank Kansara!</header>
+        <header className="top-bar">
+          <span className="welcome-text">Welcome, Nishank Kansara!</span>
+          <img src={user} alt="User profile" className="profile-image" 
+            onClick={handleopenprofile}
+          />
+        </header>
+
 
         {/* Content Area */}
         <div className="content">
           {/* Upcoming Exams */}
-          <div className="Box">
-            <h2>Upcoming Exams</h2>
-            <div className="card">
-              <div className="exam">
-                <p><strong>Exam 1</strong></p>
-                <p>Professor: abc</p>
-                <p>Topics: DSA, DBMS, Node</p>
-                <p>Date: Jun 10, 2024</p>
+          <div className="firstcol">
+            <div className="upcomingexambox">
+              <h2>Upcoming Exams</h2>
+              <div className="card">
+                <div className="exam">
+                  <p><strong>Exam 1</strong></p>
+                  <p>Professor: abc</p>
+                  <p>Topics: DSA, DBMS, Node</p>
+                  <p>Date: Jun 10, 2024</p>
+                </div>
+                <div className="exam">
+                  <p><strong>Exam 1</strong></p>
+                  <p>Professor: abc</p>
+                  <p>Topics: DSA, DBMS, Node</p>
+                  <p>Date: Jun 10, 2024</p>
+                </div>
+                <div className="exam">
+                  <p><strong>Exam 1</strong></p>
+                  <p>Professor: abc</p>
+                  <p>Topics: DSA, DBMS, Node</p>
+                  <p>Date: Jun 10, 2024</p>
+                </div>
+                <div className="exam">
+                  <p><strong>Exam 1</strong></p>
+                  <p>Professor: abc</p>
+                  <p>Topics: DSA, DBMS, Node</p>
+                  <p>Date: Jun 10, 2024</p>
+                </div>
+                <div className="exam">
+                  <p><strong>Exam 1</strong></p>
+                  <p>Professor: abc</p>
+                  <p>Topics: DSA, DBMS, Node</p>
+                  <p>Date: Jun 10, 2024</p>
+                </div>
               </div>
-              <div className="exam">
-                <p><strong>Exam 2</strong></p>
-                <p>Professor: xyz</p>
-                <p>Topics: OS, CN, AI</p>
-                <p>Date: Jun 20, 2024</p>
-              </div>
+            </div>
+            <div className="practicequestions">
+              <h1>Practice Questions</h1>
             </div>
           </div>
 
           {/* Calendar */}
          
-           
+          <div className="secondcol">
             <Calendar />
-            
-          
-          
+          <div className="percentageBox">
+            <div class="progress-circle">
+              <span>53%</span>
+            </div>
+            <div class="title">Overall Performance</div>
+          </div>
+        </div>
 
-          {/* Announcements */}
-          <div className="Box">
+          <div className="thirdcol">
+          <div className="anonouncementsBox">
             <h2>Announcements</h2>
             <div className="card">
-              <div className="announcement">
+              <div className="exam">
                 <p><strong>Exam 1</strong></p>
                 <p>Topics: DSA, DBMS, Node</p>
                 <p>Date: Jun 10, 2024</p>
               </div>
-              <div className="announcement">
+              <div className="exam">
+                <p><strong>Exam 2</strong></p>
+                <p>Topics: OS, CN, AI</p>
+                <p>Date: Jun 20, 2024</p>
+              </div>
+              <div className="exam">
+                <p><strong>Exam 2</strong></p>
+                <p>Topics: OS, CN, AI</p>
+                <p>Date: Jun 20, 2024</p>
+              </div>
+              <div className="exam">
                 <p><strong>Exam 2</strong></p>
                 <p>Topics: OS, CN, AI</p>
                 <p>Date: Jun 20, 2024</p>
               </div>
             </div>
           </div>
-
-          {/* Past Exams */}
-          <div className="Box">
+          <div className="pastexambox">
             <h2>Past Exams</h2>
             <div className="card">
-              <div className="past-exam">
+              <div className="exam">
                 <p><strong>Exam 1</strong></p>
                 <p>Topics: DSA, DBMS, Node</p>
                 <p>Date: May 15, 2024</p>
               </div>
-              <div className="past-exam">
+              <div className="exam">
+                <p><strong>Exam 1</strong></p>
+                <p>Topics: DSA, DBMS, Node</p>
+                <p>Date: May 15, 2024</p>
+              </div>
+              <div className="exam">
+                <p><strong>Exam 1</strong></p>
+                <p>Topics: DSA, DBMS, Node</p>
+                <p>Date: May 15, 2024</p>
+              </div>
+              <div className="exam">
                 <p><strong>Exam 2</strong></p>
                 <p>Topics: OS, CN, AI</p>
                 <p>Date: May 5, 2024</p>
               </div>
             </div>
           </div>
+        </div>          
+
         </div>
       </div>
     </div>

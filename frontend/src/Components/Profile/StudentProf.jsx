@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import './StudentProfile.css';
-import defaultProfilePic from '../assets/default-profile.jpg';
+import './StudentProf.css';
+import user from '../assets/user.png';
 
-function StudentProfile() {
+function StudentProf() {
   const [userData, setUserData] = useState({
     studentId: '',          // Changed "examinerId" back to "studentId"
     mobileNumber: '',
@@ -65,15 +65,16 @@ function StudentProfile() {
   }
 
   return (
-      <div className="profile-card">
-        <div className="content">
+    <div id='profilecontainer'>
+      <div id="profile-card">
+        <div id="content">
           <h2>Profile Settings</h2>
-          <form className="profile-form">
-            <div className="form-group">
+          <form id="profile-form">
+            <div id="form-group">
               <label>Student ID</label>  {/* Updated label to "Student ID" */}
               <input type="text" value={userData.studentId} readOnly />
             </div>
-            <div className="form-group">
+            <div id="form-group">
               <label>Mobile Number</label>
               <input
                 type="text"
@@ -82,7 +83,7 @@ function StudentProfile() {
                 onChange={(e) => setUserData({ ...userData, mobileNumber: e.target.value })}
               />
             </div>
-            <div className="form-group">
+            <div id="form-group">
               <label>Address</label>
               <input
                 type="text"
@@ -91,7 +92,7 @@ function StudentProfile() {
                 onChange={(e) => setUserData({ ...userData, addressLine1: e.target.value })}
               />
             </div>
-            <div className="form-group">
+            <div id="form-group">
               <label>Postcode</label>
               <input
                 type="text"
@@ -100,7 +101,7 @@ function StudentProfile() {
                 onChange={(e) => setUserData({ ...userData, postcode: e.target.value })}
               />
             </div>
-            <div className="form-group">
+            <div id="form-group">
               <label>State</label>
               <input
                 type="text"
@@ -109,7 +110,7 @@ function StudentProfile() {
                 onChange={(e) => setUserData({ ...userData, state: e.target.value })}
               />
             </div>
-            <div className="form-group">
+            <div id="form-group">
               <label>Stream</label>   {/* Updated label to "Stream" */}
               <input
                 type="text"
@@ -118,7 +119,7 @@ function StudentProfile() {
                 onChange={(e) => setUserData({ ...userData, stream: e.target.value })}
               />
             </div>
-            <div className="form-group">
+            <div id="form-group">
               <label>Country</label>
               <input
                 type="text"
@@ -127,7 +128,7 @@ function StudentProfile() {
                 onChange={(e) => setUserData({ ...userData, country: e.target.value })}
               />
             </div>
-            <div className="form-group">
+            <div id="form-group">
               <label>Date of Birth</label>
               <input
                 type="date"
@@ -140,14 +141,15 @@ function StudentProfile() {
         </div>
 
         {/* Sidebar with Profile Image, Info, and Save Button */}
-        <div className="sbar">
-          <img src={defaultProfilePic} alt="Profile" className="profile-pic" />
-          <h3 className="profile-name">{userData.firstName} {userData.surname}</h3>
-          <p className="profile-email">{userData.email}</p>
-          <button type="button" className="save-button" onClick={handleSaveProfile}>Save Profile</button>
+        <div id="sbar">
+          <img src={user} alt="Profile" id="profile-pic" />
+          <h3 id="profile-name">{userData.firstName} {userData.surname}jvnvnfnbm</h3>
+          <p id="profile-email">jkdbvjds@gmail.com{userData.email}</p>
+          <button type="button" id="save-button" onClick={handleSaveProfile}>Save Profile</button>
         </div>
       </div>
+    </div>
   );
 }
 
-export default StudentProfile;
+export default StudentProf;

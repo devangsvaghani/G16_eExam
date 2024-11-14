@@ -4,13 +4,21 @@ import { Helmet } from 'react-helmet';
 import logo from '../assets/logo.png';
 import './Homepage.css';
 import Login from '../Login/Login.jsx';
+import { useAuth } from "../../context/auth.jsx";
+import { useNavigate } from "react-router-dom";
 
 const Homepage = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const { setIsLoggedIn, validateUser, isLoggedIn } = useAuth();
+  const navigate = useNavigate();
 
   const handleLoginClick = () => {
+    
+    if (window.localStorage.getItem("token") !== null) {
+      navigate("/dashboard");
+    }
+
     setIsLoginOpen(true);
-    console.log(isLoginOpen);
   };
 
   const handleCloseLogin = () => {
@@ -63,7 +71,7 @@ const Homepage = () => {
             </div>
             <div className="feature-item">
               <h4>Real-Time Results</h4>
-              <p>Get your scores as soon as you finish your exams.</p>
+              <p>Get your scores as soon as your exam finishes.</p>
             </div>
             <div className="feature-item">
               <h4>Multiple Question Types</h4>
