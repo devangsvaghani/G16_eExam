@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Login.css';
 import { Helmet } from 'react-helmet';
-import logo from '../assets/logo.png'; 
+import logo from '../assets/logo.png';
 import close from '../assets/eye-closed.svg';
 import open from '../assets/eye-opened.svg';
 import ForgetPassword from './forgetpassword.jsx'; // Import the ForgetPassword component
+import config from "../../config.js";
+import { useAuth } from "../../context/auth.jsx";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import MoonLoader from "react-spinners/MoonLoader";
+import { toast } from "react-toastify";
 
 const Login = ({ onClose }) => {
   // States for form fields and password visibility
@@ -12,41 +18,63 @@ const Login = ({ onClose }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [role, setRole] = useState('student');
+  const [role, setRole] = useState('Student');
   const [errorMessage, setErrorMessage] = useState('');
-  const [showForgetPassword, setShowForgetPassword] = useState(false); 
+  const [showForgetPassword, setShowForgetPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { setIsLoggedIn, validateUser, isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    if (window.localStorage.getItem("token") !== null) {
+      navigate("/dashboard");
+    }
+  }, []);
 
   // Function triggered on form submission
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Basic validation
+    setLoading(true);
+
     if (!username || !password) {
-      alert('Please enter both username and password.');
+      toast.error("Fields are missing");
+      setLoading(false);
       return;
     }
 
+
     try {
-      const response = await fetch('https://your-backend-api.com/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password, role, rememberMe }),
-      });
+      const results = await axios.post(
+        (config.BACKEND_API || "http://localhost:8000") +
+        "/create-session",
+        {
+          emailUsername: username,
+          password: password
+        }
+      );
 
-      const data = await response.json();
+      console.log(results);
 
-      if (response.ok) {
-        console.log('Login successful:', data);
-        // Handle successful login (e.g., save token, redirect, etc.)
+
+      if (results.status === 200) {
+        window.localStorage.setItem("token", results.data.token);
+        window.localStorage.setItem("username", results.data.username);
+        setIsLoggedIn(true);
+        toast.success("Login Successful");
+        navigate("/dashboard");
       } else {
-        setErrorMessage(data.message || 'Login failed. Please try again.');
+        toast.error(results.data.error);
       }
-    } catch (error) {
-      setErrorMessage('An error occurred. Please try again later.');
-      console.error('Error:', error);
     }
+    catch (e) {
+      // console.log(e.response);
+      
+      toast.error((e?.response?.data?.error) || ("Internal server error"));
+    }
+
+    setLoading(false);
   };
 
   const handleForgotPasswordClick = () => {
@@ -63,7 +91,7 @@ const Login = ({ onClose }) => {
         <title>Login</title>
         <link rel="icon" href={logo} type="image/x-icon" />
       </Helmet>
-      
+
       <div className="login-container">
         {showForgetPassword ? (
           // Render ForgetPassword component when state is true
@@ -79,14 +107,14 @@ const Login = ({ onClose }) => {
             <br />
             <div className="select-container">
               <select
-                id="role" 
+                id="role"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
                 required
                 aria-label="Select Role"
               >
-                <option value="student">Student</option>
-                <option value="examiner">Examiner</option>
+                <option value="Student">Student</option>
+                <option value="Examiner">Examiner</option>
               </select>
             </div>
 
@@ -127,6 +155,11 @@ const Login = ({ onClose }) => {
                   <img src={open} alt="Show password" />
                 )}
               </button>
+              <MoonLoader
+                color="red"
+                loading={loading}
+                size={60}
+              />
             </div>
 
             {/* Error message */}

@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 
-// import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-// import Homepage from './Components/Homepage/Homepage.jsx';
-// import Login from './Components/Login/Login.jsx';
-// import Dashboard from './Components/Dashboard/Dashboard.jsx';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Homepage from './Components/Homepage/Homepage.jsx';
+import Login from './Components/Login/Login.jsx';
+import Dashboard from './Components/Dashboard/Dashboard.jsx';
 // import StartExam from './Components/Exam/Startexam.jsx';
 // import StudentProfile from './Components/Profile/StudentProfile.jsx';
 // import QuestionBank from './Components/Questions/QuestionBank.jsx';
@@ -14,9 +14,9 @@ import React, { useState } from 'react';
 // import StudentExamPage from './Components/StudentExamPage/StudentExamPage.jsx';
 // import ResultPage from './Components/ResultPage/ResultPage.jsx';
 // import ExaminerProfile from './Components/Profile/ExaminerProfile.jsx';
-import Upcomingexam from './Components/Exam/Upcomingexam.jsx';
-import Pastexam from './Components/Exam/Pastexam.jsx';
-import Examinterface from './Components/Examinterface/Examinterface.jsx'
+// import Upcomingexam from './Components/Exam/Upcomingexam.jsx';
+// import Pastexam from './Components/Exam/Pastexam.jsx';
+// import Examinterface from './Components/Examinterface/Examinterface.jsx'
 
 
 const App = () => {
@@ -197,12 +197,10 @@ const App = () => {
   // ];
   return (
     <>
-    {/* <Router>
-      <Routes>
+      {/* <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/login" element={<Login />} />
-      </Routes>
-    </Router> */}
+      </Routes> */}
     {/* <QuestionBank/> */}
      {/* <Dashboard/>  */}
      {/* <FetchedQuestions /> */}
@@ -214,7 +212,8 @@ const App = () => {
    {/* <ExaminerProfile/> */}
    {/* <Upcomingexam exams={exams} />  */}
    {/* <Pastexam results={sampleResults} /> */}
-      <Examinterface/>
+      {/* <Examinterface/> */}
+      <Dashboard/>
     </>
   );
 };
