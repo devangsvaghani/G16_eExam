@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
 
 const examinerSchema = new mongoose.Schema({
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
+    username: {
+        type: String,
         required: true,
-        ref: "User",
     },
 
     prepared_exams: [{

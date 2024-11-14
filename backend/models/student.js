@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
 
 const studentSchema = new mongoose.Schema({
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: "User",
+    username: {
+        type: String,
+        required: true
     },
 
     batch: {
@@ -45,6 +44,10 @@ const studentSchema = new mongoose.Schema({
                     },
                 },
             ],
+            obtained_score: {
+                type: Number,
+                default: 0
+            }
         },
     ],
 });
