@@ -108,7 +108,7 @@ export const create_student = async (req, res) => {
         const savedUser = await user.save();
 
         const student = new Student({
-            user: savedUser._id,
+            username: studentId,
             batch: batch,
             branch: branch,
             graduation: graduation,
@@ -179,7 +179,7 @@ export const create_examiner = async (req, res) => {
         const savedUser = await user.save();
 
         const examiner = new Examiner({
-            user: savedUser._id,
+            username: username,
             prepaprepared_exams: [],
             prepared_questions: []
         });
