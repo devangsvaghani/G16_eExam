@@ -18,6 +18,7 @@ import React, { useState } from 'react';
 // import Pastexam from './Components/Exam/Pastexam.jsx';
 // import Examinterface from './Components/Examinterface/Examinterface.jsx'
 import CreateStudent from './Components/Admindashboard/CreateStudent.jsx';
+import CreateExaminer from './Components/Admindashboard/CreateExaminer.jsx';
 
 
 const App = () => {
@@ -215,7 +216,8 @@ const App = () => {
    {/* <Pastexam results={sampleResults} /> */}
       {/* <Examinterface/> */}
       {/* <Dashboard/> */}
-      <CreateStudent/>
+      {/* <CreateStudent /> */}
+      <CreateExaminer/>
     </>
   );
 };
