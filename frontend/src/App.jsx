@@ -1,8 +1,6 @@
 
 import React, { useState } from 'react';
 
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
 import Homepage from './Components/Homepage/Homepage';
 import Dashboard from './Components/Dashboard/Dashboard'
 import Profile from './Components/Profile/Profile';
