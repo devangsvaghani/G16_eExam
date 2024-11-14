@@ -97,7 +97,7 @@ export const create_student = async (req, res) => {
             firstname,
             lastname,
             middlename,
-            dob,
+            dob:date,
             mobileno,
             email,
             gender,
@@ -168,7 +168,7 @@ export const create_examiner = async (req, res) => {
             firstname,
             lastname,
             middlename,
-            dob,
+            dob:date,
             mobileno,
             email,
             gender,
@@ -428,6 +428,25 @@ export const update_profile = async (req, res) => {
             return res.status(400).json({ message: "At least one field is required to update." });
         }
 
+        const mobilenoRegex = /^\d{10}$/;
+        if (!mobilenoRegex.test(mobileno)) {
+            return res.status(400).json({ message: 'Mobile number must be exactly 10 digits.' });
+        }
+
+        const dobRegex = /^\d{2}-\d{2}-\d{4}$/;
+        if (!dobRegex.test(dob)) {
+            return res.status(400).json({ message: 'Invalid date of birth format. Use DD-MM-YYYY.' });
+        }
+
+        const [day, month, year] = dob.split('-').map(Number);
+        const date = new Date(year, month - 1, day); // Month is 0-indexed in JS Date
+
+        // Check for valid day, month, and year in dob
+        if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
+            return res.status(400).json({ message: 'Invalid date of birth values.' });
+        }
+
+
         const user = await User.findOne({ username: username });
 
         if (!user) {
@@ -437,7 +456,7 @@ export const update_profile = async (req, res) => {
         if (firstname) user.firstname = firstname;
         if (lastname) user.lastname = lastname;
         if (middlename) user.middlename = middlename;
-        if (dob) user.dob = dob;
+        if (dob) user.dob = date;
         if (mobileno) user.mobileno = mobileno;
         if (gender) user.gender = gender;
 
