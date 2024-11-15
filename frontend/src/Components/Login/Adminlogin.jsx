@@ -10,6 +10,8 @@ import MoonLoader from "react-spinners/MoonLoader";
 import config from "../../config.js";
 import { useAuth } from "../../context/auth.jsx";
 import { useNavigate } from "react-router-dom";
+import Admindashboard from '../Admindashboard/AdminDashboard.jsx';
+import Cookies from 'js-cookie';
 
 const Login = () => {
   const [authorizationCode, setauthorizationCode] = useState('');
@@ -18,19 +20,17 @@ const Login = () => {
   const { setIsLoggedIn, validateUser, isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-
   useEffect(() => {
-    if (window.localStorage.getItem("token") === null) {
-      validateUser();
-    } else {
-      navigate(-1);
+    if(Cookies.get("role") === "Student" || Cookies.get("role") === "Examiner"){
+        navigate('/');
     }
+
   }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault(); // Prevents the default form submission
 
-    setLoading(true);
+    // setLoading(true);
 
     if (!authorizationCode) {
       toast.error("Code is missing");
@@ -51,8 +51,9 @@ const Login = () => {
       
 
       if(results.status === 200){
-        window.localStorage.setItem("token", results.data.token);
-        window.localStorage.setItem("username", results.data.username);
+        Cookies.set("token", results.data.token, {expires : 7});
+        Cookies.set("username", results.data.username, {expires : 7});
+        Cookies.set("role", results.data.role, {expires : 7});
         setIsLoggedIn(true);
         toast.success("Login Successful");
         navigate("/admin");
@@ -66,13 +67,13 @@ const Login = () => {
       toast.error("Internal server error");
     }
 
-    setLoading(false);
+    // setLoading(false);
 
   };
 
   return (
-    isLoggedIn ? 
-      <div>Admin Logged in</div>
+    isLoggedIn && Cookies.get("role") === "Admin" ? 
+      <Admindashboard />
     :
     <div className="login-container">
       <Helmet>

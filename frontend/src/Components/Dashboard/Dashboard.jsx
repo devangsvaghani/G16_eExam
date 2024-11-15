@@ -134,6 +134,13 @@ function Dashboard() {
   const { setIsLoggedIn, validateUser, LogOut, isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (window.localStorage.getItem("token") === null) {
+      validateUser();
+      navigate("/");
+    }
+  }, []);
+
   const items = [
     { id: "home", label: "Home" },
     { id: "questionbank", label: "Question Bank" },

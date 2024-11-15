@@ -1,6 +1,7 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Cookies from 'js-cookie';
 
 const authContext = createContext();
 
@@ -9,8 +10,9 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   const LogOut = () => {
-    window.localStorage.removeItem("token");
-    window.localStorage.removeItem("username");
+    Cookies.remove('token');
+    Cookies.remove('username');
+    Cookies.remove('role');
     setIsLoggedIn((prev) => false);
     navigate("/");
     toast.success("Logout successful!");
@@ -20,8 +22,9 @@ export const AuthProvider = ({ children }) => {
     if (
       isLoggedIn &&
       !(
-        window.localStorage.getItem("token") !== null &&
-        window.localStorage.getItem("username") !== null
+        Cookies.get("token") !== undefined &&
+        Cookies.get("username") !== undefined && 
+        Cookies.get("role") !== undefined 
       )
     ) {
       LogOut();
@@ -29,7 +32,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    setIsLoggedIn(window.localStorage.getItem("token") !== null);
+    setIsLoggedIn(Cookies.get("token") !== undefined);
   }, []);
 
   return (

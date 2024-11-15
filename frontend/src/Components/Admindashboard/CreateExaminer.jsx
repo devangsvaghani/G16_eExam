@@ -1,201 +1,223 @@
-import React, { useState } from 'react';
-import './CreateExaminer.css';
+import React, { useState } from "react";
+import "./CreateExaminer.css";
+import axios from "axios";
+import Cookies from "js-cookie";
+import config from "../../config.js";
 
-const CreateExaminer = ({onClose}) => {
-  const currentYear = new Date().getFullYear();
-
-  const [formData, setFormData] = useState({
-    firstName: '',
-    surname: '',
-    middleName: '',
-    dob: '',
-    email: '',
-    contact: '',
-    hireYear: currentYear,
-    role: '', // Examiner role
-    gender: '', // Male or Female
-    expertise: '', // Expertise area
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
+const CreateExaminer = ({ onClose, setExaminers, toast }) => {
+    const [formData, setFormData] = useState({
+        firstname: "",
+        lastname: "",
+        middlename: "",
+        dob: "",
+        email: "",
+        mobileno: "",
+        gender: "",
+        username: ""
     });
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-      // Regular expression to match exactly 10 digits
-      const contactRegex = /^\d{10}$/;
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
 
-      if (!contactRegex.test(formData.contact)) {
-        alert('Contact number must be 10 digits');
-        return; // Stop form submission if the contact number is invalid
-      }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Regular expression to match exactly 10 digits
+        const contactRegex = /^\d{10}$/;
+
+        if (!contactRegex.test(formData.mobileno)) {
+            toast.error("Contact number must be 10 digits");
+            return;
+        }
+
+        try{
+            
+            const headers = {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+            };
     
-    console.log('Examiner data submitted: ', formData);
+            const result = await axios.post((config.BACKEND_API || "http://localhost:8000") + "/create-examiner", formData, {headers});
+
+            console.log(result);
     
-  };
+            if(result.status !== 200){
+                toast.error((result?.data?.message) || ("Internal server error"));
+                return;
+            }
 
+            toast.success(result.data.message);
+            onClose();
+            
+            setExaminers(prev => [...prev, result.data.user]);
+        } catch(e){
+            console.log(e);
+            
+            toast.error((e?.response?.data?.message) || ("Internal server error"));
+        }
+    };
 
-  const handleClose = () => {
-    setFormData({
-      firstName: '',
-      surname: '',
-      middleName: '',
-      dob: '',
-      email: '',
-      contact: '',
-      Username: '',
-      role: '',
-      gender: '',
-      expertise: '',
-    });
-    console.log('Form closed or reset');
-  };
+    const handleClose = () => {
+        setFormData({
+            firstname: "",
+            lastname: "",
+            middlename: "",
+            dob: "",
+            email: "",
+            mobileno: "",
+            username: "",
+            role: "",
+            gender: "",
+            expertise: "",
+        });
+        console.log("Form closed or reset");
+    };
 
-  return (
-    <div className="create-examiner-container">
+    return (
+        <div className="create-examiner-container">
+            <h3 className="createexaminerheader">Create Examiner Profile</h3>
+            <form onSubmit={handleSubmit} className="examiner-form">
+                <div className="form-group">
+                    <div className="half-width">
+                        <label htmlFor="firstname">First Name:</label>
+                        <input
+                            type="text"
+                            id="firstname"
+                            name="firstname"
+                            value={formData.firstname}
+                            onChange={handleChange}
+                            placeholder="Enter first name"
+                            required
+                        />
+                    </div>
+                    <div className="half-width">
+                        <label htmlFor="username">Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleChange}
+                            placeholder="Enter username"
+                            required
+                        />
+                    </div>
+                </div>
 
-      <h3 className="createexaminerheader">Create Examiner Profile</h3>
-      <form onSubmit={handleSubmit} className="examiner-form">
-        <div className="form-group">
-          <div className="half-width">
-            <label htmlFor="firstName">First Name:</label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              placeholder="Enter first name"
-              required
-            />
-          </div>
-          <div className="half-width">
-            <label htmlFor="surname">Last Name:</label>
-            <input
-              type="text"
-              id="surname"
-              name="surname"
-              value={formData.surname}
-              onChange={handleChange}
-              placeholder="Enter surname"
-              required
-            />
-          </div>
+                <div className="form-group">
+                    <div className="half-width">
+                        <label htmlFor="middlename">Middle Name:</label>
+                        <input
+                            type="text"
+                            id="middlename"
+                            name="middlename"
+                            value={formData.middlename}
+                            onChange={handleChange}
+                            placeholder="Enter middle name"
+                            required
+                        />
+                    </div>
+
+                    <div className="half-width">
+                        <label htmlFor="lastname">Last Name:</label>
+                        <input
+                            type="text"
+                            id="lastname"
+                            name="lastname"
+                            value={formData.lastname}
+                            onChange={handleChange}
+                            placeholder="Enter last name"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <div className="half-width">
+                        <label htmlFor="email">Email Address:</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="Enter email"
+                            required
+                        />
+                    </div>
+                    <div className="half-width">
+                        <label htmlFor="mobileno">Mobile Number:</label>
+                        <input
+                            type="tel"
+                            id="mobileno"
+                            name="mobileno"
+                            value={formData.mobileno}
+                            onChange={handleChange}
+                            placeholder="Enter mobile number"
+                            required
+                            pattern="\d{10}" // Ensures exactly 10 digits
+                            title="Mobile number must be 10 digits"
+                        />
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <div className="half-width">
+                        <label htmlFor="dob">Date of Birth:</label>
+                        <input
+                            type="date"
+                            id="dob"
+                            name="dob"
+                            value={formData.dob}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    {/* Role Selection */}
+                    <div className="half-width">
+                        <div className="radio-group">
+                            <label>Gender:</label>
+                            <div className="radio-group-div">
+                                <input
+                                    type="radio"
+                                    name="gender"
+                                    value="Male"
+                                    checked={formData.gender === "Male"}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                Male
+                                <input
+                                    type="radio"
+                                    name="gender"
+                                    value="Female"
+                                    checked={formData.gender === "Female"}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                Female
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="form-group"></div>
+
+                <button type="submit" className="submit-btn">
+                    Create Examiner Profile
+                </button>
+                <button type="button" onClick={onClose} className="close-btn">
+                    Close
+                </button>
+            </form>
         </div>
-
-        <div className="form-group">
-          <div className="half-width">
-            <label htmlFor="middleName">Middle Name:</label>
-            <input
-              type="text"
-              id="middleName"
-              name="middleName"
-              value={formData.middleName}
-              onChange={handleChange}
-              placeholder="Enter middle name"
-              required
-            />
-          </div>
-          <div className="half-width">
-            <label htmlFor="dob">Date of Birth:</label>
-            <input
-              type="date"
-              id="dob"
-              name="dob"
-              value={formData.dob}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-
-        <div className="form-group">
-          <div className="half-width">
-            <label htmlFor="email">Email Address:</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter email"
-              required
-            />
-          </div>
-          <div className="half-width">
-            <label htmlFor="contact">Contact Number:</label>
-            <input
-              type="tel"
-              id="contact"
-              name="contact"
-              value={formData.contact}
-              onChange={handleChange}
-              placeholder="Enter contact number"
-              required
-              pattern="\d{10}" // Ensures exactly 10 digits
-              title="Contact number must be 10 digits"
-            />
-          </div>
-        </div>
-
-        <div className="form-group">
-          <div className="half-width">
-            <label htmlFor="hireYear">Username :</label>
-            <input
-              type="text"
-              id="hireYear"
-              name="hireYear"
-              value={formData.hireYear}
-              onChange={handleChange}
-              placeholder="Enter Username"
-              required
-            />
-          </div>
-
-          {/* Role Selection */}
-          <div className="half-width">
-            <div className="radio-group">
-              <label>Gender:</label>
-              <div className='radio-group-div'>
-                <input
-                  type="radio"
-                  name="gender"
-                  value="Male"
-                  checked={formData.gender === 'Male'}
-                  onChange={handleChange}
-                  required
-                />
-                Male
-                <input
-                  type="radio"
-                  name="gender"
-                  value="Female"
-                  checked={formData.gender === 'Female'}
-                  onChange={handleChange}
-                  required
-                />
-                Female
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div className="form-group">
-         
-       
-        </div>
-
-        <button type="submit" className="submit-btn">Create Examiner Profile</button>
-        <button type="button" onClick={onClose} className="close-btn">Close</button>
-      </form>
-    </div>
-  );
+    );
 };
 
 export default CreateExaminer;

@@ -1,64 +1,53 @@
 /* Global Styles */
 .studentpdiv {
-   align-items: center;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
 }
 
-#profilecontainer{
-    margin-left:15%;
-    margin-top: 50px;
-    width:70%;
+#profilecontainer {
+    height: 80%;
+    width: 70%;
     z-index: 700;
-    position: absolute;
+    position: relative;
     box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.5);
 }
 
 #profile-card {
-    
     background-color: #F9F7F7;
-  
     display: flex;
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     width: 100%;
     padding: 10px 15px;
     animation: fadeIn 0.8s ease-in-out;
-    gap : 20px;
-
-
+    gap: 20px;
+    flex-direction: row;
 }
-#reset-button{
-   
-  
-    
-   
 
-     margin-top: 70%;
-    
-    
-     width: 75%;
-     padding: 12px;
-     background-color: #3F72AF;
-     color: #F9F7F7;
-     border: none;
-     border-radius: 8px;
-     font-size: 15px;
-     cursor: pointer;
-     text-align: center;
-     transition: all 0.3s ease;
-
-    
-    
-    
-   
-   
-   
-     
- 
-
+#reset-button {
+    width: 75%;
+    padding: 12px;
+    background-color: #3F72AF;
+    color: #F9F7F7;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    margin: 1rem auto;
 }
+
 #reset-button:hover {
     background-color: #112D4E;
     transform: translateY(-2px);
@@ -79,11 +68,11 @@
     position: relative;
 }
 
-#content h2{
-    color:  #3F72AF;
+#content h2 {
+    color: #3F72AF;
     text-align: center;
     font-size: 30px;
-    margin-top: 10px;;
+    margin-top: 10px;
 }
 
 #profile-pic {
@@ -94,7 +83,6 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
-
 
 #profile-name {
     font-size: 18px;
@@ -158,7 +146,7 @@
     border-radius: 8px;
     box-sizing: border-box;
     transition: border 0.3s ease, box-shadow 0.3s ease;
-    margin : 4px;
+    margin: 4px;
 }
 
 #form-group input:focus {
@@ -169,7 +157,7 @@
 
 /* Save Button */
 #save-button {
-    position: absolute;
+    /* position: absolute; */
     bottom: 20px;
     width: 75%;
     padding: 12px;
@@ -181,12 +169,19 @@
     cursor: pointer;
     text-align: center;
     transition: all 0.3s ease;
+    margin: 1rem auto;
 }
 
 #save-button:hover {
     background-color: #112D4E;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.profilebtns{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 /* Keyframe Animation for Profile Card */
@@ -201,3 +196,101 @@
     }
 }
 
+/* Responsive Styles */
+@media (max-width: 768px) {
+    /* On smaller screens, profile container takes full width and height */
+    #profilecontainer {
+        width: 90%;
+        height: 90%;
+    }
+
+    #profile-card {
+        flex-direction: column; /* Stack the profile card elements */
+        gap: 10px;
+        padding: 15px;
+    }
+
+    #sbar {
+        width: 100%; /* Sidebar takes full width */
+        margin-bottom: 15px;
+    }
+
+    #profile-pic {
+        width: 50%; /* Larger profile picture on smaller screens */
+    }
+
+    #profile-name {
+        font-size: 16px;
+    }
+
+    #profile-email {
+        font-size: 14px;
+    }
+
+    #content h2 {
+        font-size: 24px;
+    }
+
+    /* Form Adjustments */
+    #form-group {
+        flex-direction: column; /* Stack form fields on smaller screens */
+        padding: 10px;
+    }
+
+    #form-group input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    /* Buttons */
+    #reset-button, #save-button {
+        width: 90%;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* For very small screens */
+    #profilecontainer {
+        width: 100%;
+        height: 80%;
+    }
+
+    #profile-card {
+        padding: 10px;
+    }
+
+    #sbar {
+        padding: 15px;
+    }
+
+    #profile-pic {
+        width: 60%; /* Profile picture smaller on very small screens */
+    }
+
+    #profile-name {
+        font-size: 14px;
+    }
+
+    #profile-email {
+        font-size: 12px;
+    }
+
+    #content h2 {
+        font-size: 20px;
+    }
+
+    #form-group {
+        flex-direction: column;
+    }
+
+    #form-group input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    #reset-button, #save-button {
+        width: 100%;
+        padding: 15px;
+    }
+}

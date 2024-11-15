@@ -17,9 +17,9 @@ const ForgetPassword = ({ onClose }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (window.localStorage.getItem("token") !== null) {
+        if (Cookies.get('token')) {
             navigate("/dashboard");
-        }
+          }
     }, []);
 
     const handleSubmit = async (e) => {

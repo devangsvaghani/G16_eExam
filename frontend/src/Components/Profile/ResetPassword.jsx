@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './ResetPassword.css';
-import { useNavigate } from "react-router-dom";
 import ForgetPassword from "../Login/forgetpassword";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import config from "../../config.js";
+import { useAuth } from "../../context/auth.jsx";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 function ResetPassword() {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -10,32 +15,66 @@ function ResetPassword() {
   const [isForgetPassOpen, setForgetOpen] = useState(false);
   const [error, setError] = useState("");
 
+  const { setIsLoggedIn, validateUser, isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!Cookies.get("token")) {
+        navigate("/");
+    }
+}, []);
+
   const handleForget = () => {
     setForgetOpen(true);
   };
 
-  const correctCurrentPassword = "oldPassword123"; // This should be replaced with real authentication
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (currentPassword !== correctCurrentPassword) {
-      alert("The current password is incorrect.");
-      return;
+    if(newPassword !== confirmPassword){
+        setError("Password Does not match");
+        return;
     }
 
-    if (newPassword !== confirmPassword) {
-      alert("New password and confirm password do not match.");
-      return;
+    if(newPassword.length < 8){
+        toast.error("Password must be at least 8 characters long");
+        return;
     }
 
-    setError("");
-    alert("Password reset successfully!");
+    try{
+
+        const headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+        };
+
+        const result = await axios.post(
+            (config.BACKEND_API || "http://localhost:8000") +
+                `/reset-password`,{
+                    old_password: currentPassword,
+                    new_password: newPassword
+                },
+            { headers }
+        );
+
+        console.log(result);
+
+        toast.success(result.data.message);
+
+        setTimeout(() => {
+            navigate(-1);
+        }, 1000);
+    }catch(e){
+        console.log(e);
+
+        toast.error(e?.response?.data?.message || "Internal server error");
+    }
   };
-    const navigate = useNavigate();
+  
+  ;
   const handleClose = () => {
         
-      navigate('/');
+      navigate(-1);
   };
 
   const handleCloseForget = () => {

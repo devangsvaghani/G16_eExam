@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import MoonLoader from "react-spinners/MoonLoader";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 const Login = ({ onClose }) => {
   // States for form fields and password visibility
@@ -27,7 +28,7 @@ const Login = ({ onClose }) => {
 
 
   useEffect(() => {
-    if (window.localStorage.getItem("token") !== null) {
+    if (Cookies.get('token')) {
       navigate("/dashboard");
     }
   }, []);
@@ -59,8 +60,9 @@ const Login = ({ onClose }) => {
 
 
       if (results.status === 200) {
-        window.localStorage.setItem("token", results.data.token);
-        window.localStorage.setItem("username", results.data.username);
+        Cookies.set("token", results.data.token);
+        Cookies.set("username", results.data.username);
+        Cookies.set("role", results.data.role);
         setIsLoggedIn(true);
         toast.success("Login Successful");
         navigate("/dashboard");
@@ -104,7 +106,7 @@ const Login = ({ onClose }) => {
 
             {/* Role dropdown */}
             <label htmlFor="role">Role</label>
-            <br />
+            {/* <br /> */}
             <div className="select-container">
               <select
                 id="role"
@@ -120,7 +122,7 @@ const Login = ({ onClose }) => {
 
             {/* Username input */}
             <label htmlFor="username">Username</label>
-            <br />
+            {/* <br /> */}
             <input
               type="text"
               id="username"
@@ -133,7 +135,7 @@ const Login = ({ onClose }) => {
 
             {/* Password input with toggle visibility */}
             <label htmlFor="password">Password</label>
-            <br />
+            {/* <br /> */}
             <div className="password-container">
               <input
                 type={showPassword ? 'text' : 'password'}
