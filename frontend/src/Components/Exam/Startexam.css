@@ -3,7 +3,7 @@
   margin: 0px;
   padding: 0px;
 }
-.container {
+.start-exam-container {
   display: flex;
   flex-direction: column; /* Arrange container items in a column */
   align-items: center;

@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './SubmitConfirmationModal.css';
 
-const SubmitConfirmationModal = ({ onConfirm, onCancel }) => {
+const SubmitConfirmationModal = ({ onCancel}) => {
+    const navigate = useNavigate();
+
     const handleConfirmClick = () => {
-        alert('Successfully Submitted!!'); // Display the alert
-        onConfirm(); // Call onConfirm to proceed with submission
+        alert('Your Exam Has been Successfully Submitted!!!')
+        navigate("/");
     };
 
     return (
@@ -16,7 +19,7 @@ const SubmitConfirmationModal = ({ onConfirm, onCancel }) => {
                     <button onClick={handleConfirmClick}>Yes, Submit</button>
                     <button onClick={onCancel}>Cancel</button>
                 </div>
-            </div>
+            </div> 
         </div>
     );
 };

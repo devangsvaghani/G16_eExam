@@ -11,6 +11,8 @@ import Admindashboard from './Components/Admindashboard/AdminDashboard';
 import Upcomingexam from './Components/Exam/Upcomingexam'
 import ResetPassword from './Components/Profile/ResetPassword';
 import Adminlogin from './Components/Login/Adminlogin'
+import StartExam from './Components/Exam/Startexam';
+import Examinterface from './Components/Examinterface/Examinterface';
 
 // const exams = [
   //   {
@@ -210,6 +212,10 @@ const App = () => {
       {/* <QuestionBank /> */}
       {/* <FetchedQuestions /> */}
         {/* <Examinerdashboard/> */}
+      <Routes>
+        <Route path="/" element={<StartExam />} />
+        <Route path="/exam" element={<Examinterface/>}/>
+      </Routes>
       
     
     </>
