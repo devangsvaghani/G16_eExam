@@ -4,9 +4,11 @@ import "./FetchedQuestions.css";
 const FetchedQuestions = () => {
   const [questions, setQuestions] = useState([]);
   const [newQuestion, setNewQuestion] = useState({
+    id: null,
     text: "",
     options: ["", "", "", ""],
-    correctAnswer: ""
+    correctAnswer: "",
+    difficulty: ""
   });
 
   useEffect(() => {
@@ -27,9 +29,13 @@ const FetchedQuestions = () => {
   };
 
   const handleAddQuestion = () => {
-    if (newQuestion.text && newQuestion.correctAnswer) {
-      setQuestions([...questions, newQuestion]);
-      setNewQuestion({ text: "", options: ["", "", "", ""], correctAnswer: "" });
+    if (newQuestion.text && newQuestion.correctAnswer && newQuestion.difficulty) {
+      const questionWithId = {
+        ...newQuestion,
+        id: Date.now() // Generate a unique ID using the current timestamp
+      };
+      setQuestions([...questions, questionWithId]);
+      setNewQuestion({ id: null, text: "", options: ["", "", "", ""], correctAnswer: "", difficulty: "" });
     } else {
       alert("Please fill in all fields.");
     }
@@ -41,7 +47,7 @@ const FetchedQuestions = () => {
         {questions.length > 0 && (
           <ul className="question-list">
             {questions.map((question, index) => (
-              <li key={index} className="question-item">
+              <li key={question.id} className="question-item">
                 <strong className="question-label">Q:</strong>
                 <span className="question-text">{question.text}</span>
                 <ul className="options-list">
@@ -50,6 +56,7 @@ const FetchedQuestions = () => {
                   ))}
                 </ul>
                 <p className="correct-answer"><strong>Correct Answer:</strong> {question.correctAnswer}</p>
+                <p className="difficulty"><strong>Difficulty:</strong> {question.difficulty}</p>
               </li>
             ))}
           </ul>
@@ -85,6 +92,21 @@ const FetchedQuestions = () => {
           onChange={handleInputChange}
           className="input-field"
         />
+        
+        <select
+          name="difficulty"
+          value={newQuestion.difficulty}
+          onChange={handleInputChange}
+          className="input-field select-field"
+        >
+          <option value="" disabled>
+            Select difficulty
+          </option>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+
         <button 
           onClick={handleAddQuestion} 
           className="add-question-button"

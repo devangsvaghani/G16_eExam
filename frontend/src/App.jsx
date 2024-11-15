@@ -191,7 +191,7 @@ const App = () => {
 
   return (
     <>
-      <Routes>
+      {/* <Routes>
       
         <Route path="/" element={<Homepage />} />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -206,6 +206,10 @@ const App = () => {
       {/* <ResetPassword/> */}
       {/* <ResetPassword/> */}
       {/* <Admindashboard/> */}
+
+      {/* <QuestionBank /> */}
+      {/* <FetchedQuestions /> */}
+        {/* <Examinerdashboard/> */}
       
     
     </>

@@ -65,7 +65,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
+    position: relative; 
+    gap: 130px;
+  
 }
 
 #content h2 {
@@ -82,6 +84,7 @@
     border: 2px solid #3F72AF;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    
 }
 
 #profile-name {
@@ -108,7 +111,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
 }
 
 /* Form */
@@ -116,7 +119,7 @@
     display: flex;
     justify-content: left;
     flex-direction: column;
-    gap: 15px;
+   
 }
 
 #form-group {
@@ -294,3 +297,6 @@
         padding: 15px;
     }
 }
+
+
+

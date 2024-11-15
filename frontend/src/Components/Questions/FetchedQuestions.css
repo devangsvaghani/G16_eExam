@@ -44,6 +44,11 @@
   color: #3F72AF;
 }
 
+.difficulty {
+  margin-top: 4px;
+  color: #FF6F61; /* Distinct color for difficulty level */
+}
+
 .create-question {
   margin-top: 24px;
 }
@@ -77,4 +82,15 @@
 
 .add-question-button:hover {
   background-color: #112D4E;
+}
+
+/* New Styles for Difficulty Dropdown */
+.select-field {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #d1d1d1;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  color: #4a4a4a;
+  background-color: #F9F7F7;
 }
