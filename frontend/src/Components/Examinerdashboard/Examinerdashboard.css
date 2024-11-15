@@ -513,7 +513,7 @@ body, html {
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 16px;
-  height: 180px;
+  height: 220px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -548,5 +548,17 @@ body, html {
   background-color: #555;
 }
 
+.exam-grid-editbtn,
+.exam-grid-resultbtn{
+  color: white;
+  box-shadow: none;
+  border: none;
+  font-size: 15px;
+  flex-direction: row;
+  background-color: #3F72AF;
+  padding: 8px;
+  border-radius: 10px;
+  width: 100%;
+}
 
 

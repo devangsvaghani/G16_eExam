@@ -5,6 +5,7 @@ import user from "../assets/user.png";
 import { useAuth } from "../../context/auth.jsx";
 import { useNavigate } from "react-router-dom";
 import CreateExam from '../CreateExam/CreateExam.jsx';
+import ExamResults from "./ExamResults.jsx";
 
 
 const exams = [
@@ -227,7 +228,8 @@ function Examinerdashboard() {
   const [iscreateexamopen,setiscreateexamopen] = useState(false);
   const navigate = useNavigate();
   const [isprofileopen,setisprofileopen] = useState(false);
-
+  const [showresult,setshowresult] = useState(false);
+  
 
   const items = [
     { id: "home", label: "Home" },
@@ -420,6 +422,9 @@ function Examinerdashboard() {
               <p><strong>Duration:</strong> {exam.duration}</p>
               <p><strong>Start Time:</strong> {exam.startTime}</p>
               <p><strong>No. of Questions:</strong> {exam.questions}</p>
+              <button className="exam-grid-editbtn">
+                Edit
+              </button>
             </div>
           ))}
         </div>
@@ -435,6 +440,40 @@ function Examinerdashboard() {
           Close 
           </button>
         </div>
+        }
+         {activeIndex==3 && !iscreateexamopen && !showresult &&
+          <div>
+          <div className="exam-grid">
+          {exams.map((exam, index) => (
+            <div className="exam-card" key={index}>
+              <h3>{exam.name}</h3>
+              <p><strong>Subject:</strong> {exam.subject}</p>
+              <p><strong>Duration:</strong> {exam.duration}</p>
+              <p><strong>Start Time:</strong> {exam.startTime}</p>
+              <p><strong>No. of Questions:</strong> {exam.questions}</p>
+              <button className="exam-grid-resultbtn" onClick={()=>setshowresult(true)} >
+                Result
+              </button>
+            </div>
+          ))}
+        </div>
+        </div>
+        }
+         {activeIndex==3 && !iscreateexamopen && showresult &&
+          <div>
+           <ExamResults 
+           examtitle="Mathsmatics insem exam" 
+           subject="Mathematics"
+           duration="2 hour"
+           starttime="10 pm"
+           numquestion="20"
+           totalmarks="100"
+
+           />
+           <button className="create-examiner-button" onClick={()=>setshowresult(false)}>
+              close
+           </button>
+          </div>
         }
       </div>
     </div>
