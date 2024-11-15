@@ -10,6 +10,8 @@ import Forgetpassword from './Components/Login/forgetpassword';
 import Admindashboard from './Components/Admindashboard/AdminDashboard';
 import Upcomingexam from './Components/Exam/Upcomingexam'
 import ResetPassword from './Components/Profile/ResetPassword';
+import Examinerdashboard from './Components/Examinerdashboard/Examinerdashboard.jsx'
+import ExaminerProfile from './Components/Profile/ExaminerProfile.jsx'
 
 // const exams = [
   //   {
@@ -190,11 +192,17 @@ const App = () => {
 
   return (
     <>
-      <Routes>
+      {/* <Routes>
       
         <Route path="/" element={<StudentProf />} />
         <Route path="/resetpass" element={<ResetPassword />} />
         <Route path="/forgetpass" element={<Forgetpassword/>}/>
+      </Routes> */}
+      {/* <Examinerdashboard/> */}
+
+      <Routes>
+      <Route path="/" element={<Examinerdashboard />} />
+      <Route path="/Examinerprofile" element={<ExaminerProfile/>}/>
       </Routes>
       
       {/* <Forgetpassword/> */}
