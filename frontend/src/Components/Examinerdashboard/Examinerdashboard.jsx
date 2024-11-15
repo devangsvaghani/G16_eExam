@@ -4,6 +4,7 @@ import logo from "../assets/logo.png";
 import user from "../assets/user.png";
 import { useAuth } from "../../context/auth.jsx";
 import { useNavigate } from "react-router-dom";
+import CreateExam from '../CreateExam/CreateExam.jsx';
 
 
 const Calendar = () => {
@@ -141,7 +142,6 @@ function Examinerdashboard() {
     { id: "question", label: "Questions" },
     { id: "exam", label: "Exam" },
     { id: "results", label: "Results" },
-   
   ];
 
 
@@ -212,9 +212,9 @@ function Examinerdashboard() {
 
 
         {/* Content Area */}
-        <div className="content">
+        {/* <div className="content">
           {/* Upcoming Exams */}
-          <div className="firstcol">
+          {/* <div className="firstcol">
             <div className="upcomingexambox">
               <h2>Upcoming Exams</h2>
               <div className="card">
@@ -250,18 +250,14 @@ function Examinerdashboard() {
                 </div>
               </div>
             </div>
-            
-          </div>
+          </div> */}
 
           {/* Calendar */}
-         
-          <div className="secondcol">
+          {/* <div className="secondcol">
             <Calendar />
-          
-         
-        </div>
+          </div> */}
 
-          <div className="thirdcol">
+        {/* <div className="thirdcol">
           <div className="anonouncementsBox">
             <h2>Announcements</h2>
             <div className="card">
@@ -305,15 +301,17 @@ function Examinerdashboard() {
                 <p>Topics: DSA, DBMS, Node</p>
                 <p>Date: May 15, 2024</p>
               </div>
-              <div className="exam">
+             / <div className="exam">
                 <p><strong>Exam 2</strong></p>
                 <p>Topics: OS, CN, AI</p>
                 <p>Date: May 5, 2024</p>
               </div>
             </div>
           </div>
-        </div>          
-
+        </div>           
+        </div> */}
+        <div className="CreateExam-comp">
+          <CreateExam/>
         </div>
       </div>
     </div>
