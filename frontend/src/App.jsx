@@ -12,6 +12,8 @@ import Upcomingexam from './Components/Exam/Upcomingexam'
 import ResetPassword from './Components/Profile/ResetPassword';
 import Examinerdashboard from './Components/Examinerdashboard/Examinerdashboard.jsx'
 import ExaminerProfile from './Components/Profile/ExaminerProfile.jsx'
+import QuestionBank from './Components/Questions/QuestionBank.jsx';
+import FetchedQuestions from './Components/Questions/FetchedQuestions.jsx';
 
 // const exams = [
   //   {
@@ -211,6 +213,10 @@ const App = () => {
       {/* <ResetPassword/> */}
       {/* <ResetPassword/> */}
       {/* <Admindashboard/> */}
+
+      {/* <QuestionBank /> */}
+      {/* <FetchedQuestions /> */}
+
       
     
     </>
