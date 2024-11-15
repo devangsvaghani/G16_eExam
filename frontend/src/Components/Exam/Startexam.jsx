@@ -1,15 +1,51 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Startexam.css';
 
-function ExamPage() {
-  const [countdown, setCountdown] = useState(null);
-  const [testStarted, setTestStarted] = useState(false);
+function StartExam() {
+  const navigate = useNavigate();
+  const targetDate = new Date('November 15, 2024 00:05:00').getTime();
+  const [currentTime, setCurrentTime] = useState(new Date().getTime());
+  const [countdown, setCountdown] = useState(targetDate - currentTime);
   const [consentGiven, setConsentGiven] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [testCountdown, setTestCountdown] = useState(null); // Added state for the 10-second countdown
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      setCurrentTime(now);
+      setCountdown(targetDate - now);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [targetDate]);
+
+  useEffect(() => {
+    if (testCountdown === 0) {
+      navigate('/exam'); // Redirect to the exam page
+    } else if (testCountdown > 0) {
+      const timer = setInterval(() => {
+        setTestCountdown((prevCountdown) => prevCountdown - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [testCountdown, navigate]);
 
   const handleConsentChange = () => {
     setConsentGiven(!consentGiven);
     setShowError(false); // Hide error message when consent is given
+  };
+
+  const showStartButton = countdown <= 0;
+
+  const formatCountdown = (time) => {
+    const hours = Math.floor(time / (1000 * 60 * 60));
+    const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((time % (1000 * 60)) / 1000);
+    return `${hours.toString().padStart(2, '0')}:${minutes
+      .toString()
+      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
   const startTest = () => {
@@ -17,24 +53,11 @@ function ExamPage() {
       setShowError(true);
       return;
     }
-    setCountdown(10); // Start countdown from 10 seconds
-    setTestStarted(true);
+    setTestCountdown(10); // Start a 10-second countdown
   };
 
-  useEffect(() => {
-    if (countdown === 0) {
-      alert('Test Started!');
-      // Add test start logic here
-      setTestStarted(false);
-    }
-    if (countdown && countdown > 0) {
-      const timer = setInterval(() => setCountdown(countdown - 1),1000);
-      return () => clearInterval(timer);
-    }
-  }, [countdown]);
-
   return (
-    <div className="container">
+    <div className="start-exam-container">
       <div className="exam-container">
         <h1 className="heading">Mathematics Final Exam</h1>
 
@@ -60,22 +83,25 @@ function ExamPage() {
           <ul>
             <li>You have 60 minutes to complete the exam.</li>
             <li>There are 50 questions in total.</li>
-            <li>Click the "Start Test" button when ready.</li>
+            <li>Click the "Start Test" button when the countdown reaches zero.</li>
           </ul>
         </div>
 
         <div className="consent">
-        <div className="checkbox"><input
-            type="checkbox"
-            checked={consentGiven}
-            onChange={handleConsentChange}
-          />
-        </div>
-        <div>
-        <label htmlFor="consent-checkbox">
-            I agree to the terms and conditions, including that I will not engage in any form of academic dishonesty or use unauthorized assistance during the test.
-          </label>
-        </div>
+          <div className="checkbox">
+            <input
+              type="checkbox"
+              checked={consentGiven}
+              onChange={handleConsentChange}
+            />
+          </div>
+          <div>
+            <label htmlFor="consent-checkbox">
+              I agree to the terms and conditions, including that I will not
+              engage in any form of academic dishonesty or use unauthorized
+              assistance during the test.
+            </label>
+          </div>
         </div>
 
         {/* Display error message if consent is not selected */}
@@ -85,19 +111,22 @@ function ExamPage() {
           </div>
         )}
 
-        {testStarted && countdown > 0 && (
+        {/* Countdown or Start Button */}
+        {!showStartButton ? (
           <div className="countdown">
-            The test will start in <strong>{countdown}</strong> seconds.
+            Time until the Start button appears: <strong>{formatCountdown(countdown)}</strong>
           </div>
-        )}
-        <br/>
-
-        {!testStarted && (
+        ) : testCountdown !== null ? (
+          <div className="countdown">
+            The test will start in <strong>{testCountdown}</strong> seconds.
+          </div>
+        ) : (
           <button className="start-btn" onClick={startTest}>
             Start Test
           </button>
         )}
       </div>
+
       <footer className="footer">
         <p>
           For technical support, contact: <a href="mailto:support@example.com">support@example.com</a>
@@ -108,4 +137,4 @@ function ExamPage() {
   );
 }
 
-export default ExamPage;
+export default StartExam;

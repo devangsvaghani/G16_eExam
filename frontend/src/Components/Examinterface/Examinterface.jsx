@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Examinterface.css';
 import SubmitConfirmationModal from './submitConfirmationModal';
+import user from '../assets/user.png';
 
 function Examinterface() {
     const [timeRemaining, setTimeRemaining] = useState(30000);
@@ -258,6 +259,7 @@ const handleCloseSubmitConfirm = () => {
           setSelectedAnswer(null);
       }
   };
+  
 
   return (
     <div className="exampage">
@@ -315,7 +317,7 @@ const handleCloseSubmitConfirm = () => {
             </aside>
 
             <div className="question-area">
-                <div>
+                <div className='question-area-div'>
                     <h2>Question {currentQuestionIndex + 1}</h2>
                     <p>{questions[currentQuestionIndex].text}</p>
                     <p className="points">({questions[currentQuestionIndex].points} points)</p>
@@ -354,7 +356,7 @@ const handleCloseSubmitConfirm = () => {
 
            <aside className="profilebar">
                 <div className='profile'>
-                    <img src="https://img.freepik.com/premium-vector/silver-membership-icon-default-avatar-profile-icon-membership-icon-social-media-user-image-vector-illustration_561158-4215.jpg" alt="" />
+                    <img src={user} alt="" />
                     <h3 className="ques">Nishank Kansara</h3>
                     <p>202201111</p>
                 </div>
