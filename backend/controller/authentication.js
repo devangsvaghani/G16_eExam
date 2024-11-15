@@ -21,7 +21,7 @@ export const create_session = async (req, res) => {
         }
 
         const token = generateToken(user);
-        return res.status(200).json({ token: token, username: user.username, message: "Logged in successfully" });
+        return res.status(200).json({ token: token, username: user.username, role: user.role, message: "Logged in successfully" });
 
     } catch (error) {
         console.error(error);
@@ -41,7 +41,7 @@ export const admin_login = async (req, res) => {
         }
 
         const token = generateToken(admin);
-        return res.status(200).json({ token: token, message: "Logged in successfully" });
+        return res.status(200).json({ token: token, username: admin.username, role: admin.role, message: "Logged in successfully" });
 
     } catch(error){
         console.error(error);
@@ -52,6 +52,9 @@ export const admin_login = async (req, res) => {
 export const create_student = async (req, res) => {
     try {
         const { firstname, lastname, middlename, dob, mobileno, email, gender, batch, branch, graduation } = req.body;
+
+        // console.log(req.body);
+        
 
         if(!firstname || !dob || !mobileno || !email || !gender || !batch || !branch || !graduation){
             return res.status(400).json({ message: 'All fields are required!' });
@@ -69,13 +72,13 @@ export const create_student = async (req, res) => {
             return res.status(400).json({ message: 'Mobile number must be exactly 10 digits.' });
         }
 
-        // DOB validation (expecting format 'DD-MM-YYYY')
-        const dobRegex = /^\d{2}-\d{2}-\d{4}$/;
+        // DOB validation (expecting format 'YYYY-MM-DD')
+        const dobRegex = /^\d{4}-\d{2}-\d{2}$/;
         if (!dobRegex.test(dob)) {
-            return res.status(400).json({ message: 'Invalid date of birth format. Use DD-MM-YYYY.' });
+            return res.status(400).json({ message: 'Invalid date of birth format. Use YYYY-MM-DD.' });
         }
 
-        const [day, month, year] = dob.split('-').map(Number);
+        const [year, month, day] = dob.split('-').map(Number);
         const date = new Date(year, month - 1, day); // Month is 0-indexed in JS Date
 
         // Check for valid day, month, and year in dob
@@ -117,10 +120,10 @@ export const create_student = async (req, res) => {
 
         await student.save();
 
-        return res.status(200).json({ message: "Student created successfully" });
+        return res.status(200).json({ message: "Student created successfully", user: savedUser });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "Internal Server Error", error: error.message });
+        return res.status(500).json({ message: error.message });
     }
 }
 
@@ -144,13 +147,13 @@ export const create_examiner = async (req, res) => {
             return res.status(400).json({ message: 'Mobile number must be exactly 10 digits.' });
         }
 
-        // DOB validation (expecting format 'DD-MM-YYYY')
-        const dobRegex = /^\d{2}-\d{2}-\d{4}$/;
+        // DOB validation (expecting format 'YYYY-MM-DD')
+        const dobRegex = /^\d{4}-\d{2}-\d{2}$/;
         if (!dobRegex.test(dob)) {
-            return res.status(400).json({ message: 'Invalid date of birth format. Use DD-MM-YYYY.' });
+            return res.status(400).json({ message: 'Invalid date of birth format. Use YYYY-MM-DD.' });
         }
 
-        const [day, month, year] = dob.split('-').map(Number);
+        const [year, month, day] = dob.split('-').map(Number);
         const date = new Date(year, month - 1, day); // Month is 0-indexed in JS Date
 
         // Check for valid day, month, and year in dob
@@ -186,7 +189,7 @@ export const create_examiner = async (req, res) => {
 
         await examiner.save();
 
-        return res.status(200).json({ message: "Examiner created successfully" });
+        return res.status(200).json({ message: "Examiner created successfully", user: savedUser});
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Internal Server Error", error: error.message });
@@ -402,8 +405,9 @@ export const reset_password = async (req,res) => {
             return res.status(400).json({ error: 'Password must be at least 8 characters long.' });
         }
         
-        if(user.password !== old_password){
-            return res.status(400).json({ error: 'Password does not match' });
+        const pass_hash = await bcrypt.compare(old_password, user.password);
+        if(!pass_hash){
+            return res.status(400).json({ error: 'Incorrect Password' });
         }
 
         user.password = new_password;
@@ -419,106 +423,4 @@ export const reset_password = async (req,res) => {
     }
 }
 
-export const update_profile = async (req, res) => {
-    try {
-        const { username } = req.params;  
-        const { firstname, lastname, middlename, dob, mobileno, gender } = req.body;
 
-        if (!firstname && !lastname && !middlename && !dob && !mobileno && !gender) {
-            return res.status(400).json({ message: "At least one field is required to update." });
-        }
-
-        const mobilenoRegex = /^\d{10}$/;
-        if (!mobilenoRegex.test(mobileno)) {
-            return res.status(400).json({ message: 'Mobile number must be exactly 10 digits.' });
-        }
-
-        const dobRegex = /^\d{2}-\d{2}-\d{4}$/;
-        if (!dobRegex.test(dob)) {
-            return res.status(400).json({ message: 'Invalid date of birth format. Use DD-MM-YYYY.' });
-        }
-
-        const [day, month, year] = dob.split('-').map(Number);
-        const date = new Date(year, month - 1, day); // Month is 0-indexed in JS Date
-
-        // Check for valid day, month, and year in dob
-        if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
-            return res.status(400).json({ message: 'Invalid date of birth values.' });
-        }
-
-
-        const user = await User.findOne({ username: username });
-
-        if (!user) {
-            return res.status(404).json({ message: "User not found." });
-        }
-
-        if (firstname) user.firstname = firstname;
-        if (lastname) user.lastname = lastname;
-        if (middlename) user.middlename = middlename;
-        if (dob) user.dob = date;
-        if (mobileno) user.mobileno = mobileno;
-        if (gender) user.gender = gender;
-
-        await user.save();
-
-        return res.status(200).json({ message: "Profile updated successfully.", user });
-    } catch (error) {
-        console.error("Error updating profile:", error);
-        return res.status(500).json({ message: "Failed to update profile." });
-    }
-};
-
-export const delete_student = async (req, res) => {
-    try {
-        const { username } = req.params; 
-
-        const user = await User.findOne({ username: username });
-
-        if (!user) {
-            return res.status(404).json({ message: "User not found." });
-        }
-
-        const student = await Student.findOne({ user: user._id });
-
-        if (!student) {
-            return res.status(404).json({ message: "Student not found." });
-        }
-
-        await Student.deleteOne({ _id: student._id });
-
-        await User.deleteOne({ username: username });
-
-        return res.status(200).json({ message: "Student and associated User deleted successfully." });
-    } catch (error) {
-        console.error("Error deleting student:", error);
-        return res.status(500).json({ message: "Failed to delete student." });
-    }
-};
-
-export const delete_examiner = async (req, res) => {
-    try {
-        const { username } = req.params; 
-
-        const user = await User.findOne({ username: username });
-
-        if (!user) {
-            return res.status(404).json({ message: "User not found." });
-        }
-
-        const examiner = await Examiner.findOne({ user: user._id });
-
-        if (!examiner) {
-            return res.status(404).json({ message: "Examiner not found." });
-        }
-
-        await Examiner.deleteOne({ _id: examiner._id });
-
-        await User.deleteOne({ username: username });
-
-        return res.status(200).json({ message: "Examiner and associated User deleted successfully." });
-    } catch (error) {
-        console.error("Error deleting examiner:", error);
-        return res.status(500).json({ message: "Failed to delete examiner." });
-    }
-};
