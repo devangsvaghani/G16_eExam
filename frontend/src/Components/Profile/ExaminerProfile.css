@@ -1,46 +1,62 @@
 /* Global Styles */
-body {
-    margin: 0;
-    padding: 0;
+
+.profileoverlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: Arial, sans-serif;
+    z-index: 1000;
+    overflow-y: auto;
 }
 
 /* Profile Card */
 .profile-card {
+    
     background-color: #F9F7F7; /* Soft white background for profile card */
     display: flex;
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     width: 800px;
-    padding: 20px;
+    padding: 15px;
     animation: fadeIn 0.8s ease-in-out;
-    gap: 20px;
+    gap: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    position: absolute;
 }
 
 /* Sidebar */
 .sbar {
-    background-color: #DBE2EF; /* Light blue background for sidebar */
-    padding: 20px;
+    background-color: #DBE2EF; /* Light blue background for sidebar*/
+   
     width: 40%;
+    height: 100%;
     border-radius: 10px;
     text-align: center;
     order: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
+    position: relative; 
+    gap: 130px;
+  
 }
 
 .sbar img.profile-pic {
-    width: 70%;
+    width: 80%;
     border-radius: 50%;
     margin-top: 10px;
     border: 2px solid #3F72AF;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    
 }
 
 .sbar img.profile-pic:hover {
@@ -65,18 +81,18 @@ body {
     font-size: 12px;
 }
 
-/* Content */
-.content {
+/* profilecontent */
+.profilecontent {
     flex-grow: 1;
     order: 1;
     display: flex;
     flex-direction: column;
     gap: 15px;
     width: 100%;
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
 }
 
-.content h2 {
+.profilecontent h2 {
     color: #3F72AF;
     text-align: center;
     font-size: 30px;
@@ -88,7 +104,7 @@ body {
     display: flex;
     justify-content: left;
     flex-direction: column;
-    gap: 15px;
+   
 }
 
 .form-group {
@@ -99,7 +115,7 @@ body {
     width: 100%;
     box-sizing: border-box;
     background-color: #3F72AF; /* Blue background for form fields */
-    padding: 6px;
+    padding: 8px;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
@@ -108,12 +124,14 @@ body {
     flex: 0 0 100px;
     text-align: left;
     font-size: 13px;
+    padding: 5px;
     color: #F9F7F7; /* White text for better contrast on blue fields */
     font-weight: bold;
 }
 
 .form-group input {
     flex: 1;
+    margin: 1px;
     padding: 8px;
     font-size: 13px;
     border: 1px solid #DBE2EF;
@@ -127,28 +145,22 @@ body {
     box-shadow: 0 0 5px rgba(63, 114, 175, 0.5);
     outline: none;
 }
-
-/* Save Button */
-.save-button {
-    position: absolute;
-    bottom: 20px;
-    width: 75%;
-    padding: 12px;
-    background-color: #3F72AF;
-    color: #F9F7F7;
-    border: none;
-    border-radius: 8px;
-    font-size: 15px;
+.examinerprofilebutton{
+    
+    width: 90%;
+    padding: 10px;
+    background-color:  #f4f4f4;
+    color: #2a4a7b;
+    border: 1px solid #2a4a7b;
+    border-radius: 4px;
+    font-size: 16px;
     cursor: pointer;
-    text-align: center;
-    transition: all 0.3s ease;
+  
+    margin-bottom: 10px;
 }
-
-.save-button:hover {
-    background-color: #112D4E;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
+.examinerprofilebutton:hover {
+    background-color: #e8e8e1;
+  }
 
 /* Keyframe Animation for Profile Card */
 @keyframes fadeIn {
@@ -162,35 +174,82 @@ body {
     }
 }
 
-/* Responsive Styling */
-@media (max-width: 768px) {
+/* Responsive Styles */
+@media (max-width: 1024px) {
     .profile-card {
-        flex-direction: column;
+        width: 90%; /* Adjust card width for smaller screens */
+        padding: 10px;
+        /* height: 100%; */
     }
-
     .sbar {
-        width: 100%;
-        order: 2;
-        border-radius: 0;
+        width: 35%; /* Adjust sidebar width */
+        gap: 80px; /* Reduce gap between elements in sidebar */
     }
-
-    .content {
-        order: 1;
-        width: 100%;
-    }
-
-    .form-group {
-        flex-direction: column;
-    }
-
-    .form-group label {
-        text-align: left;
-        width: auto;
-        margin-bottom: 5px;
-    }
-
-    .save-button {
-        position: relative;
-        margin-top: 20px;
+    .profilecontent h2 {
+        font-size: 26px;
     }
 }
+
+@media (max-width: 768px) {
+    .profile-card {
+        flex-direction: column; /* Stack elements vertically */
+        width: 100%; /* Full width on small screens */
+        padding: 10px;
+    }
+    .sbar {
+        width: 70%;
+        height: auto;
+        border-radius: 10px 10px 0 0;
+        gap: 20px;
+        
+
+    }
+    .profilecontent {
+        width: 100%;
+    }
+    .profilecontent h2 {
+        font-size: 24px;
+    }
+    .form-group label {
+        font-size: 12px; /* Smaller label font for smaller screens */
+    }
+    .form-group input {
+        font-size: 12px; /* Smaller input font */
+    }
+    .examinerprofilebutton {
+        width: 100%; /* Button takes full width */
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sbar img.profile-pic {
+        width: 60%; /* Smaller profile pic for extra small screens */
+    }
+    .sbar h3.profile-name {
+        font-size: 16px;
+    }
+    .sbar p.profile-email {
+        font-size: 10px;
+    }
+    .profilecontent h2 {
+        font-size: 20px;
+    }
+    .form-group {
+        gap: 5px;
+        padding: 5px;
+    }
+    .form-group label {
+        font-size: 11px;
+    }
+    .form-group input {
+        font-size: 11px;
+    }
+    .examinerprofilebutton {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+
+
+
