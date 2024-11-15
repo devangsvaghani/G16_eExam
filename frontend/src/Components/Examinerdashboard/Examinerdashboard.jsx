@@ -7,6 +7,96 @@ import { useNavigate } from "react-router-dom";
 import CreateExam from '../CreateExam/CreateExam.jsx';
 
 
+const exams = [
+  {
+    name: 'Mathematics Final Exam',
+    subject: 'Mathematics',
+    duration: '2 hours',
+    startTime: '10:00 AM',
+    questions: 50,
+  },
+  {
+    name: 'Physics Quiz',
+    subject: 'Physics',
+    duration: '1 hour',
+    startTime: '2:00 PM',
+    questions: 30,
+  },
+  {
+    name: 'History Test',
+    subject: 'History',
+    duration: '1.5 hours',
+    startTime: '11:00 AM',
+    questions: 40,
+  },
+  {
+    name: 'History Test',
+    subject: 'History',
+    duration: '1.5 hours',
+    startTime: '11:00 AM',
+    questions: 40,
+  },
+  {
+    name: 'History Test',
+    subject: 'History',
+    duration: '1.5 hours',
+    startTime: '11:00 AM',
+    questions: 40,
+  },
+  {
+    name: 'History Test',
+    subject: 'History',
+    duration: '1.5 hours',
+    startTime: '11:00 AM',
+    questions: 40,
+  },
+  {
+    name: 'History Test',
+    subject: 'History',
+    duration: '1.5 hours',
+    startTime: '11:00 AM',
+    questions: 40,
+  },
+  {
+    name: 'History Test',
+    subject: 'History',
+    duration: '1.5 hours',
+    startTime: '11:00 AM',
+    questions: 40,
+  },
+  {
+    name: 'History Test',
+    subject: 'History',
+    duration: '1.5 hours',
+    startTime: '11:00 AM',
+    questions: 40,
+  },
+  {
+    name: 'History Test',
+    subject: 'History',
+    duration: '1.5 hours',
+    startTime: '11:00 AM',
+    questions: 40,
+  },
+  {
+    name: 'History Test',
+    subject: 'History',
+    duration: '1.5 hours',
+    startTime: '11:00 AM',
+    questions: 40,
+  },
+  {
+    name: 'History Test',
+    subject: 'History',
+    duration: '1.5 hours',
+    startTime: '11:00 AM',
+    questions: 40,
+  },
+  // Add more exam objects as needed
+];
+
+
+
 const Calendar = () => {
   const today = new Date();
   const [currentDate, setCurrentDate] = useState(today);
@@ -53,6 +143,7 @@ const Calendar = () => {
     setEvents((prevEvents) => ({ ...prevEvents, [eventKey]: eventText }));
     setSelectedDate(null);
   };
+
 
   const removeEvent = () => {
     const eventKey = formatDate(selectedDate);
@@ -133,18 +224,25 @@ function Examinerdashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); 
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 700);
   const { setIsLoggedIn, validateUser, LogOut, isLoggedIn } = useAuth();
+  const [iscreateexamopen,setiscreateexamopen] = useState(false);
   const navigate = useNavigate();
-  // const [isprofileopen,setisprofileopen] = useState(false);
+  const [isprofileopen,setisprofileopen] = useState(false);
 
 
   const items = [
     { id: "home", label: "Home" },
     { id: "question", label: "Questions" },
-    { id: "exam", label: "Exam" },
-    { id: "results", label: "Results" },
+    { id: "Upcoming Exam", label: "Upcoming Exam" },
+    { id: "Past Exam", label: "Past Exam" },
   ];
 
+  const handleCreateExam = () => {
+    setiscreateexamopen(true);
+  };
 
+  const handleCloseCreateExam = () => {
+    setiscreateexamopen(false);
+  };
 
 
   const handleProfileClose=()=>{
@@ -212,10 +310,11 @@ function Examinerdashboard() {
 
 
         {/* Content Area */}
-        {/* <div className="content">
+        { activeIndex==0 &&
+        <div className="content">
           {/* Upcoming Exams */}
-          {/* <div className="firstcol">
-            <div className="upcomingexambox">
+           <div className="firstcol">
+            <div className="upcomingexambox" onClick={()=>setActiveIndex(2)}>
               <h2>Upcoming Exams</h2>
               <div className="card">
                 <div className="exam">
@@ -250,14 +349,14 @@ function Examinerdashboard() {
                 </div>
               </div>
             </div>
-          </div> */}
+          </div>
 
           {/* Calendar */}
-          {/* <div className="secondcol">
+          <div className="secondcol">
             <Calendar />
-          </div> */}
+          </div>
 
-        {/* <div className="thirdcol">
+        <div className="thirdcol">
           <div className="anonouncementsBox">
             <h2>Announcements</h2>
             <div className="card">
@@ -283,7 +382,7 @@ function Examinerdashboard() {
               </div>
             </div>
           </div>
-          <div className="pastexambox">
+          <div className="pastexambox" onClick={()=>setActiveIndex(3)}>
             <h2>Past Exams</h2>
             <div className="card">
               <div className="exam">
@@ -309,10 +408,34 @@ function Examinerdashboard() {
             </div>
           </div>
         </div>           
-        </div> */}
-        <div className="CreateExam-comp">
-          <CreateExam/>
+        </div> 
+      }
+        {activeIndex==2 && !iscreateexamopen &&
+          <div>
+          <div className="exam-grid">
+          {exams.map((exam, index) => (
+            <div className="exam-card" key={index}>
+              <h3>{exam.name}</h3>
+              <p><strong>Subject:</strong> {exam.subject}</p>
+              <p><strong>Duration:</strong> {exam.duration}</p>
+              <p><strong>Start Time:</strong> {exam.startTime}</p>
+              <p><strong>No. of Questions:</strong> {exam.questions}</p>
+            </div>
+          ))}
         </div>
+          <button className="create-examiner-button" onClick={handleCreateExam}>
+              + Create Exam
+          </button>
+        </div>
+        }
+        {activeIndex==2 && iscreateexamopen &&
+        <div className="CreateExam-comp" >
+          <CreateExam onclose={handleCloseCreateExam}/>
+          <button className="create-examiner-button" onClick={handleCloseCreateExam}>
+          Close 
+          </button>
+        </div>
+        }
       </div>
     </div>
   );

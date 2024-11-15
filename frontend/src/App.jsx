@@ -203,10 +203,10 @@ const App = () => {
       </Routes> */}
       {/* <Examinerdashboard/> */}
 
-      {/* <Routes>
+      <Routes>
       <Route path="/" element={<Examinerdashboard />} />
       <Route path="/Examinerprofile" element={<ExaminerProfile/>}/>
-      </Routes> */}
+      </Routes>
       
       {/* <Forgetpassword/> */}
       {/* <StudentProf/> */}
@@ -217,7 +217,7 @@ const App = () => {
 
       {/* <QuestionBank /> */}
       {/* <FetchedQuestions /> */}
-        <Examinerdashboard/>
+        {/* <Examinerdashboard/> */}
       
     
     </>
