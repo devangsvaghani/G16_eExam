@@ -15,6 +15,7 @@ import ExaminerProfile from './Components/Profile/ExaminerProfile.jsx'
 import QuestionBank from './Components/Questions/QuestionBank.jsx';
 import FetchedQuestions from './Components/Questions/FetchedQuestions.jsx';
 
+
 // const exams = [
   //   {
   //     name: 'Mathematics Final Exam',
@@ -202,10 +203,10 @@ const App = () => {
       </Routes> */}
       {/* <Examinerdashboard/> */}
 
-      <Routes>
+      {/* <Routes>
       <Route path="/" element={<Examinerdashboard />} />
       <Route path="/Examinerprofile" element={<ExaminerProfile/>}/>
-      </Routes>
+      </Routes> */}
       
       {/* <Forgetpassword/> */}
       {/* <StudentProf/> */}
@@ -216,7 +217,7 @@ const App = () => {
 
       {/* <QuestionBank /> */}
       {/* <FetchedQuestions /> */}
-
+        <Examinerdashboard/>
       
     
     </>
