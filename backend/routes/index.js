@@ -36,8 +36,11 @@ import {
     get_upcoming_exams_3,
     get_upcoming_exams_year,
 } from "../controller/past_upcoming_exams.js";
+import { student_performance, student_submit_answer } from "../controller/student.js";
+import { exams_result, show_exam } from "../controller/exams_result.js"
 import { all_students, delete_student, get_student, student_performance, student_submit_answer, update_student } from "../controller/student.js";
 import { all_examiners, delete_examiner, get_examiner, update_profile } from "../controller/examiner.js";
+
 
 dotenv.config();
 const router = express.Router();
@@ -86,6 +89,10 @@ router.post("/update-profile/:username", update_profile);
 router.get("/student-performance/:username", student_performance);
 
 router.post("/student-submit-answer", student_submit_answer);
+
+
+router.get("/exams-result/:username", exams_result);
+router.get("/show-exam/:username/:examId", show_exam);
 
 // student related
 router.get("/get-student/:username", authenticateToken, get_student);

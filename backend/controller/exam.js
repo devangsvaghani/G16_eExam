@@ -127,9 +127,11 @@ export const add_question_in_exam = async (req, res) => {
             return res.status(404).json({ message: "Exam not found" });
         }
 
+        const question  = await Question.findOne({questionId});
         // Add the question to the exam's questions array
         if (!exam.questions.includes(questionId)) {
             exam.questions.push(questionId);
+            exam.total_points += question.points;
             await exam.save();
         }
 
@@ -152,10 +154,12 @@ export const delete_question_from_exam = async (req, res) => {
             return res.status(404).json({ message: "Exam not found" });
         }
 
+        const question  = await Question.findOne({questionId});
         // Remove the question from the exam's questions array
         const questionIndex = exam.questions.indexOf(questionId);
         if (questionIndex !== -1) {
             exam.questions.splice(questionIndex, 1);
+            exam.total_points -= question.points;
             await exam.save();
         }
 
