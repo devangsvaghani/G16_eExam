@@ -2,6 +2,8 @@ import React from 'react';
 import './Pastexam.css';
 
 const Pastexam = ({ results }) => {
+
+
   return (
     <div className="pastexam-container">
       <h2>Past Exams</h2>
@@ -26,6 +28,9 @@ const Pastexam = ({ results }) => {
         ))}
       </div>
       <div className="records-info">Records: 1 to {results.length} of {results.length}</div>
+      {
+
+      }
     </div>
   );
 };

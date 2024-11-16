@@ -6,8 +6,8 @@ import { useAuth } from "../../context/auth.jsx";
 import { useNavigate } from "react-router-dom";
 import CreateExam from '../CreateExam/CreateExam.jsx';
 import ExamResults from "./ExamResults.jsx";
-
-
+import Examreport from "../ResultPage/Examreport.jsx"
+import FetchedQuestions from "../Questions/FetchedQuestions.jsx"
 const exams = [
   {
     name: 'Mathematics Final Exam',
@@ -94,6 +94,33 @@ const exams = [
     questions: 40,
   },
   // Add more exam objects as needed
+];
+
+const questions = [
+  {
+    id: 1,
+    qText: "What is the capital of France?",
+    options: ["Paris", "Berlin", "Madrid", "Rome"],
+    answer: "Paris",
+    difficulty: "Easy",
+    points: 5,
+  },
+  {
+    id: 2,
+    qText: 'Which programming language is known as the "language of the web"?',
+    options: ["Python", "JavaScript", "Java"],
+    answer: "JavaScript",
+    difficulty: "Medium",
+    points: 10,
+  },
+  {
+    id: 3,
+    qText: "What is the square root of 64?",
+    options: ["6", "8", "10", "12"],
+    answer: "8",
+    difficulty: "Easy",
+    points: 5,
+  },
 ];
 
 
@@ -226,9 +253,11 @@ function Examinerdashboard() {
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 700);
   const { setIsLoggedIn, validateUser, LogOut, isLoggedIn } = useAuth();
   const [iscreateexamopen,setiscreateexamopen] = useState(false);
+  const [iscreateQuestionopen,setiscreateQuestionopen] = useState(false);
   const navigate = useNavigate();
   const [isprofileopen,setisprofileopen] = useState(false);
-  const [showresult,setshowresult] = useState(false);
+  const [isresultopen,setisresultopen] = useState(false);
+  const [isOpenQuestion,setisOpenQuestion] = useState(false);
   
 
   const items = [
@@ -412,6 +441,61 @@ function Examinerdashboard() {
         </div>           
         </div> 
       }
+
+      {activeIndex==1 && !isOpenQuestion && !iscreateQuestionopen &&
+
+        <div class="Examiner-subject-grid-container">
+          <div class="subject" onClick={() => setisOpenQuestion(true)}>Mathematics</div>
+          <div class="subject" onClick={() => setisOpenQuestion(true)}>Physics</div>
+          <div class="subject" onClick={() => setisOpenQuestion(true)}>Chemistry</div>
+          <div class="subject" onClick={() => setisOpenQuestion(true)}>Biology</div>
+          <div class="subject" onClick={() => setisOpenQuestion(true)}>Mathematics</div>
+          <div class="subject" onClick={() => setisOpenQuestion(true)}>Physics</div>
+          <div class="subject" onClick={() => setisOpenQuestion(true)}>Chemistry</div>
+          <div class="subject" onClick={() => setisOpenQuestion(true)}>Biology</div>
+          <div class="subject" onClick={() => setisOpenQuestion(true)}>Mathematics</div>
+          <button className="create-examiner-button" onClick={()=>setiscreateQuestionopen(true)}>
+              + Create Question
+          </button>
+        </div>
+      }
+
+      {activeIndex==1 && isOpenQuestion && !iscreateQuestionopen &&
+        <div>
+        <div className="Examiner-Question-grid-container">
+      {questions.map((question) => (
+        <div className="question-card" key={question.id}>
+          <div className="question-header">{`Q${question.id}: ${question.qText}`}</div>
+          <div className="options">
+            {question.options.map((option, index) => (
+              <div className="option" key={index}>
+                {String.fromCharCode(65 + index) + ". " + option}
+              </div>
+            ))}
+          </div>
+          <div className="metadata">
+            <span>{`Answer: ${question.answer}`}</span>
+            <span>{`Difficulty: ${question.difficulty}`}</span>
+            <span>{`Points: ${question.points}`}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+        <button className="create-examiner-button" onClick={() =>setisOpenQuestion(false)}>
+          Close 
+          </button>
+    </div>
+  }
+
+  { activeIndex==1 && !isOpenQuestion && iscreateQuestionopen &&
+  <>
+    <FetchedQuestions/>
+    <button className="create-examiner-button" onClick={() =>setiscreateQuestionopen(false)}>
+          Close 
+    </button>
+  </>
+  }
+      
         {activeIndex==2 && !iscreateexamopen &&
           <div>
           <div className="exam-grid">
@@ -441,7 +525,7 @@ function Examinerdashboard() {
           </button>
         </div>
         }
-         {activeIndex==3 && !iscreateexamopen && !showresult &&
+         {activeIndex==3  && !isresultopen &&
           <div>
           <div className="exam-grid">
           {exams.map((exam, index) => (
@@ -451,7 +535,7 @@ function Examinerdashboard() {
               <p><strong>Duration:</strong> {exam.duration}</p>
               <p><strong>Start Time:</strong> {exam.startTime}</p>
               <p><strong>No. of Questions:</strong> {exam.questions}</p>
-              <button className="exam-grid-resultbtn" onClick={()=>setshowresult(true)} >
+              <button className="exam-grid-resultbtn" onClick={() => setisresultopen(true)}>
                 Result
               </button>
             </div>
@@ -459,7 +543,7 @@ function Examinerdashboard() {
         </div>
         </div>
         }
-         {activeIndex==3 && !iscreateexamopen && showresult &&
+         {activeIndex==3 && isresultopen &&
           <div>
            <ExamResults 
            examtitle="Mathsmatics insem exam" 
@@ -468,13 +552,13 @@ function Examinerdashboard() {
            starttime="10 pm"
            numquestion="20"
            totalmarks="100"
-
            />
-           <button className="create-examiner-button" onClick={()=>setshowresult(false)}>
-              close
+           <button className="create-examiner-button" onClick={()=>setisresultopen(false)}>
+              Close
            </button>
           </div>
         }
+
       </div>
     </div>
   );
