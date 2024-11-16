@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "./UpdateExam.css";
+import "./updateexam.css";
+import Examinerdashboard from "./Examinerdashboard";
 
-const UpdateExam = () => {
+const UpdateExam = ({ onClose }) => {
   const [exam, setExam] = useState({
     name: "Sample Exam",
     duration: 60,
@@ -88,6 +89,7 @@ const UpdateExam = () => {
   const [showQuestions, setShowQuestions] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showCancelExamModal, setShowCancelExamModal] = useState(false);
+  const [Isclosepage, setIsclosepage] = useState(false);
 
   // Function to calculate total marks
   const calculateTotalMarks = () => {
@@ -114,6 +116,9 @@ const UpdateExam = () => {
     if (!validateDateTime()) return;
     alert("Exam details saved successfully!");
   };
+  const handleclosepage = () => {
+    setIsclosepage(true);
+  }
 
   const handleQuestionSelect = (id) => {
     const question = exam.questions.find((q) => q.id === id);
@@ -208,6 +213,7 @@ const UpdateExam = () => {
   };
 
   return (
+    <div className="update-exam-div">
     <div className="update-exam-container">
       <h1>Update Exam</h1>
 
@@ -310,7 +316,10 @@ const UpdateExam = () => {
         <div className="buttons-container">
           <button className="save-btn" onClick={saveExamDetails}>
             Save Exam Details
-          </button>
+            </button>
+            <button className="closebtn" onClick={onClose}>
+              Close 
+            </button>
         </div>
       </div>
 
@@ -382,14 +391,14 @@ const UpdateExam = () => {
                 Save
               </button>
               <button
-                className="cancel-btn"
-                onClick={() => {
-                  setShowModal(false);
-                  setSelectedQuestion(null);
-                }}
-              >
-                Cancel
-              </button>
+  className="cancel-btn"
+  onClick={() => {
+    setShowModal(false);
+    setSelectedQuestion(null);
+  }}
+>
+  Cancel
+</button>
             </div>
           </div>
         </div>
@@ -413,9 +422,11 @@ const UpdateExam = () => {
             </div>
           </div>
         </div>
-      )}
-    </div>
-  );
+        )}
+      </div>
+      </div>
+      );
+      
 };
 
 export default UpdateExam;

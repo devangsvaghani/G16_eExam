@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import "./Examinerdashboard.css";
 import logo from "../assets/logo.png";
 import user from "../assets/user.png";
 import { useAuth } from "../../context/auth.jsx";
-import { useNavigate } from "react-router-dom";
 import CreateExam from '../CreateExam/CreateExam.jsx';
 import ExamResults from "./ExamResults.jsx";
 import Examreport from "../ResultPage/Examreport.jsx"
 import FetchedQuestions from "../Questions/FetchedQuestions.jsx"
+import UpdateExam from "./UpdateExam.jsx";
 const exams = [
   {
     name: 'Mathematics Final Exam',
@@ -132,6 +134,7 @@ const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [eventText, setEventText] = useState("");
   const { setIsLoggedIn, validateUser, isLoggedIn } = useAuth();
+  const [iseditExam, setisEditExam] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -143,7 +146,13 @@ const Calendar = () => {
 
   const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
   const startDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
-
+  
+  const handleEditExam = () => {
+    setisEditExam(true);
+  }
+  const handleCloseEditExam = () => {
+    setisEditExam(false);
+  }
   const handlePrevMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
   };
@@ -257,7 +266,8 @@ function Examinerdashboard() {
   const navigate = useNavigate();
   const [isprofileopen,setisprofileopen] = useState(false);
   const [isresultopen,setisresultopen] = useState(false);
-  const [isOpenQuestion,setisOpenQuestion] = useState(false);
+  const [isOpenQuestion, setisOpenQuestion] = useState(false);
+  const [iseditExam, setisEditExam] = useState(false);
   
 
   const items = [
@@ -275,7 +285,9 @@ function Examinerdashboard() {
     setiscreateexamopen(false);
   };
 
-
+  const handleEditExam = () => {
+    setisEditExam(true);
+  }
   const handleProfileClose=()=>{
     setisprofileopen(false);
   };
@@ -506,7 +518,7 @@ function Examinerdashboard() {
               <p><strong>Duration:</strong> {exam.duration}</p>
               <p><strong>Start Time:</strong> {exam.startTime}</p>
               <p><strong>No. of Questions:</strong> {exam.questions}</p>
-              <button className="exam-grid-editbtn">
+              <button className="exam-grid-editbtn" onClick={handleEditExam}>
                 Edit
               </button>
             </div>
@@ -558,6 +570,8 @@ function Examinerdashboard() {
            </button>
           </div>
         }
+        {
+          (iseditExam && <UpdateExam onClose={()=>setisEditExam(false)} />)}
 
       </div>
     </div>
