@@ -224,11 +224,11 @@ const App = () => {
       {/* <QuestionBank /> */}
       {/* <FetchedQuestions /> */}
          {/* <Examinerdashboard/>   */}
-         {/* <Routes>
+         <Routes>
         <Route path="/" element={<Dashboard exams={exams} results={sampleResults}/>} />
         <Route path="/startexam/:examId" element={<StartExam />} />
         <Route path="/exam" element={<Examinterface />} />
-      </Routes> */}
+      </Routes>
       {/* <UpdateExam/>
       <Dashboard/> */}
       {/* <Examinerdashboard/> */}

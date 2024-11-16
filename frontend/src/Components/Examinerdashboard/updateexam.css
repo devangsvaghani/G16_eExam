@@ -1,13 +1,29 @@
 .update-exam-container {
     font-family: Arial, sans-serif;
     padding: 20px;
-    max-width: 800px;
+   width: 65%;
     margin: auto;
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f9f9f9;
+    max-height: 100%;
+    overflow-y: auto;
+    min-width: 500px;
+    
 }
-
+.update-exam-div {
+    position: fixed; /* Use fixed to keep it in the same position */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* Cover the entire viewport */
+    display: flex;
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    z-index: 100; /* Ensure it appears above other content */
+    background-color: rgba(0, 0, 0, 0.5); /* Optional: semi-transparent background */
+    
+}
 .update-exam-container h1,
 .update-exam-container h3 {
     text-align: center;
@@ -16,6 +32,7 @@
 .update-exam-container label {
     display: block;
     margin: 15px 0 5px;
+    
 }
 
 .update-exam-container textarea,
@@ -230,7 +247,34 @@ overflow-y:auto ;
     border: 1px solid #ccc;
     border-radius: 4px;
 
+
 }
+.update-exam-container::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .update-exam-container::-webkit-scrollbar-thumb {
+    background-color: #3F72AF;
+    border-radius: 10px;
+  }
+  
+  .update-exam-container::-webkit-scrollbar-track {
+    background-color: #c0c6d2;
+  }
+  
+  .update-exam-container .update-questions ul::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .update-exam-container .update-questions ul::-webkit-scrollbar-thumb {
+    background-color: #3F72AF;
+    border-radius: 10px;
+  }
+  
+  .update-exam-container .update-questions ul::-webkit-scrollbar-track {
+    background-color: #c0c6d2;
+  }
+  
 
 .update-exam-container input[type="radio"] {
     margin-left: 10px;
