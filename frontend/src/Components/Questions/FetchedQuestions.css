@@ -1,33 +1,33 @@
-.step-three > h1{
+.fetched-exam-container > h1{
   color: #112D4E;
 }
 
-.step-three{
+.fetched-exam-container{
   width: 80%;
   overflow-y: auto;
 }
 
 /* Scrollbar styles */
-.step-three::-webkit-scrollbar {
+.fetched-exam-container::-webkit-scrollbar {
   width: 6px;
 }
 
-.step-three::-webkit-scrollbar-thumb {
+.fetched-exam-container::-webkit-scrollbar-thumb {
   background-color: #3F72AF;
   border-radius: 10px;
 }
 
-.step-three::-webkit-scrollbar-track {
+.fetched-exam-container::-webkit-scrollbar-track {
   background-color: #c0c6d2;
 }
-.step-three > h2,.step-three >  h3 {
+.fetched-exam-container > h2,.fetched-exam-container >  h3 {
   text-align: center;
   font-weight: 600;
   color: #112D4E;
   margin-bottom: 20px;
 }
 
-.step-three > input,.step-three > select,.step-three > button {
+.fetched-exam-container > input,.fetched-exam-container > select,.fetched-exam-container > button {
   border: 1px solid #ddd;
   padding: 10px;
   border-radius: 5px;
@@ -42,7 +42,7 @@ input:focus, select:focus, button:focus {
 }
 
 /* Main container */
-.step-three {
+.fetched-exam-container {
   max-width: 900px;
   margin: 0 auto;
   padding: 20px;
@@ -181,7 +181,7 @@ select:focus {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .step-three {
+  .fetched-exam-container {
     padding: 15px;
   }
 

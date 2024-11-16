@@ -15,17 +15,19 @@ const Pastexam = ({ results }) => {
           <div className="header-item">Status</div>
           <div className="header-item">Detail</div>
         </div>
-        {results.map((result, index) => (
-          <div className="table-row" key={index}>
-            <div className="table-cell">{result.examName}</div>
-            <div className="table-cell">{result.date}</div>
-            <div className="table-cell">{result.score}</div>
-            <div className="table-cell">{result.status}</div>
-            <div className="table-cell detail-cell">
-              <button className="pbutton" onClick={() => console.log('Viewing details for:', result.examName)}>View</button>
+        <div className="past-exam-list-div">
+          {results.map((result, index) => (
+            <div className="table-row" key={index}>
+              <div className="table-cell">{result.examName}</div>
+              <div className="table-cell">{result.date}</div>
+              <div className="table-cell">{result.score}</div>
+              <div className="table-cell">{result.status}</div>
+              <div className="table-cell detail-cell">
+                <button className="pbutton" onClick={() => console.log('Viewing details for:', result.examName)}>View</button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
       <div className="records-info">Records: 1 to {results.length} of {results.length}</div>
       {

@@ -66,7 +66,7 @@ const FetchedQuestions = () => {
   };
 
   return (
-    <div className="step-three">
+    <div className="fetched-exam-container">
       <h1><center>Online Examination System</center></h1>
       <h2>Fetched Questions</h2>
 

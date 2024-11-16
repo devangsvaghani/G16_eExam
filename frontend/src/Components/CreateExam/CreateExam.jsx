@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "./CreateExam.css";
 
 const CreateExam = () => {
@@ -10,20 +10,20 @@ const CreateExam = () => {
   const [degree, setDegree] = useState("B.Tech");
   const [program, setProgram] = useState("");
   const [semester, setSemester] = useState("");
-
+  const [totalmarks, settotalmarks] = useState("");
   // Step 2: Timing Details
   const [duration, setDuration] = useState("");
   const [date, setDate] = useState("");
   const [startTime, setStartTime] = useState("");
+  const [difficulty, setDifficulty] = useState("easy");
+
 
   // Step 3: Questions
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [numOptions, setNumOptions] = useState(4);
   const [correctOption, setCorrectOption] = useState(null);
-
-
-
+  const [points, setpoints] = useState(0);
   const [currentOptions, setCurrentOptions] = useState(Array(numOptions).fill(""));
 
   useEffect(() => {
@@ -46,9 +46,9 @@ const CreateExam = () => {
 
   // Sample Question Bank
   const questionBank = [
-    { id: 1, questionText: "What is React?", options: ["Library", "Framework", "Language", "Tool"], correctOption: 0 },
-    { id: 2, questionText: "What is JSX?", options: ["Syntax", "Style", "Library", "API"], correctOption: 0 },
-    { id: 3, questionText: "What is useState?", options: ["Hook", "Function", "Class", "Event"], correctOption: 0 },
+    { id: 1, questionText: "What is React?", options: ["Library", "Framework", "Language", "Tool"], correctOption: 0, points: 2, difficulty: "easy" },
+    { id: 2, questionText: "What is JSX?", options: ["Syntax", "Style", "Library", "API"], correctOption: 0, points: 2, difficulty: "easy" },
+    { id: 3, questionText: "What is useState?", options: ["Hook", "Function", "Class", "Event"], correctOption: 0, points: 2, difficulty: "easy" },
     // Additional questions can be added here
   ];
 
@@ -70,11 +70,14 @@ const CreateExam = () => {
       questionText: currentQuestion,
       options: [...currentOptions],
       correctOption,
+      points,
+      difficulty, // Add difficulty here
     };
     setQuestions([...questions, newQuestion]);
     setCurrentQuestion("");
     setCurrentOptions(Array(numOptions).fill(""));
     setCorrectOption(null);
+    setpoints(); // Reset points
   };
 
   const handleDeleteQuestion = (index) => {
@@ -103,7 +106,7 @@ const CreateExam = () => {
       setSelectedBankQuestions([...selectedBankQuestions, question]);
     }
   };
-  
+
 
   const handleAddSelectedQuestions = () => {
     setQuestions([...questions, ...selectedBankQuestions]);
@@ -122,10 +125,13 @@ const CreateExam = () => {
         date,
         startTime,
         questions,
+        totalmarks,
+        difficulty,
       };
       console.log("Exam Created:", examData);
       alert("Exam created successfully!");
       // Reset all fields
+      settotalmarks("");
       setExamTitle("");
       setSubject("");
       setProgram("");
@@ -140,10 +146,15 @@ const CreateExam = () => {
     }
   };
 
+
   // Filtered Question Bank for Search
   const filteredQuestions = questionBank.filter((q) =>
     q.questionText.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  useEffect(() => {
+    const sum = questions.reduce((acc, question) => acc + question.points, 0);
+    settotalmarks(sum);
+  }, [questions]);
 
   return (
     <div className="create-exam-container">
@@ -183,10 +194,12 @@ const CreateExam = () => {
           <div className="step-two">
             <h2>Step 2: Timing Details</h2>
             <input
-              type="text"
+              type="number"
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
-              placeholder="Duration (e.g., 2 hours)"
+              placeholder="Duration (in minutes)"
+              min="1"
+              step="1"
             />
             <input
               type="date"
@@ -212,6 +225,12 @@ const CreateExam = () => {
               onChange={(e) => setCurrentQuestion(e.target.value)}
               placeholder="Question Text"
             />
+            <input
+              type="number"
+              value={points}
+              onChange={(e) => setpoints(parseInt(e.target.value) || 0)}
+              placeholder="Points"
+            />
 
             <input
               type="number"
@@ -221,6 +240,14 @@ const CreateExam = () => {
               }
               placeholder="Number of Options"
             />
+            <select
+              value={difficulty}
+              onChange={(e) => setDifficulty(e.target.value)}
+            >
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
             <div className="option-div">
               {Array.from({ length: numOptions }).map((_, index) => (
                 <div key={index} className="option-input">
@@ -246,10 +273,10 @@ const CreateExam = () => {
               ))}
             </div>
 
-            <button onClick={handleAddQuestion}>Add Question</button>
-            <button onClick={handleOpenModal}>Add from Question Bank</button>
-            <button onClick={handlePrevious}>Previous</button>
-            <button onClick={handleSubmitExam}>Submit Exam</button>
+            <button className="create-exam-btn1" onClick={handleAddQuestion}>Add Question</button>
+            <button  className="create-exam-btn1" onClick={handleOpenModal}>Add from Question Bank</button>
+            <button  className="create-exam-btn1" onClick={handlePrevious}>Previous</button>
+            <button  className="create-exam-btn1" onClick={handleSubmitExam}>Submit Exam</button>
           </div>
         )}
       </div>
@@ -257,72 +284,75 @@ const CreateExam = () => {
       {/* Exam Preview */}
       <div className="exam-preview">
         <h3>Exam Preview</h3>
-      <div className="exam-preview-container">
-        <p><strong>Title:</strong> {examTitle}</p>
-        <p><strong>Subject:</strong> {subject}</p>
-        <p><strong>Program:</strong> {program}</p>
-        <p><strong>Semester:</strong> {semester}</p>
-        <p><strong>Duration:</strong> {duration}</p>
-        <p><strong>Date:</strong> {date}</p>
-        <p><strong>Start Time:</strong> {startTime}</p>
-        
-        <h4>Questions:</h4>
-        {questions.map((q, index) => (
-          <div key={index} className="question-preview">
-            <p>
-              Q{index + 1}: {q.questionText}
-              <button className="exam-preview-deletebtn"onClick={() => handleDeleteQuestion(index)}>Delete</button>
-            </p>
-            <ul>
-              {q.options.map((option, i) => (
-                <li
-                  key={i}
-                  className={q.correctOption === i ? "correct-option" : ""}
-                >
-                  {option}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
+        <div className="exam-preview-container">
+          <p><strong>Title:</strong> {examTitle}</p>
+          <p><strong>Subject:</strong> {subject}</p>
+          <p><strong>Program:</strong> {program}</p>
+          <p><strong>Semester:</strong> {semester}</p>
+          <p><strong>Duration:</strong> {duration}</p>
+          <p><strong>Date:</strong> {date}</p>
+          <p><strong>Start Time:</strong> {startTime}</p>
+          <p><strong>Total Marks:</strong> {totalmarks}</p>
 
-      {/* Modal for Question Bank */}
-      {isModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Question Bank</h2>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              placeholder="Search questions..."
-            />
 
-            <div className="question-bank">
-            {filteredQuestions.map((question) => {
-                const isSelected = selectedBankQuestions.some((q) => q.id === question.id);
+          <h4>Questions:</h4>
+          {questions.map((q, index) => (
+            <div key={index} className="question-preview">
+              <p>
+                Q{index + 1}: {q.questionText} (Points: {q.points} Difficulty: {q.difficulty})
+                <button className="exam-preview-deletebtn" onClick={() => handleDeleteQuestion(index)}>Delete</button>
+              </p>
+              <ul>
 
-                return (
-                  <label key={question.id} className="question-item">
-                    <input
-                      className="question-item-input"
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => handleQuestionSelect(question)}
-                    />
-                    <span>{question.questionText}</span>
-                  </label>
-                );
-              })}
-
+                {q.options.map((option, i) => (
+                  <li
+                    key={i}
+                    className={q.correctOption === i ? "correct-option" : ""}
+                  >
+                    {option}
+                  </li>
+                ))}
+              </ul>
             </div>
-
-            <button onClick={handleAddSelectedQuestions}>Add Selected Questions</button>
-            <button onClick={handleCloseModal}>Close</button>
-          </div>
+          ))}
         </div>
-      )}
+
+        {/* Modal for Question Bank */}
+        {isModalOpen && (
+          <div className="modal">
+            <div className="modal-content">
+              <h2>Question Bank</h2>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Search questions..."
+              />
+
+              <div className="question-bank">
+                {filteredQuestions.map((question) => {
+                  const isSelected = selectedBankQuestions.some((q) => q.id === question.id);
+
+                  return (
+                    <label key={question.id} className="question-item">
+                      <input
+                        className="question-item-input"
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => handleQuestionSelect(question)}
+                      />
+                      <span>{question.questionText}</span>
+                    </label>
+                  );
+                })}
+
+              </div>
+
+              <button onClick={handleAddSelectedQuestions}>Add Selected Questions</button>
+              <button onClick={handleCloseModal}>Close</button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

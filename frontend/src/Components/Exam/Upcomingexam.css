@@ -6,7 +6,7 @@
   font-family: 'Poppins', sans-serif;
   background-color: #f4faff; /* Soft background for the whole page */
   border-radius: 10px;
-  padding: 20px;
+  padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
@@ -55,6 +55,8 @@
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
+  max-height: 500px;
+  overflow-y: auto;
   
 }
 

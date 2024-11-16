@@ -488,3 +488,7 @@ body, html {
 }
 
 
+.upcoming-exam-comp,.past-exam-comp{
+  max-height: 1000px;
+  overflow-y: auto;
+}

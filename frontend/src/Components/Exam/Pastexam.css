@@ -11,7 +11,7 @@
 }
 
 /* Header */
-h2 {
+.pastexam-container h2 {
   text-align: center;
   color: white; /* White text for contrast */
   margin-bottom: 20px;
@@ -130,4 +130,8 @@ h2 {
 .pbutton:focus {
   outline: none; /* Remove focus outline */
   box-shadow: 0 0 0 3px 112D4E; /* Add a subtle glow on focus */
+}
+.past-exam-list-div{
+  max-height: 400px;
+  overflow-y: auto;
 }
