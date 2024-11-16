@@ -5,33 +5,68 @@ const QuestionBank = () => {
   const [questions, setQuestions] = useState([]);
   const [isSubjectSelected, setIsSubjectSelected] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState('');
-  const [answersVisibility, setAnswersVisibility] = useState({});
   const [bookmarkedQuestions, setBookmarkedQuestions] = useState([]);
   const [showBookmarks, setShowBookmarks] = useState(false);
   const [selectedDifficulty, setSelectedDifficulty] = useState('');
+  const [popupQuestion, setPopupQuestion] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [feedback, setFeedback] = useState('');
 
   const subjectQuestions = {
     "Digital Communication": [
-      { id: 1, text: 'What is modulation in digital communication?', difficulty: 'Easy', answer: 'Modulation is the process of varying a carrier signal to transmit data.' },
-      { id: 2, text: 'Define Nyquist rate.', difficulty: 'Medium', answer: 'Nyquist rate is twice the maximum frequency of a signal to avoid aliasing.' },
-      { id: 3, text: 'Explain the concept of Time Division Multiplexing.', difficulty: 'Medium', answer: 'TDM allows multiple signals to share the same transmission medium by dividing time slots.' },
-      { id: 4, text: 'What are the advantages of digital signals over analog signals?', difficulty: 'Easy', answer: 'Digital signals are less prone to noise and allow easier data processing and compression.' },
-      { id: 5, text: 'Describe the role of error detection in digital communication.', difficulty: 'Medium', answer: 'Error detection helps identify and correct errors in data transmission to improve reliability.' },
-    ],
-    // ... (Add more subjects as needed)
-    "Computer Networks": [
-      { id: 6, text: 'What is the OSI model in computer networks?', difficulty: 'Easy', answer: 'The OSI model is a seven-layer framework for network communication standards.' },
-      { id: 7, text: 'Explain the purpose of TCP/IP protocol.', difficulty: 'Medium', answer: 'TCP/IP is a suite of protocols to facilitate reliable data transmission over networks.' },
-      { id: 8, text: 'Define the concept of subnetting.', difficulty: 'Hard', answer: 'Subnetting divides an IP network into smaller sub-networks for efficiency and security.' },
-      { id: 9, text: 'What is a firewall, and how does it work?', difficulty: 'Medium', answer: 'A firewall is a security system that monitors and controls network traffic based on security rules.' },
-      { id: 10, text: 'Describe the differences between IPv4 and IPv6.', difficulty: 'Easy', answer: 'IPv6 has a larger address space and improved security features compared to IPv4.' },
-    ],
-    "Software Engineering": [
-      { id: 11, text: 'What is the SDLC in software engineering?', difficulty: 'Easy', answer: 'The SDLC is a process for planning, developing, and deploying software systems.' },
-      { id: 12, text: 'Explain agile methodology.', difficulty: 'Medium', answer: 'Agile is a flexible development approach focused on iterative progress and collaboration.' },
-      { id: 13, text: 'What is the purpose of requirement gathering?', difficulty: 'Easy', answer: 'Requirement gathering identifies the needs and constraints of the software project.' },
-      { id: 14, text: 'Describe the role of testing in the software development process.', difficulty: 'Medium', answer: 'Testing ensures the software functions as expected and meets quality standards.' },
-      { id: 15, text: 'What is a design pattern, and why is it used?', difficulty: 'Medium', answer: 'A design pattern is a reusable solution to common software design problems.' },
+      {
+        id: 1,
+        text: 'What is modulation in digital communication?',
+        options: ['Modifying a signal', 'Transmitting data', 'Varying a carrier signal', 'None of the above'],
+        points: 5,
+        difficulty: 'Easy',
+        answer: 'Varying a carrier signal',
+      },
+      {
+        id: 2,
+        text: 'What is modulation in digital communication?',
+        options: ['Modifying a signal', 'Transmitting data', 'Varying a carrier signal', 'None of the above'],
+        points: 5,
+        difficulty: 'Easy',
+        answer: 'Varying a carrier signal',
+      }, {
+        id: 3,
+        text: 'What is modulation in digital communication?',
+        options: ['Modifying a signal', 'Transmitting data', 'Varying a carrier signal', 'None of the above'],
+        points: 5,
+        difficulty: 'Easy',
+        answer: 'Varying a carrier signal',
+      }, {
+        id: 4,
+        text: 'What is modulation in digital communication?',
+        options: ['Modifying a signal', 'Transmitting data', 'Varying a carrier signal', 'None of the above'],
+        points: 5,
+        difficulty: 'Easy',
+        answer: 'Varying a carrier signal',
+      }, {
+        id: 5,
+        text: 'What is modulation in digital communication?',
+        options: ['Modifying a signal', 'Transmitting data', 'Varying a carrier signal', 'None of the above'],
+        points: 5,
+        difficulty: 'Easy',
+        answer: 'Varying a carrier signal',
+      }, {
+        id: 6,
+        text: 'What is modulation in digital communication?',
+        options: ['Modifying a signal', 'Transmitting data', 'Varying a carrier signal', 'None of the above'],
+        points: 5,
+        difficulty: 'Easy',
+        answer: 'Varying a carrier signal',
+      },
+      {
+        id: 7,
+        text: 'Define Nyquist rate.',
+        options: ['Twice the maximum frequency', 'Half the frequency', 'Quarter of the frequency', 'None'],
+        points: 10,
+        difficulty: 'Medium',
+        answer: 'Twice the maximum frequency',
+      },
+      // Add similar structure for other questions
     ],
   };
 
@@ -39,16 +74,8 @@ const QuestionBank = () => {
     setQuestions(subjectQuestions[subject]);
     setSelectedSubject(subject);
     setIsSubjectSelected(true);
-    setAnswersVisibility({});
     setShowBookmarks(false);
-    setSelectedDifficulty(''); // Reset difficulty filter when loading new subject
-  };
-
-  const toggleAnswerVisibility = (id) => {
-    setAnswersVisibility((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+    setSelectedDifficulty('');
   };
 
   const toggleBookmark = (question) => {
@@ -62,6 +89,7 @@ const QuestionBank = () => {
     });
   };
 
+  
   const closeQuestionPage = () => {
     setQuestions([]);
     setIsSubjectSelected(false);
@@ -84,8 +112,37 @@ const QuestionBank = () => {
     ? questions.filter((question) => question.difficulty === selectedDifficulty)
     : questions;
 
+  const openPopup = (question) => {
+    setPopupQuestion(question);
+    setSelectedOption(null);
+    setFeedback('');
+  };
+
+  const closePopup = () => {
+    setPopupQuestion(null);
+    setSelectedOption(null);
+    setFeedback('');
+  };
+
+  const handleOptionChange = (option) => {
+    setSelectedOption(option);
+  };
+
+  const handleSubmit = () => {
+    if (!selectedOption) {
+      setFeedback('Please select an option.');
+      return;
+    }
+
+    if (selectedOption === popupQuestion.answer) {
+      setFeedback('Correct! 🎉');
+    } else {
+      setFeedback(`Incorrect. The correct answer is: ${popupQuestion.answer}`);
+    }
+  };
+
   return (
-    <div className="question-bank">
+    <div className="question-bank-div">
       <h2 className="title">Question Bank</h2>
       <center>
         {!isSubjectSelected ? (
@@ -103,11 +160,7 @@ const QuestionBank = () => {
           </div>
         ) : (
           <>
-            <button onClick={closeQuestionPage} className="close-button">
-              Close
-            </button>
             <h3>{showBookmarks ? 'Bookmarked Questions' : `${selectedSubject} Questions`}</h3>
-            
             <div className="filter-container">
               <label htmlFor="difficulty-select" className="filter-label">Filter by Difficulty:</label>
               <select id="difficulty-select" value={selectedDifficulty} onChange={handleDifficultyChange} className="filter-select">
@@ -117,31 +170,60 @@ const QuestionBank = () => {
                 <option value="Hard">Hard</option>
               </select>
             </div>
-
-            <ul className="questions-list">
-              {filteredQuestions.map((question, index) => (
-                <li key={question.id} className="question-item">
-                  <div className="question-content">
-                    <p className="question-text">
-                      <span className="question-number">Question {index + 1}:</span> {question.text}
-                    </p>
-                    <p className="question-difficulty">{question.difficulty}</p>
-                  </div>
-                  <button onClick={() => toggleAnswerVisibility(question.id)} className="view-answer-button">
-                    {answersVisibility[question.id] ? 'Hide Answer' : 'View Answer'}
-                  </button>
-                  {answersVisibility[question.id] && (
-                    <p className="answer-text">{question.answer}</p>
-                  )}
-                  <button onClick={() => toggleBookmark(question)} className="bookmark-button">
-                    {bookmarkedQuestions.find((q) => q.id === question.id) ? '★' : '☆'}
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <div className="questions-list-div">
+              <ul className="questions-list">
+                {filteredQuestions.map((question, index) => (
+                  <li key={question.id} className="question-item">
+                    <div className="question-content">
+                      <p className="question-text">
+                        <span className="question-number">Question {index + 1}:</span> {question.text}
+                      </p>
+                      <p className="question-difficulty">Difficulty: {question.difficulty}</p>
+                      <p>Points: {question.points}</p>
+                    </div>
+                    <button onClick={() => openPopup(question)} className="view-answer-button">View</button>
+                    <button onClick={() => toggleBookmark(question)} className="bookmark-button">
+                      {bookmarkedQuestions.find((q) => q.id === question.id) ? '★' : '☆'}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <button onClick={closeQuestionPage} className="close-button">Close</button>
           </>
         )}
       </center>
+
+      {popupQuestion && (
+        <div className="popup">
+          <div className="popup-content">
+            <h3>Question Details</h3>
+            <p><strong>Question:</strong> {popupQuestion.text}</p>
+            <p><strong>Options:</strong></p>
+            <ul>
+              {popupQuestion.options.map((option, idx) => (
+                <li key={idx}>
+                  <label className='question-option-label'>
+                    <input
+                      type="radio"
+                      name="options"
+                      value={option}
+                      onChange={() => handleOptionChange(option)}
+                      checked={selectedOption === option}
+                    />
+                    {option}
+                  </label>
+                </li>
+              ))}
+            </ul>
+            <div className='pop-up-bottom'>
+            <button onClick={handleSubmit} className="submit-button">Submit</button>
+            {feedback && <p className="feedback">{feedback}</p>}
+            <button onClick={closePopup} className="close-button">Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -6,7 +6,7 @@ const StartExam = () => {
   const { examId } = useParams();
   const navigate = useNavigate();
 
-  const targetDate = new Date("November 15, 2024 00:05:00").getTime();
+  const targetDate = new Date("November 16, 2024 16:35:00").getTime();
   const [currentTime, setCurrentTime] = useState(new Date().getTime());
   const [countdown, setCountdown] = useState(targetDate - currentTime);
   const [consentGiven, setConsentGiven] = useState(false);
@@ -22,6 +22,7 @@ const StartExam = () => {
 
     return () => clearInterval(interval);
   }, [targetDate]);
+
 
   useEffect(() => {
     if (testCountdown === 0) {
@@ -48,13 +49,23 @@ const StartExam = () => {
   };
 
   const formatCountdown = (time) => {
-    const hours = Math.floor(time / (1000 * 60 * 60));
-    const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((time % (1000 * 60)) / 1000);
+  const days = Math.floor(time / (1000 * 60 * 60 * 24)); // Calculate days
+  const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); // Remaining hours
+  const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)); // Remaining minutes
+  const seconds = Math.floor((time % (1000 * 60)) / 1000); // Remaining seconds
+
+  if (days > 0) {
+    // Format to include days
+    return `${days} days ${hours.toString().padStart(2, "0")} hours ${minutes
+      .toString()
+      .padStart(2, "0")} minutes`;
+  } else {
+    // Format without days
     return `${hours.toString().padStart(2, "0")}:${minutes
       .toString()
       .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-  };
+  }
+};
 
   const showStartButton = countdown <= 0;
 

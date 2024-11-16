@@ -5,7 +5,10 @@ import user from "../assets/user.png";
 import { useAuth } from "../../context/auth.jsx";
 import { useNavigate } from "react-router-dom";
 import StudentProfile from "../Profile/StudentProf.jsx";
-
+import QuestionBank from "../Questions/QuestionBank.jsx";
+import Upcomingexam from "../Exam/Upcomingexam.jsx"
+import Pastexam from "../Exam/Pastexam.jsx";
+import Profile from "../Profile/Profile.jsx";
 const Calendar = () => {
   const today = new Date();
   const [currentDate, setCurrentDate] = useState(today);
@@ -127,7 +130,7 @@ const Calendar = () => {
   );
 };
 
-function Dashboard() {
+function Dashboard( {exams,results}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); 
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 700);
@@ -209,7 +212,7 @@ function Dashboard() {
 
 
         {/* Content Area */}
-        <div className="content">
+        {activeIndex==0 && <div className="content">
           {/* Upcoming Exams */}
           <div className="firstcol">
             <div className="upcomingexambox">
@@ -318,6 +321,14 @@ function Dashboard() {
         </div>          
 
         </div>
+}
+      {activeIndex==1 && <QuestionBank/>
+      }
+      {activeIndex==2 && <div className="upcoming-exam-comp"><Upcomingexam exams={exams}/></div>}
+
+      {activeIndex==3 && <div className="past-exam-comp"><Pastexam results={results}/></div>}
+      {activeIndex==4 && <div className="student-profile-div"><StudentProfile/></div>}
+
       </div>
     </div>
   );

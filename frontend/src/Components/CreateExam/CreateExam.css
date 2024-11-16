@@ -61,7 +61,7 @@
 }
 
 .option-div{
-  max-height: 375px;
+  max-height: 260px;
   overflow-y: auto;
 }
 
@@ -206,3 +206,28 @@
 .question-bank::-webkit-scrollbar-track {
   background-color: #c0c6d2;
 }
+
+/* Style for dropdown menu */
+.create-exam-form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+}
+
+/* Hover and focus styles for dropdown */
+.create-exam-form select:hover {
+  border-color: #4CAF50;
+}
+
+.create-exam-form select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+

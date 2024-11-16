@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Examinterface.css';
-import SubmitConfirmationModal from './submitConfirmationModal';
+import SubmitConfirmationModal from './SubmitConfirmationModal';
 import user from '../assets/user.png';
 
 function Examinterface() {
@@ -8,154 +8,11 @@ function Examinterface() {
     const [isActive, setIsActive] = useState(true);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [showSubmitConfirm, setShowSubmitConfirm] = useState(false); 
+    const [tabSwitchCount, setTabSwitchCount] = useState(0);
+    const [autoSubmit, setAutoSubmit] = useState(false); // Auto-submit flag
     
 
     const questions = [
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
-      { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
-      { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
-      { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
-      { text: "What is the largest mammal?", options: ["Elephant", "Blue Whale", "Shark", "Giraffe"], points: 3 },
-      { text: "In which year did World War II end?", options: ["1939", "1945", "1942", "1948"], points: 5 },
       { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], points: 3 },
       { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], points: 2 },
       { text: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Jane Austen", "Mark Twain", "J.K. Rowling"], points: 4 },
@@ -190,6 +47,54 @@ function Examinterface() {
         const seconds = String(totalSeconds % 60).padStart(2, '0');
         return { hours, minutes, seconds };
     };
+    const [tabSwitched, setTabSwitched] = useState(false);
+
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === "hidden") {
+                setTabSwitched(true); // Set state when tab is switched
+            }
+            if (tabSwitched && document.visibilityState === "visible") {
+                alert("Exam Submitted due to tab switching!!");
+                setAutoSubmit(true); // Trigger auto-submit
+                setShowSubmitConfirm(true); // Show the confirmation modal or directly submit
+            }
+        };
+
+        // Add event listener
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+        };
+    }, [tabSwitched]); // Add `tabSwitched` as a dependency
+    
+    useEffect(() => {
+        // Handle back button (popstate)
+        const handlePopState = (event) => {
+            event.preventDefault();
+            setShowSubmitConfirm(true); // Open the modal
+            window.history.pushState(null, null, window.location.href); // Prevent actual navigation
+        };
+
+        // Handle page reload or close (beforeunload)
+        const handleBeforeUnload = (event) => {
+            event.preventDefault();
+            //setShowSubmitConfirm(true); // Open the modal
+            event.returnValue = ""; // For modern browsers
+        };
+
+        window.addEventListener("popstate", handlePopState);
+        window.addEventListener("beforeunload", handleBeforeUnload);
+
+        // Push state initially to prevent back navigation
+        window.history.pushState(null, null, window.location.href);
+
+        return () => {
+            window.removeEventListener("popstate", handlePopState);
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        };
+    }, []);
 
     const { hours, minutes, seconds } = formatTime(timeRemaining);
 
@@ -209,7 +114,7 @@ function Examinterface() {
           return updatedStatuses;
       });
   };
-
+  
   const updateResponse = (index) => {
     setResponse(prevResponse => {
         const updatedResponse = [...prevResponse];
@@ -371,6 +276,7 @@ const handleCloseSubmitConfirm = () => {
         </div>
             {showSubmitConfirm && (
                 <SubmitConfirmationModal
+                autoSubmit={autoSubmit}
                     onCancel={handleCloseSubmitConfirm}
                 />
             )}

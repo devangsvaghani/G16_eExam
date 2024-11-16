@@ -1,17 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SubmitConfirmationModal.css';
 
-const SubmitConfirmationModal = ({ onCancel}) => {
+const SubmitConfirmationModal = ({ onCancel, autoSubmit = false }) => {
     const navigate = useNavigate();
 
     const handleConfirmClick = () => {
-        alert('Your Exam Has been Successfully Submitted!!!')
+        if(!autoSubmit)
+        alert('Your Exam Has been Successfully Submitted!!!');
         navigate("/");
     };
-
-    return (
-        <div className="modal-overlay">
+    useEffect(() => {
+        if (autoSubmit) {
+            handleConfirmClick();
+        }
+    }, [autoSubmit]);
+    if(!autoSubmit)
+    {
+        return (
+            <div className="modal-overlay">
             <div className="submit-modal">
                 <h2>Confirm Submission</h2>
                 <p>Are you sure you want to submit your test?</p>
@@ -21,7 +28,12 @@ const SubmitConfirmationModal = ({ onCancel}) => {
                 </div>
             </div> 
         </div>
-    );
+        )
+    }
+    else
+    {
+        return null;
+    }
 };
 
 export default SubmitConfirmationModal;
