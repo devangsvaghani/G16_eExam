@@ -29,7 +29,7 @@ const StudentExamPage = () => {
       <h1 className="exam-page-title">My Exams</h1>
 
       <div className="exam-section">
-        <h2>Upcoming Exams</h2>
+        <h2 className="exam-section-title">Upcoming Exams</h2>
         <div className="exam-list">
           {upcomingExams.length > 0 ? (
             upcomingExams.map((exam) => (
@@ -46,7 +46,7 @@ const StudentExamPage = () => {
       </div>
 
       <div className="exam-section">
-        <h2>Past Exams</h2>
+        <h2 className="exam-section-title">Past Exams</h2>
         <div className="exam-list">
           {pastExams.length > 0 ? (
             pastExams.map((exam) => (

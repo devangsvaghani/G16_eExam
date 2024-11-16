@@ -12,6 +12,7 @@ import Upcomingexam from './Components/Exam/Upcomingexam'
 import ResetPassword from './Components/Profile/ResetPassword';
 import Adminlogin from './Components/Login/Adminlogin'
 import Examinerdashboard from './Components/Examinerdashboard/Examinerdashboard';
+import PerformanceResultPage from './Components/PerformanceResultPage/PerformanceResultPage';
 
 // const exams = [
   //   {
@@ -190,6 +191,15 @@ import Examinerdashboard from './Components/Examinerdashboard/Examinerdashboard'
 
 const App = () => {
 
+  const pastExams = [
+    { score: 80 },
+    { score: 75 },
+    { score: 90 },
+    { score: 85 },
+    { score: 78 },
+    { score: 88 }
+  ];
+
   return (
     <>
       {/* <Routes>
@@ -210,7 +220,8 @@ const App = () => {
 
       {/* <QuestionBank /> */}
       {/* <FetchedQuestions /> */}
-        <Examinerdashboard/>
+        {/* <Examinerdashboard/>  */}
+        <Dashboard/>
       
     
     </>
