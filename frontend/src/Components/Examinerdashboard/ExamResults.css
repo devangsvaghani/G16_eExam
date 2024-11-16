@@ -44,6 +44,11 @@ td{
   
 }
 
+.studentid-result:hover{
+  cursor: pointer;
+  font-weight: 700;
+}
+
 .no-results {
   text-align: center;
   padding: 10px;

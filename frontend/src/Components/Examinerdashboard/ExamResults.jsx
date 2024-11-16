@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./ExamResults.css";
+import Examreport from '../ResultPage/Examreport.jsx'
 
 // Sample student data
 const studentData = [
@@ -18,8 +19,12 @@ const ExamResult = ({examtitle,subject,duration,starttime,numquestion,totalmarks
     student.id.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const [isExamreportopen,setisExamreportopen] = useState(false);
+  
   return (
     <div className="exam-result-container">
+      { !isExamreportopen &&
+      <>
       <h2>Exam Results</h2>
       <div className="exam-information-div">
         <h3> Exam Title : <span>{examtitle}</span></h3>
@@ -50,7 +55,8 @@ const ExamResult = ({examtitle,subject,duration,starttime,numquestion,totalmarks
           {filteredStudents.length > 0 ? (
             filteredStudents.map((student) => (
               <tr key={student.id} >
-                <td>{student.id}</td>
+                <td onClick={()=> setisExamreportopen(true)} className="studentid-result"
+                onclick>{student.id}</td>
                 <td>{student.name}</td>
                 <td>{student.marksEarned}</td>
                 {/* <td>{student.totalMarks}</td> */}
@@ -66,6 +72,17 @@ const ExamResult = ({examtitle,subject,duration,starttime,numquestion,totalmarks
           )}
         </tbody>
       </table>
+
+      </>
+      }
+      {isExamreportopen && 
+        <>
+      <Examreport/>
+      <button className="create-examiner-button" style={{zIndex:"10"}} onClick={()=>setisExamreportopen(false)}>
+              Close
+      </button>
+      </>
+      }
     </div>
   );
 };
