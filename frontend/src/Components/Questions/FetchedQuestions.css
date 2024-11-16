@@ -1,96 +1,199 @@
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 24px;
-  background-color: #F9F7F7;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+.step-three > h1{
+  color: #112D4E;
 }
 
+.step-three{
+  width: 80%;
+  overflow-y: auto;
+}
+
+/* Scrollbar styles */
+.step-three::-webkit-scrollbar {
+  width: 6px;
+}
+
+.step-three::-webkit-scrollbar-thumb {
+  background-color: #3F72AF;
+  border-radius: 10px;
+}
+
+.step-three::-webkit-scrollbar-track {
+  background-color: #c0c6d2;
+}
+.step-three > h2,.step-three >  h3 {
+  text-align: center;
+  font-weight: 600;
+  color: #112D4E;
+  margin-bottom: 20px;
+}
+
+.step-three > input,.step-three > select,.step-three > button {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  margin: 5px 0;
+  box-sizing: border-box;
+}
+
+input:focus, select:focus, button:focus {
+  outline: none;
+  border-color: black;
+}
+
+/* Main container */
+.step-three {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.create-question {
+  margin-top: 40px;
+}
+
+.input-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+}
+
+.input-field {
+  font-size: 16px;
+  background-color: #f9f9f9;
+}
+
+.select-field {
+  background-color: #f9f9f9;
+}
+
+.add-question-button {
+  background-color: #112D4E;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 15px;
+  transition: background-color 0.3s;
+}
+
+.input-field-select-field,.input-field{
+  width:100%;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.add-question-button:hover {
+  background-color: #0a396fe5;
+}
+
+.add-question-button:disabled {
+  background-color: #b0b0b0;
+  cursor: not-allowed;
+}
+
+/* Question list styles */
 .existing-questions {
-  margin-bottom: 24px;
+  margin-top: 30px;
 }
 
 .question-list {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
 }
 
 .question-item {
-  border: 1px solid #e0e0e0;
-  padding: 16px;
+  background-color: #fafafa;
   border-radius: 8px;
-  background-color: white;
-  margin-bottom: 16px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.question-label, .question-text {
-  color: black;
-  font-weight: bold;
+.question-item strong {
+  font-size: 16px;
 }
 
 .options-list {
-  margin-top: 8px;
-  padding-left: 16px;
+  list-style: none;
+  padding-left: 20px;
 }
 
 .option {
-  color: #4a4a4a;
+  font-size: 14px;
+  padding: 5px 0;
 }
 
-.correct-answer {
-  margin-top: 8px;
-  color: #3F72AF;
+.option.correct {
+  color: black;
 }
 
-.difficulty {
-  margin-top: 4px;
-  color: #FF6F61; /* Distinct color for difficulty level */
+.question-item p {
+  font-size: 14px;
+  color: #777;
+  margin: 5px 0;
 }
 
-.create-question {
-  margin-top: 24px;
+/* Option input styling */
+.option-div {
+  margin-top: 20px;
 }
 
-.subtitle {
-  font-size: 1.25rem;
-  font-weight: 500;
-  margin-bottom: 8px;
-  color: #112D4E;
+.option-input {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.input-field {
-  width: 100%;
+.option-input-input {
+  margin-right: 10px;
+}
+
+.option-input input[type="text"] {
+  width: calc(100% - 30px);
+  font-size: 14px;
   padding: 8px;
-  border: 1px solid #d1d1d1;
-  border-radius: 4px;
-  margin-bottom: 16px;
 }
 
-.add-question-button {
-  width: 100%;
-  background-color: #3F72AF;
-  color: white;
-  font-weight: bold;
-  padding: 12px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+.option-input input[type="radio"] {
+  margin-right: 10px;
+  width: 10%;
 }
 
-.add-question-button:hover {
-  background-color: #112D4E;
+/* Select dropdown styles */
+select {
+
+  background-color: #f9f9f9;
+  font-size: 16px;
 }
 
-/* New Styles for Difficulty Dropdown */
-.select-field {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #d1d1d1;
-  border-radius: 4px;
-  margin-bottom: 16px;
-  color: #4a4a4a;
-  background-color: #F9F7F7;
+select:focus {
+  
+  border-color: #112D4E;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .step-three {
+    padding: 15px;
+  }
+
+  .create-question {
+    margin-top: 20px;
+  }
+
+  .input-field, .select-field, .add-question-button {
+    font-size: 14px;
+  }
+
+  .question-item {
+    padding: 15px;
+  }
 }
