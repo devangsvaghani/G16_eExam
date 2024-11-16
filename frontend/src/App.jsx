@@ -13,6 +13,7 @@ import ResetPassword from './Components/Profile/ResetPassword';
 import Adminlogin from './Components/Login/Adminlogin'
 import Examinerdashboard from './Components/Examinerdashboard/Examinerdashboard';
 import PerformanceResultPage from './Components/PerformanceResultPage/PerformanceResultPage';
+import UpdateExam from './Components/Examinerdashboard/UpdateExam.jsx';
 
 // const exams = [
   //   {
@@ -220,8 +221,8 @@ const App = () => {
 
       {/* <QuestionBank /> */}
       {/* <FetchedQuestions /> */}
-        {/* <Examinerdashboard/>  */}
-        <Dashboard/>
+         {/* <Examinerdashboard/>   */}
+      <UpdateExam/>
       
     
     </>
