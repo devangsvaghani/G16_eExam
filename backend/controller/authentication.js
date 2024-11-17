@@ -25,7 +25,7 @@ export const create_session = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "Internal Server Error", error: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -45,7 +45,7 @@ export const admin_login = async (req, res) => {
 
     } catch(error){
         console.error(error);
-        return res.status(500).json({ message: "Internal Server Error", error: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -192,7 +192,7 @@ export const create_examiner = async (req, res) => {
         return res.status(200).json({ message: "Examiner created successfully", user: savedUser});
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "Internal Server Error", error: error.message });
+        return res.status(500).json({ message: error.message });
     }
 }
 
@@ -233,7 +233,7 @@ export const create_admin = async (req, res) => {
         return res.status(200).json({ message: "Admin created successfully" });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "Internal Server Error", error: error.message });
+        return res.status(500).json({ message: error.message });
     }
 }
 
@@ -283,7 +283,7 @@ export const forgot_password = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "Internal Server Error", error: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -334,7 +334,7 @@ export const resend_otp = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "Internal Server Error", error: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -343,19 +343,19 @@ export const verify_otp = async (req, res) => {
         const { email, otp, password } = req.body;
 
         if (!email || !otp || !password) {
-            return res.status(400).json({error: "Email and OTP are required" });
+            return res.status(400).json({message: "Email and OTP are required" });
         }
 
         // Check password length (e.g., minimum 8 characters)
         if (password.length < 8) {
-            return res.status(400).json({ error: 'Password must be at least 8 characters long.' });
+            return res.status(400).json({ message: 'Password must be at least 8 characters long.' });
         }
 
         // Find OTP records for the user by email
         const userOTPRecords = await Otp.findOne({ email : email });
 
         if (!userOTPRecords) {
-            return res.status(400).json({ error: "Account record doesn't exist" });
+            return res.status(400).json({ message: "Account record doesn't exist" });
         }
 
         // OTP record exists
@@ -365,11 +365,11 @@ export const verify_otp = async (req, res) => {
         if (expiresAt < Date.now()) {
             // OTP has expired
             await Otp.deleteMany({ email });
-            return res.status(409).json({ error: "Code has expired. Please request again" });
+            return res.status(409).json({ message: "Code has expired. Please request again" });
         }
 
         if (otp !== existing_otp) {
-            return res.status(401).json({ error: "Invalid OTP. Please try again." });
+            return res.status(401).json({ message: "Invalid OTP. Please try again." });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -382,7 +382,7 @@ export const verify_otp = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "Internal Server Error", error: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -391,26 +391,28 @@ export const reset_password = async (req,res) => {
         const { old_password, new_password } = req.body;
 
         if (!old_password || !new_password) {
-            return res.status(400).json({error: "All fields are required" });
+            return res.status(400).json({message: "All fields are required" });
         }
 
         const user = await User.findOne({username : req.user.username});
 
         if (!user) {
-            return res.status(409).json({ error: 'User does not exists!'});
+            return res.status(409).json({ message: 'User does not exists!'});
         }
 
         // Check password length (e.g., minimum 8 characters)
         if (new_password.length < 8) {
-            return res.status(400).json({ error: 'Password must be at least 8 characters long.' });
+            return res.status(400).json({ message: 'Password must be at least 8 characters long.' });
         }
         
         const pass_hash = await bcrypt.compare(old_password, user.password);
         if(!pass_hash){
-            return res.status(400).json({ error: 'Incorrect Password' });
+            return res.status(400).json({ message: 'Incorrect Password' });
         }
 
-        user.password = new_password;
+        const hashedPassword = await bcrypt.hash(new_password, 10);
+
+        user.password = hashedPassword;
 
         await user.save();
 
@@ -419,7 +421,7 @@ export const reset_password = async (req,res) => {
         });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "Internal Server Error", error: error.message });
+        return res.status(500).json({ message: error.message });
     }
 }
 

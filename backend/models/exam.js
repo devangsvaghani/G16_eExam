@@ -41,7 +41,7 @@ const examSchema = new mongoose.Schema({
     },
 
     batch : {
-        type : String,
+        type : Number,
         required: true
     },
 
@@ -64,7 +64,12 @@ const examSchema = new mongoose.Schema({
 
     instructions: [{
         type : String,
-    }]
+    }],
+
+    subject: {
+        type: String,
+        required: true
+    }
 },{
     timestamps: true
 });

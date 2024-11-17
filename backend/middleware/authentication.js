@@ -47,7 +47,6 @@ export const authenticate_student_token = (req, res, next) => {
             return res.status(403).json({ message: "Access Forbidden!" });
         }
 
-        req.user = user;
         next();
     });
 }
@@ -75,7 +74,6 @@ export const authenticate_examiner_token = (req, res, next) => {
             return res.status(403).json({ message: "Access Forbidden!" });
         }
 
-        req.user = user;
         next();
     });
 }
@@ -103,7 +101,6 @@ export const authenticate_admin_token = (req, res, next) => {
             return res.status(403).json({ message: "Access Forbidden!" });
         }
 
-        req.user = user;
         next();
     });
 }

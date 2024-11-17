@@ -16,7 +16,8 @@ export const create_exam = async (req, res) => {
             branch,
             total_points,
             status,
-            instructions
+            instructions,
+            subject
         } = req.body;
 
         const exam = new Exam({
@@ -31,7 +32,8 @@ export const create_exam = async (req, res) => {
             branch,
             total_points,
             status,
-            instructions
+            instructions,
+            subject
         });
 
         await exam.save();
@@ -58,7 +60,8 @@ export const update_exam = async (req, res) => {
             branch,
             total_points,
             status,
-            instructions
+            instructions,
+            subject
         } = req.body;
 
         // Find the exam by ID and update it
@@ -81,6 +84,7 @@ export const update_exam = async (req, res) => {
         exam.total_points = total_points;
         exam.status = status;
         exam.instructions = instructions;
+        exam.subject = subject;
 
         // Save the updated exam
         await exam.save();

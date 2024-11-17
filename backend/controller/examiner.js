@@ -8,7 +8,7 @@ export const all_examiners = async (req, res) => {
         return res.status(200).json({ examiners: examiners, message: "Examiners fetched successfully"});
     } catch(error){
         console.error(error);
-        return res.status(500).json({ message: "Internal Server error" , error: error.message});
+        return res.status(500).json({ message: error.message });
     }
 };
 

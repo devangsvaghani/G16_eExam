@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import {
     authenticateToken,
     authenticate_admin_token,
+    authenticate_student_token,
 } from "../middleware/authentication.js";
 
 import {
@@ -31,12 +32,12 @@ import {
 } from "../controller/authentication.js";
 import {
     get_past_exams,
-    get_past_exams_3,
+    get_past_exams_5_student,
     get_upcoming_exams,
-    get_upcoming_exams_3,
+    get_upcoming_exams_5_student,
+    get_upcoming_exams_student,
     get_upcoming_exams_year,
 } from "../controller/past_upcoming_exams.js";
-import { student_performance, student_submit_answer } from "../controller/student.js";
 import { exams_result, show_exam } from "../controller/exams_result.js"
 import { all_students, delete_student, get_student, student_performance, student_submit_answer, update_student } from "../controller/student.js";
 import { all_examiners, delete_examiner, get_examiner, update_profile } from "../controller/examiner.js";
@@ -81,12 +82,10 @@ router.delete("/:examId/delete-question/:questionId", delete_question_from_exam)
 router.get("/past-exams", get_past_exams);
 router.get("/upcoming-exams", get_upcoming_exams);
 router.get("/upcoming-exams-per-year/:year", get_upcoming_exams_year);
-router.get("/upcoming-exams-limit-3", get_upcoming_exams_3);
-router.get("/past-exams-limit-3", get_past_exams_3);
 
 router.post("/update-profile/:username", update_profile);
 
-router.get("/student-performance/:username", student_performance);
+
 
 router.post("/student-submit-answer", student_submit_answer);
 
@@ -96,6 +95,10 @@ router.get("/show-exam/:username/:examId", show_exam);
 
 // student related
 router.get("/get-student/:username", authenticateToken, get_student);
+router.get("/upcoming-exams-limit-5-student", authenticate_student_token, get_upcoming_exams_5_student);
+router.get("/past-exams-limit-5-student", authenticate_student_token, get_past_exams_5_student);
+router.get("/upcoming-exams-student", authenticate_student_token, get_upcoming_exams_student);
+router.get("/student-performance", authenticate_student_token, student_performance);
 
 // examiner related
 router.get("/get-examiner/:username", authenticateToken, get_examiner);

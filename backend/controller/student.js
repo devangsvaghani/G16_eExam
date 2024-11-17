@@ -1,13 +1,17 @@
 import Student from '../models/student.js';
 import Question from '../models/question.js';
 import Exam from '../models/exam.js';
-import User from '../models/user.js'
+import User from '../models/user.js';
+import mongoose from 'mongoose';
 
 export const student_performance = async (req, res) => {
     try {
-        const { username } = req.params;
+        const username = req?.user?.username;
 
-        // Find the student by username
+        if(!username){
+            return res.status(404).json({ message: "No Username Found" });
+        }
+
         const student = await Student.findOne({ username: username })
             .populate({
                 path: 'givenExams.exam',
@@ -76,6 +80,13 @@ export const student_submit_answer = async (req, res) => {
             });
             student_exam = student.givenExams[student.givenExams.length - 1];
         }
+
+        if(student_exam.questions.find(q => q.question.toString() === question._id.toString())){
+            return res.status(200).json({
+                message: isCorrect ? 'Answer is correct. Score updated!' : 'Answer is incorrect.',
+                obtained_score: student_exam.obtained_score,
+            });
+        }
         
         student_exam.questions.push({ question: question._id, answer }); 
         
@@ -102,7 +113,7 @@ export const all_students = async (req, res) => {
         return res.status(200).json({ students: students, message: "Students fetched successfully"});
     } catch(error){
         console.error(error);
-        return res.status(500).json({ message: "Internal Server error" , error: error.message});
+        return res.status(500).json({ message: error.message });
     }
 };
 
