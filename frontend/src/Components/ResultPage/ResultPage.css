@@ -1,0 +1,73 @@
+.result-page {
+    background-color: #F9F7F7;
+    color: #112D4E;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  h2 {
+    color: #3F72AF;
+  }
+  
+  select {
+    background-color: #DBE2EF;
+    border: 1px solid #3F72AF;
+    color: #3F72AF;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+  }
+  
+  .report-card {
+    margin-top: 30px;
+    background-color: #DBE2EF;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #3F72AF;
+  }
+  
+  th {
+    background-color: #3F72AF;
+    color: white;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #F9F7F7;
+  }
+  
+  tr:nth-child(odd) {
+    background-color: #DBE2EF;
+  }
+
+  h3 {
+    color: #3F72AF;
+    font-size: 24px;
+  }
+  
+  .summary {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #F9F7F7;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  h4 {
+    color: #112D4E;
+    font-size: 18px;
+  }
+  
