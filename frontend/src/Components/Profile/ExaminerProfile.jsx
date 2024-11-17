@@ -216,7 +216,7 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
                             <div className="select-branch">
                                 <label htmlFor="gender">Gender</label>
                                 <select
-                                    id="gender"
+                                    className="select-branch-select"
                                     name="gender"
                                     value={userData.gender}
                                     onChange={handleChange}
@@ -236,12 +236,15 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
 
                     {/* Sidebar with Profile Image, Info, Reset Password Button, and Edit Profile (only for Admins) */}
                     <div id="sbar">
-                        <img src={user} alt="Profile" id="profile-pic" />
-                        <h3 id="profile-name">
-                            {`${userData.firstname} ${userData.lastname}`}
-                        </h3>
-                        <p id="profile-email">{userData.email}</p>
+                        <div>
+                            <img src={user} alt="Profile" id="profile-pic" />
+                            <h3 id="profile-name">
+                                {`${userData.firstname} ${userData.lastname}`}
+                            </h3>
+                            <p id="profile-email">{userData.email}</p>
+                        </div>
                         <div className="profilebtns">
+                        {!isAdmin &&
                             <button
                                 type="button"
                                 id="reset-button"
@@ -249,13 +252,14 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
                             >
                                 Reset Password
                             </button>
+                        }
                             {isAdmin && ( // Only render the "Edit Profile" button if the user is an admin
                                 <button
                                     type="button"
                                     id="save-button"
                                     onClick={handleSaveProfile}
                                 >
-                                    Edit Profile
+                                    Save Changes
                                 </button>
                             )}
                             <button

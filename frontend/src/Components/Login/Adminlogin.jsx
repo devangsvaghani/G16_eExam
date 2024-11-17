@@ -82,10 +82,8 @@ const Login = () => {
       </Helmet>
       <form onSubmit={handleLogin} className="login-form">
         <h2>Administrator Login</h2>
-        <br />
 
         <label htmlFor="securitykey">Authorization Code</label>
-        <br />
         <div className="password-container">
           {/* Password input field */}
           <input

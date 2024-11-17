@@ -229,7 +229,23 @@
 
 .question-bank-div .question-option-label>input[type='radio']{
   display: block;
-  margin-left: 100px;
-  
+  width:10%;
+}
+
+.question-option-label{
+  width:100%;
+  display: flex;
+}
+
+.popup-content > ul{
+  list-style: none;
+}
+
+.question-option-label > p{
+  width:90%;
+}
+
+.popup-content-li{
+  width:100%;
 }
 

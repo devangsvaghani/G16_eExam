@@ -223,7 +223,7 @@ function StudentProf({ onClose, toast, username, setStudents }) {
                             <div className="select-branch">
                                 <label htmlFor="gender">Gender</label>
                                 <select
-                                    id="gender"
+                                    className="select-branch-select"
                                     name="gender"
                                     value={userData.gender}
                                     onChange={handleChange}
@@ -238,11 +238,10 @@ function StudentProf({ onClose, toast, username, setStudents }) {
                                     </option>
                                 </select>
                             </div>
-                            <div className="half-width">
+                            <div className="select-branch">
                                 <label htmlFor="batch">Batch</label>
                                 <input
                                     type="number"
-                                    id="batch"
                                     name="batch"
                                     value={userData.batch}
                                     onChange={handleChange}
@@ -254,7 +253,7 @@ function StudentProf({ onClose, toast, username, setStudents }) {
                             <div className="select-branch">
                                 <label htmlFor="branch">Branch:</label>
                                 <select
-                                    id="branch"
+                                    className="select-branch-select"
                                     name="branch"
                                     value={userData.branch}
                                     onChange={handleChange}
@@ -278,7 +277,7 @@ function StudentProf({ onClose, toast, username, setStudents }) {
                             <div className="select-branch">
                                 <label htmlFor="graduation">graduation</label>
                                 <select
-                                    id="graduation"
+                                    className="select-branch-select"
                                     name="graduation"
                                     value={userData.graduation}
                                     onChange={handleChange}
@@ -298,12 +297,15 @@ function StudentProf({ onClose, toast, username, setStudents }) {
 
                     {/* Sidebar with Profile Image, Info, Reset Password Button, and Edit Profile (only for Admins) */}
                     <div id="sbar">
-                        <img src={user} alt="Profile" id="profile-pic" />
-                        <h3 id="profile-name">
-                            {`${userData.firstname} ${userData.lastname}`}
-                        </h3>
-                        <p id="profile-email">{userData.email}</p>
+                        <div>
+                            <img src={user} alt="Profile" id="profile-pic" />
+                            <h3 id="profile-name">
+                                {`${userData.firstname} ${userData.lastname}`}
+                            </h3>
+                            <p id="profile-email">{userData.email}</p>
+                        </div>
                         <div className="profilebtns">
+                            { !isAdmin && 
                             <button
                                 type="button"
                                 id="reset-button"
@@ -311,13 +313,14 @@ function StudentProf({ onClose, toast, username, setStudents }) {
                             >
                                 Reset Password
                             </button>
+                            }
                             {isAdmin && ( // Only render the "Edit Profile" button if the user is an admin
                                 <button
                                     type="button"
                                     id="save-button"
                                     onClick={handleSaveProfile}
                                 >
-                                    Edit Profile
+                                    Save Changes
                                 </button>
                             )}
                             <button

@@ -61,6 +61,7 @@
     width: 50%;
     border-radius: 10px;
     text-align: center;
+    justify-content: space-between;
     order: 2;
     display: flex;
     flex-direction: column;
@@ -69,7 +70,7 @@
 }
 
 #content h2 {
-    color: #3F72AF;
+    color: black;
     text-align: center;
     font-size: 30px;
     margin-top: 10px;
@@ -119,6 +120,54 @@
     gap: 15px;
 }
 
+/* Dropdown Styling */
+.select-branch-select {
+    width: 100%;
+    padding: 4px;
+    font-size: 14px;
+    color: #112D4E; /* Dark text for dropdown items */
+    background-color: #F9F7F7; /* Light background */
+    border: 1px solid #3F72AF; /* Border color matching the theme */
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    appearance: none; /* Remove default browser dropdown arrow */
+    cursor: pointer;
+}
+
+.select-branch-select:focus {
+    outline: none;
+    border-color: #112D4E; /* Highlight border on focus */
+    box-shadow: 0 0 5px rgba(63, 114, 175, 0.5); /* Subtle shadow on focus */
+}
+
+.select-branch-select option {
+    color: #112D4E; /* Ensure text inside options aligns with theme */
+    background-color: #F9F7F7; /* Match dropdown background */
+}
+
+/* Dropdown container for better alignment */
+.studentpdiv  .select-branch {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #3F72AF; /* Blue background for dropdown container */
+    padding: 8px;
+    border-radius: 8px;
+    align-items: center;
+}
+
+.studentpdiv  .select-branch > label{
+    text-align: left;
+    font-size: 12px;
+    color: #F9F7F7;
+    font-weight: bold;
+}
+
+
+
 #form-group {
     display: flex;
     flex-direction: row;
@@ -131,15 +180,17 @@
     border-radius: 8px;
 }
 
-#form-group label {
+#form-group > label {
     text-align: left;
     font-size: 12px;
     color: #F9F7F7; /* White text for better contrast on blue fields */
     font-weight: bold;
 }
 
-#form-group > input {
+#form-group > input,
+.select-branch > input {
     flex: 1;
+    width:100%;
     padding: 5px;
     font-size: 13px;
     border: 1px solid #DBE2EF;
@@ -148,6 +199,8 @@
     transition: border 0.3s ease, box-shadow 0.3s ease;
     margin: 4px;
 }
+
+
 
 #form-group input:focus {
     border-color: #3F72AF;
@@ -204,6 +257,10 @@
         height: 90%;
     }
 
+    .studentpdiv .select-branch{
+        flex-direction: column;
+    }
+
     #profile-card {
         flex-direction: column; /* Stack the profile card elements */
         gap: 10px;
@@ -233,7 +290,7 @@
 
     /* Form Adjustments */
     #form-group {
-        flex-direction: column; /* Stack form fields on smaller screens */
+        flex-direction: row; /* Stack form fields on smaller screens */
         padding: 10px;
     }
 
