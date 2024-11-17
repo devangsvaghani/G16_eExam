@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, Label } from 'recharts';
+import Examreport from '../ResultPage/Examreport'
 import './PerformanceResultPage.css';
 
 const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#8dd1e1', '#d0ed57'];
 
-const OverallPerformance = ({ pastExams }) => {
+const PerformanceResultPage = ({ pastExams }) => {
   const [averageScore, setAverageScore] = useState(0);
   const [performanceData, setPerformanceData] = useState([]);
   const [finalPercentage, setFinalPercentage] = useState(0);
-
 
   useEffect(() => {
     if (pastExams.length > 0) {
@@ -30,12 +30,43 @@ const OverallPerformance = ({ pastExams }) => {
     }
   }, [pastExams]);
 
+  const [isexamreportopen,setisexamreportopen] = useState(false);
+  const [results, setResults] = useState([
+    { exam: 'Exam 1', score: 80 ,total : 100 },
+    { exam: 'Exam 2', score: 75 ,total : 100 },
+    { exam: 'Exam 3', score: 90 ,total : 100 },
+    { exam: 'Exam 4', score: 85 ,total : 100 },
+    { exam: 'Exam 5', score: 78 ,total : 100 },
+    { exam: 'Exam 6', score: 88 ,total : 100 },
+    { exam: 'Exam 1', score: 80 ,total : 100 },
+    { exam: 'Exam 2', score: 75 ,total : 100 },
+    { exam: 'Exam 3', score: 90 ,total : 100 },
+    { exam: 'Exam 4', score: 85 ,total : 100 },
+    { exam: 'Exam 5', score: 78 ,total : 100 },
+    { exam: 'Exam 6', score: 88 ,total : 100 },
+    { exam: 'Exam 1', score: 80 ,total : 100 },
+    { exam: 'Exam 2', score: 75 ,total : 100 },
+    { exam: 'Exam 3', score: 90 ,total : 100 },
+    { exam: 'Exam 4', score: 85 ,total : 100 },
+    { exam: 'Exam 5', score: 78 ,total : 100 },
+    { exam: 'Exam 6', score: 88 ,total : 100 },
+    { exam: 'Exam 1', score: 80 ,total : 100 },
+    { exam: 'Exam 2', score: 75 ,total : 100 },
+    { exam: 'Exam 3', score: 90 ,total : 100 },
+    { exam: 'Exam 4', score: 85 ,total : 100 },
+    { exam: 'Exam 5', score: 78 ,total : 100 },
+    { exam: 'Exam 6', score: 88 ,total : 100 },
+  ]);
+
   return (
-    <div className="overall-performance">
+    <div>
+      {!isexamreportopen &&
+      <div>
+      <div className="overall-performance">
       <h2>Overall Performance</h2>
       <p>Average Score: {averageScore.toFixed(2)}</p>
       <div className="charts-container">
-        <ResponsiveContainer width="60%" height={400}>
+        <ResponsiveContainer width="60%" height={300}>
           <LineChart data={performanceData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
@@ -46,72 +77,71 @@ const OverallPerformance = ({ pastExams }) => {
             <Line type="monotone" dataKey="average" stroke="#82ca9d" name="Average Score" />
           </LineChart>
         </ResponsiveContainer>
-        <ResponsiveContainer width="40%" height={400}>
-          <PieChart>
-            <Pie
-              data={[{ name: 'Final Percentage', value: finalPercentage }]}
-              dataKey="value"
-              cx="50%"
-              cy="50%"
-              outerRadius={150}
-              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
-            >
-              <Cell fill="#8884d8" />
-            </Pie>
-            <Label
-              value={`Final Percentage: ${finalPercentage.toFixed(2)}%`}
-              position="center"
-              style={{ fontSize: '18px', fontWeight: 'bold' }}
-            />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  );
-};
-
-const ResultPage = () => {
-  const [results, setResults] = useState([
-    { exam: 'Exam 1', score: 80 },
-    { exam: 'Exam 2', score: 75 },
-    { exam: 'Exam 3', score: 90 },
-    { exam: 'Exam 4', score: 85 },
-    { exam: 'Exam 5', score: 78 },
-    { exam: 'Exam 6', score: 88 },
-  ]);
-
-  return (
-    <div className="result-page">
-      <div className="exam-result">
-        <h3>Exam Result</h3>
-        <div className="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Exam</th>
-                <th>Score</th>
-              </tr>
-            </thead>
-            <tbody>
-              {results.map((result, index) => (
-                <tr key={index}>
-                  <td>{result.exam}</td>
-                  <td>{result.score}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="chart-container-progress-circle">
+        <div style={{
+                      width: '200px',
+                      height: '200px',
+                      borderRadius: '50%',
+                      background: 'conic-gradient(#3F72AF 0% 53%, #e0e0e0 53%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative',
+                    }}>
+                    <div style={{
+                      width: '150px',
+                      height: '150px',
+                      borderRadius: '50%',
+                      background: 'conic-gradient(white 0% 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative',
+                    }}>
+          <span>53%</span>
+          </div>
+          </div>
+          <br/>
+          <p>Overall Performance</p>
         </div>
       </div>
     </div>
-  );
-};
+      <div className="result-page">
+          <div className="exam-result">
+            <h3>Exam Result</h3>
+            <div className="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Exam</th>
+                    <th>Marks Obtained</th>
+                    <th>Total Marks</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {results.map((result, index) => (
+                    <tr key={index}>
+                      <td className='student-dashboard-td' onClick={()=>setisexamreportopen(true)}>{result.exam}</td>
+                      <td>{result.score}</td>
+                      <td>{result.total}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>}
+      {isexamreportopen && 
+        <div>
 
-const PerformanceResultPage = ({ pastExams }) => {
-  return (
-    <div>
-      <OverallPerformance pastExams={pastExams} />
-      <ResultPage />
+        <Examreport/>
+        <button className="create-examiner-button" onClick={() =>setisexamreportopen(false)}>
+          Close 
+        </button>
+        </div>
+      }
+      
     </div>
   );
 };

@@ -9,6 +9,7 @@ import QuestionBank from "../Questions/QuestionBank.jsx";
 import Upcomingexam from "../Exam/Upcomingexam.jsx"
 import Pastexam from "../Exam/Pastexam.jsx";
 import Profile from "../Profile/Profile.jsx";
+import PerformanceResultPage from "../PerformanceResultPage/PerformanceResultPage.jsx";
 const Calendar = () => {
   const today = new Date();
   const [currentDate, setCurrentDate] = useState(today);
@@ -137,6 +138,15 @@ function Dashboard( {exams,results}) {
   const { setIsLoggedIn, validateUser, LogOut, isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
+  const pastExams = [
+    { score: 80 },
+    { score: 75 },
+    { score: 90 },
+    { score: 85 },
+    { score: 78 },
+    { score: 88 }
+  ];
+
   useEffect(() => {
     if (window.localStorage.getItem("token") === null) {
       validateUser();
@@ -260,9 +270,29 @@ function Dashboard( {exams,results}) {
           <div className="secondcol">
             <Calendar />
           <div className="percentageBox">
-            <div className="progress-circle">
-              <span>53%</span>
-            </div>
+          <div style={{
+                      width: '200px',
+                      height: '200px',
+                      borderRadius: '50%',
+                      background: 'conic-gradient(#3F72AF 0% 53%, #e0e0e0 53%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative',
+                    }}>
+                    <div style={{
+                      width: '150px',
+                      height: '150px',
+                      borderRadius: '50%',
+                      background: 'conic-gradient(white 0% 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative',
+                    }}>
+          <span>53%</span>
+          </div>
+          </div>
             <div className="title">Overall Performance</div>
           </div>
         </div>
@@ -324,9 +354,15 @@ function Dashboard( {exams,results}) {
 }
       {activeIndex==1 && <QuestionBank/>
       }
-      {activeIndex==2 && <div className="upcoming-exam-comp"><Upcomingexam exams={exams}/></div>}
+      {activeIndex==2 && 
+      <div className="upcoming-exam-comp">
+      <Upcomingexam exams={exams}/>
+      </div>}
 
-      {activeIndex==3 && <div className="past-exam-comp"><Pastexam results={results}/></div>}
+      {activeIndex==3 && 
+      <div className="past-exam-comp">
+      <PerformanceResultPage pastExams={pastExams}/>
+      </div>}
       {activeIndex==4 && <div className="student-profile-div"><StudentProfile/></div>}
 
       </div>

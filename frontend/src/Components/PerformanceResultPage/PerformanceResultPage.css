@@ -6,7 +6,7 @@
   text-align: center;
 }
 
-h2 {
+.overall-performance > h2 {
   color: #3F72AF;
 }
 
@@ -19,7 +19,7 @@ h2 {
 }
 
 .table-wrapper {
-  max-height: 150px; /* Height for the scrollable area */
+  max-height: 400px; /* Height for the scrollable area */
   overflow-y: auto; /* Enables vertical scrolling */
   border: 1px solid #3F72AF;
   border-radius: 5px;
@@ -57,10 +57,22 @@ h3 {
 
 .charts-container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   margin-top: 20px;
   gap: 20px; /* Adds spacing between chart and pie chart */
+}
+
+.chart-container-progress-circle{
+  width:40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.student-dashboard-td:hover{
+  cursor: pointer;
+  font-weight: 700;
 }
 
 .overall-performance {
