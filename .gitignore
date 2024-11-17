@@ -13,6 +13,7 @@ frontend/build
 
 # misc
 frontend/.DS_Store
+frontend/.env
 frontend/.env.local
 frontend/.env.development.local
 frontend/.env.test.local
@@ -36,6 +37,7 @@ backend/build
 
 # misc
 backend/.DS_Store
+backend/.env
 backend/.env.local
 backend/.env.development.local
 backend/.env.test.local
