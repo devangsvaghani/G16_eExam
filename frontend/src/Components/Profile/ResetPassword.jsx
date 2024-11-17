@@ -30,7 +30,7 @@ function ResetPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setError("");
     if(newPassword !== confirmPassword){
         setError("Password Does not match");
         return;

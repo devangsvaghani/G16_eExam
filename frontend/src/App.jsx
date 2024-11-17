@@ -205,17 +205,14 @@ const App = () => {
 
     return (
         <>
-            {/* <Routes>
+            <Routes>
                 <Route path="/" element={<Homepage />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/admin" element={<Adminlogin />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/forgot-password" element={<Forgetpassword />} />
-            </Routes> */}
-
-            <Dashboard />
+            </Routes>
         </>
-        
     );
 };
 
