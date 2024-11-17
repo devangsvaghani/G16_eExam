@@ -132,7 +132,7 @@
 }
 
 /* Branch selection styling */
-.select-branch {
+.create-student-container  .select-branch {
   margin-bottom: 20px;
   width: 48%;
 }
@@ -144,7 +144,7 @@
   margin-bottom: 5px;
 }
 
-.select-branch select {
+.create-student-container .select-branch>select {
   width: 100%;
   padding: 10px;
   font-size: 1em;

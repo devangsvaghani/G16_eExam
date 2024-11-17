@@ -11,6 +11,8 @@ const CreateExam = () => {
   const [program, setProgram] = useState("");
   const [semester, setSemester] = useState("");
   const [totalmarks, settotalmarks] = useState("");
+  const [instructions, setInstructions] = useState("");
+
   // Step 2: Timing Details
   const [duration, setDuration] = useState("");
   const [date, setDate] = useState("");
@@ -127,6 +129,7 @@ const CreateExam = () => {
         questions,
         totalmarks,
         difficulty,
+        instructions, // Include instructions here
       };
       console.log("Exam Created:", examData);
       alert("Exam created successfully!");
@@ -139,12 +142,14 @@ const CreateExam = () => {
       setDuration("");
       setDate("");
       setStartTime("");
+      setInstructions(""); // Reset instructions
       setQuestions([]);
       setStep(1);
     } else {
       alert("Please complete all fields and add at least one question.");
     }
   };
+  
 
 
   // Filtered Question Bank for Search
@@ -186,35 +191,17 @@ const CreateExam = () => {
               onChange={(e) => setSemester(e.target.value)}
               placeholder="Semester"
             />
+            <textarea
+              value={instructions}
+              onChange={(e) => setInstructions(e.target.value)}
+              placeholder="Enter instructions for the exam"
+              rows="4"
+              cols="50"
+            ></textarea>
             <button onClick={handleNext}>Next</button>
           </div>
         )}
 
-        {step === 2 && (
-          <div className="step-two">
-            <h2>Step 2: Timing Details</h2>
-            <input
-              type="number"
-              value={duration}
-              onChange={(e) => setDuration(e.target.value)}
-              placeholder="Duration (in minutes)"
-              min="1"
-              step="1"
-            />
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
-            <input
-              type="time"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-            />
-            <button onClick={handlePrevious}>Previous</button>
-            <button onClick={handleNext}>Next</button>
-          </div>
-        )}
 
         {step === 3 && (
           <div className="step-three">
@@ -274,9 +261,9 @@ const CreateExam = () => {
             </div>
 
             <button className="create-exam-btn1" onClick={handleAddQuestion}>Add Question</button>
-            <button  className="create-exam-btn1" onClick={handleOpenModal}>Add from Question Bank</button>
-            <button  className="create-exam-btn1" onClick={handlePrevious}>Previous</button>
-            <button  className="create-exam-btn1" onClick={handleSubmitExam}>Submit Exam</button>
+            <button className="create-exam-btn1" onClick={handleOpenModal}>Add from Question Bank</button>
+            <button className="create-exam-btn1" onClick={handlePrevious}>Previous</button>
+            <button className="create-exam-btn1" onClick={handleSubmitExam}>Submit Exam</button>
           </div>
         )}
       </div>
@@ -292,6 +279,7 @@ const CreateExam = () => {
           <p><strong>Duration:</strong> {duration}</p>
           <p><strong>Date:</strong> {date}</p>
           <p><strong>Start Time:</strong> {startTime}</p>
+          <p><strong>Instructions:</strong> {instructions}</p>
           <p><strong>Total Marks:</strong> {totalmarks}</p>
 
 

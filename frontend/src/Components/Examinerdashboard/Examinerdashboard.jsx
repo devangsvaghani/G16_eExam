@@ -293,7 +293,7 @@ function Examinerdashboard() {
   };
 
   const handleopenprofile = () => {
-    navigate('/Examinerprofile');
+    navigate('/examinerprofile');
   }
 
 

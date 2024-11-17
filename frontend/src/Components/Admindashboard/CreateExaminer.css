@@ -112,7 +112,7 @@
     margin-bottom: 5px;
   }
   
-  .select-role select {
+  .select-role > select {
     width: 100%;
     padding: 10px;
     font-size: 1.0em;

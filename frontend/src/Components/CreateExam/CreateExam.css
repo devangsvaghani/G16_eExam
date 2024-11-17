@@ -144,6 +144,10 @@
   margin-top: 15px;
 }
 
+.step-one > textarea{
+  width: 100%;
+}
+
 .question-item {
   display: flex;
   align-items: center;

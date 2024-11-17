@@ -115,8 +115,8 @@ function ResetPassword() {
           />
           {error && <p className="error">{error}</p>}
           <p type="button" className="forgetpass" onClick={handleForget}>Forget Password?</p>
-          <input className="reset-button" type="submit" value="Reset Password" />
-          <button type="button" className="close-btn" onClick={handleClose}>Close</button>
+          <button className="reset-button" type="submit" >Reset Password</button>
+          <button type="button" className="close-button" onClick={handleClose}>Close</button>
         </form>
       </div>
       {isForgetPassOpen && <ForgetPassword onClose={handleCloseForget} />}

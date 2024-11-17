@@ -50,7 +50,7 @@ tr:nth-child(odd) {
   background-color: #DBE2EF;
 }
 
-h3 {
+.exam-result>h3 {
   color: #3F72AF;
   font-size: 24px;
 }

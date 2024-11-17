@@ -108,7 +108,7 @@ const PerformanceResultPage = ({ pastExams }) => {
     </div>
       <div className="result-page">
           <div className="exam-result">
-            <h3>Exam Result</h3>
+            <h3 >Exam Result</h3>
             <div className="table-wrapper">
               <table>
                 <thead>

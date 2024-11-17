@@ -202,7 +202,7 @@ const QuestionBank = () => {
             <p><strong>Options:</strong></p>
             <ul>
               {popupQuestion.options.map((option, idx) => (
-                <li key={idx}>
+                <li key={idx} className='popup-content-li'>
                   <label className='question-option-label'>
                     <input
                       type="radio"
@@ -211,7 +211,7 @@ const QuestionBank = () => {
                       onChange={() => handleOptionChange(option)}
                       checked={selectedOption === option}
                     />
-                    {option}
+                    <p>{option}</p>
                   </label>
                 </li>
               ))}

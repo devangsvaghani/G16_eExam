@@ -17,6 +17,7 @@ import StartExam from "./Components/Exam/Startexam.jsx";
 import Examinterface from "./Components/Examinterface/Examinterface.jsx";
 import FetchedQuestions from "./Components/Questions/FetchedQuestions.jsx";
 import QuestionBank from "./Components/Questions/QuestionBank.jsx";
+import ExaminerProfile from "./Components/Profile/ExaminerProfile.jsx";
 const exams = [
     {
         name: "Mathematics Final Exam",
@@ -212,6 +213,11 @@ const App = () => {
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/forgot-password" element={<Forgetpassword />} />
             </Routes>
+            {/* <Routes>
+                <Route path="/" element={<Examinerdashboard />} />
+                <Route path="/examinerprofile" element={<ExaminerProfile/>}/>
+            </Routes> */}
+            {/* <Forgetpassword/> */}
         </>
     );
 };

@@ -102,23 +102,6 @@ const Login = ({ onClose }) => {
           // Otherwise, render the Login form
           <form onSubmit={handleLogin} className="login-form">
             <h2>Login</h2>
-            <br />
-
-            {/* Role dropdown */}
-            <label htmlFor="role">Role</label>
-            {/* <br /> */}
-            <div className="select-container">
-              <select
-                id="role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                required
-                aria-label="Select Role"
-              >
-                <option value="Student">Student</option>
-                <option value="Examiner">Examiner</option>
-              </select>
-            </div>
 
             {/* Username input */}
             <label htmlFor="username">Username</label>
@@ -177,15 +160,6 @@ const Login = ({ onClose }) => {
 
             {/* Remember me and forgot password */}
             <div className="remember-forgot">
-              <label className="remember-me-label">
-                <input
-                  type="checkbox"
-                  id="rememberMe"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                />
-                Remember me
-              </label>
               <br />
               <p
                 type="button"

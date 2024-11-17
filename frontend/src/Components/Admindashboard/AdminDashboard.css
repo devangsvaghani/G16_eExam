@@ -29,12 +29,13 @@
     list-style-type: none;
   }
   
-  .menu li a {
+  .menu > li > a {
     color: #fff;
     text-decoration: none;
     font-size: 1.2em;
     text-align: center;
     margin: 10px 0;
+    cursor: pointer;
   }
   
   .menu li a.active {

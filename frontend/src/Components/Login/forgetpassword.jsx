@@ -13,14 +13,18 @@ const ForgetPassword = ({ onClose }) => {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmNewPassword] = useState("");
     const [error, setError] = useState("");
-    const { setIsLoggedIn, validateUser, isLoggedIn } = useAuth();
+    const [resendTimer, setResendTimer] = useState(0); // Timer state
+    const { validateUser } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (Cookies.get('token')) {
-            navigate("/dashboard");
-          }
-    }, []);
+        if (resendTimer > 0) {
+            const timerId = setInterval(() => {
+                setResendTimer((prev) => prev - 1);
+            }, 1000);
+            return () => clearInterval(timerId);
+        }
+    }, [resendTimer]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -30,25 +34,18 @@ const ForgetPassword = ({ onClose }) => {
                 const results = await axios.post(
                     (config.BACKEND_API || "http://localhost:8000") +
                         "/forgot-password",
-                    {
-                        email: email,
-                    }
+                    { email }
                 );
-
-                console.log(results);
 
                 if (results.status === 200) {
                     toast.success(results.data.message);
                     setSubmitted(true);
+                    setResendTimer(60); // Set timer to 60 seconds
                 } else {
                     toast.error(results.data.message);
                 }
             } catch (e) {
-                console.log(e.response);
-
-                toast.error(
-                    e?.response?.data?.message || "Internal server error"
-                );
+                toast.error(e?.response?.data?.message || "Internal server error");
             }
         } else {
             toast.error("Please enter a valid email address");
@@ -64,7 +61,7 @@ const ForgetPassword = ({ onClose }) => {
         }
 
         if (newPassword !== confirmPassword) {
-            toast.error("Passwords does not match");
+            toast.error("Passwords do not match");
             return;
         }
 
@@ -76,18 +73,11 @@ const ForgetPassword = ({ onClose }) => {
         try {
             const results = await axios.post(
                 (config.BACKEND_API || "http://localhost:8000") + "/verify-otp",
-                {
-                    email: email,
-                    otp: otp,
-                    password: newPassword,
-                }
+                { email, otp, password: newPassword }
             );
-
-            console.log(results);
 
             if (results.status === 200) {
                 toast.success(results.data.message);
-
                 setTimeout(() => {
                     window.location.reload();
                 }, 1000);
@@ -95,38 +85,29 @@ const ForgetPassword = ({ onClose }) => {
                 toast.error(results.data.message);
             }
         } catch (e) {
-            console.log(e.response);
-
             toast.error(e?.response?.data?.message || "Internal server error");
         }
     };
 
     const handleResendOtp = async () => {
+        if (resendTimer > 0) return;
+
         try {
             const results = await axios.post(
-                (config.BACKEND_API || "http://localhost:8000") +
-                    "/resend-otp",
-                {
-                    email: email,
-                }
+                (config.BACKEND_API || "http://localhost:8000") + "/resend-otp",
+                { email }
             );
-
-            console.log(results);
 
             if (results.status === 200) {
                 toast.success(results.data.message);
-                setSubmitted(true);
+                setResendTimer(60); // Reset timer to 60 seconds
             } else {
                 toast.error(results.data.message);
             }
         } catch (e) {
-            console.log(e.response);
-
-            toast.error(
-                e?.response?.data?.message || "Internal server error"
-            );
+            toast.error(e?.response?.data?.message || "Internal server error");
         }
-    }
+    };
 
     const validateEmail = (email) => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -138,7 +119,7 @@ const ForgetPassword = ({ onClose }) => {
             <div className="forget-password-container">
                 <h2>Forgot Your Password?</h2>
                 {submitted ? (
-                    <p>OTP sent to your mail</p>
+                    <p>OTP sent to your email</p>
                 ) : (
                     <p>Enter your email address</p>
                 )}
@@ -174,9 +155,14 @@ const ForgetPassword = ({ onClose }) => {
                         <p
                             type="button"
                             onClick={handleResendOtp}
-                            className="resend-otp"
+                            className={`resend-otp ${
+                                resendTimer > 0 ? "disabled" : ""
+                            }`}
+                            disabled={resendTimer > 0}
                         >
-                            Resent OTP
+                            {resendTimer > 0
+                                ? `Resend OTP in ${resendTimer}s`
+                                : "Resend OTP"}
                         </p>
                         <button type="submit" className="resetlink-button">
                             Change Password

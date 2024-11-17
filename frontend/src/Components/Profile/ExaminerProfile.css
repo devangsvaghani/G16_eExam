@@ -71,7 +71,7 @@
 }
 
 #content h2 {
-    color: #3F72AF;
+    color: black;
     text-align: center;
     font-size: 30px;
     margin-top: 10px;
@@ -83,8 +83,7 @@
     margin-top: 10px;
     border: 2px solid #3F72AF;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    
+    transition: all 0.3s ease; 
 }
 
 #profile-name {
