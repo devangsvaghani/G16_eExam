@@ -173,3 +173,28 @@ export const delete_question_from_exam = async (req, res) => {
         return res.status(500).json({ message: "Failed to remove question from exam" });
     }
 };
+
+export const fetch_exam_student = async (req, res) => {
+    try {
+        const { examId } = req.params;
+
+        // Find the exam by ID without fetching questions
+        const exam = await Exam.findOne({ examId }).lean();
+
+        if (!exam) {
+            return res.status(404).json({ message: "Exam not found." });
+        }
+
+        // Fetch all questions using their unique IDs
+        const questions = await Question.find({ questionId: { $in: exam.questions } }).select("-answer");
+
+        return res.status(200).json({ 
+            message: "Exam Fetched Successfully", 
+            exam: { ...exam, questions } 
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Failed to fetch exam" });
+    }
+}
+

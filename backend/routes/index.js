@@ -5,12 +5,16 @@ import {
     authenticateToken,
     authenticate_admin_token,
     authenticate_student_token,
+    authenticate_examiner_token
 } from "../middleware/authentication.js";
 
 import {
     create_question,
     update_question,
     delete_question,
+    all_questions_subject_wise_student,
+    add_question_bookmark_student,
+    delete_question_bookmark_student,
 } from "../controller/questions.js";
 import {
     create_exam,
@@ -18,6 +22,7 @@ import {
     delete_exam,
     add_question_in_exam,
     delete_question_from_exam,
+    fetch_exam_student,
 } from "../controller/exam.js";
 import {
     create_session,
@@ -36,10 +41,11 @@ import {
     get_upcoming_exams,
     get_upcoming_exams_5_student,
     get_upcoming_exams_student,
-    get_upcoming_exams_year,
+    get_past_exams_5_examiner,
+    get_upcoming_exams_5_examiner
 } from "../controller/past_upcoming_exams.js";
 import { exams_result, show_exam } from "../controller/exams_result.js"
-import { all_students, delete_student, get_student, student_performance, student_submit_answer, update_student } from "../controller/student.js";
+import { all_students, delete_student, get_student, student_performance, student_submit_answer, submit_exam_student, update_student } from "../controller/student.js";
 import { all_examiners, delete_examiner, get_examiner, update_profile } from "../controller/examiner.js";
 
 
@@ -81,17 +87,17 @@ router.delete("/:examId/delete-question/:questionId", delete_question_from_exam)
 
 router.get("/past-exams", get_past_exams);
 router.get("/upcoming-exams", get_upcoming_exams);
-router.get("/upcoming-exams-per-year/:year", get_upcoming_exams_year);
 
 router.post("/update-profile/:username", update_profile);
 
 
 
-router.post("/student-submit-answer", student_submit_answer);
+router.post("/student-submit-answer", authenticate_student_token, student_submit_answer);
+router.post("/submit-exam-student", authenticate_student_token, submit_exam_student);
 
 
-router.get("/exams-result/:username", exams_result);
-router.get("/show-exam/:username/:examId", show_exam);
+router.get("/exams-result", authenticate_student_token, exams_result);
+router.get("/show-exam/:examId", authenticate_student_token, show_exam);
 
 // student related
 router.get("/get-student/:username", authenticateToken, get_student);
@@ -99,9 +105,16 @@ router.get("/upcoming-exams-limit-5-student", authenticate_student_token, get_up
 router.get("/past-exams-limit-5-student", authenticate_student_token, get_past_exams_5_student);
 router.get("/upcoming-exams-student", authenticate_student_token, get_upcoming_exams_student);
 router.get("/student-performance", authenticate_student_token, student_performance);
+router.get("/all-questions-student", authenticate_student_token, all_questions_subject_wise_student);
+router.post("/add-bookmark-question", authenticate_student_token, add_question_bookmark_student);
+router.post("/delete-bookmark-question", authenticate_student_token, delete_question_bookmark_student);
+
+router.get("/fetch-exam-student/:examId", fetch_exam_student);
 
 // examiner related
 router.get("/get-examiner/:username", authenticateToken, get_examiner);
+router.get("/upcoming-exams-limit-5-examiner", authenticate_examiner_token, get_upcoming_exams_5_examiner);
+router.get("/past-exams-limit-5-examiner", authenticate_examiner_token, get_past_exams_5_examiner);
 
 // admin dashboard
 router.get("/all-students", authenticate_admin_token, all_students);

@@ -2,11 +2,15 @@ import Student from "../models/student.js";
 
 export const exams_result = async (req,res) => {
     try {
-        const { username } = req.params;
+        const username = req?.user?.username; 
+
+        if (!username) {
+            return res.status(404).json({ message: "No username found" });
+        }
 
         const student = await Student.findOne({ username }).populate({
             path: 'givenExams.exam',
-            select: 'examId total_points title' 
+            select: 'examId total_points title subject' 
         });
 
         if (!student) {
@@ -23,15 +27,15 @@ export const exams_result = async (req,res) => {
             results.push({
                 examId: exam.examId,
                 title: exam.title,
+                subject: exam.subject,
                 totalPoints: exam.total_points,
                 obtainedPoints: examEntry.obtained_score,
                 percentage
             });
-            console.log(exam.examId);
             
         }
 
-        return res.status(200).json(results);
+        return res.status(200).json({ message: "Results Fetched Successfully", pastExams: results});
 
     } catch (error) {
         console.error(error);
@@ -42,7 +46,13 @@ export const exams_result = async (req,res) => {
 
 export const show_exam = async (req,res) => {
     try {
-        const { username, examId } = req.params;
+        const username = req?.user?.username; 
+
+        if (!username) {
+            return res.status(404).json({ message: "No username found" });
+        }
+
+        const { examId } = req.params;
 
         const student = await Student.findOne({ username })
             .populate({
@@ -82,6 +92,7 @@ export const show_exam = async (req,res) => {
         }
 
         return res.status(200).json({
+            message: "Exam Fetched successfully",
             examId: exam.exam.examId,
             title: exam.exam.title,
             questions: questionDetails

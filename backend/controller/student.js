@@ -51,60 +51,105 @@ export const student_performance = async (req, res) => {
 
 export const student_submit_answer = async (req, res) => {
     try {
-        const { username, examId, questionId, answer } = req.body;
+        const username = req?.user?.username;
 
+        if (!username) {
+            return res.status(404).json({ message: "No Username Found" });
+        }
+
+        const { examId, questionId, answer } = req.body;
+
+        // Fetch student, question, and exam data
         const student = await Student.findOne({ username });
         if (!student) {
-            return res.status(404).json({ message: 'Student not found' });
+            return res.status(404).json({ message: "Student not found" });
         }
 
-        const examData = await Exam.findOne({ examId });
-        if (!examData) {
-            return res.status(404).json({ message: 'Exam not found' });
-        }
-
-        const question = await Question.findOne({ questionId });
+        const question = await Question.findOne({ questionId }); // Corrected query
         if (!question) {
-            return res.status(404).json({ message: 'Question not found' });
+            return res.status(404).json({ message: "Question not found" });
         }
 
-        const isCorrect = question.answer === answer;
+        const examData = await Exam.findOne({ examId }); // Corrected query
+        if (!examData) {
+            return res.status(404).json({ message: "Exam not found" });
+        }
 
-        let student_exam = student.givenExams.find(exam => exam.exam.equals(examData._id));
+        if(examData.batch !== student.batch || examData.branch !== student.branch){
+            return res.status(404).json({ message: "Exam is not for your batch/branch" });
+        }
 
-        if (!student_exam) {
-            student.givenExams.push({
+        // Find the exam in the student's data
+        let examIndex = student.givenExams.findIndex(e => String(e.exam) === String(examData._id));
+        let exam = examIndex >= 0 ? student.givenExams[examIndex] : null;
+
+        if(exam.submitted){
+            return res.status(401).json({ message: "Exam was already submitted"});
+        }
+
+        // If the exam doesn't exist, add a new entry
+        if (!exam) {
+            exam = {
                 exam: examData._id,
-                questions: [{ question: question._id, answer }],
+                questions: [],
                 obtained_score: 0,
-            });
-            student_exam = student.givenExams[student.givenExams.length - 1];
+            };
+            student.givenExams.push(exam);
+            examIndex = student.givenExams.length - 1; // Update the index
         }
 
-        if(student_exam.questions.find(q => q.question.toString() === question._id.toString())){
-            return res.status(200).json({
-                message: isCorrect ? 'Answer is correct. Score updated!' : 'Answer is incorrect.',
-                obtained_score: student_exam.obtained_score,
-            });
-        }
-        
-        student_exam.questions.push({ question: question._id, answer }); 
-        
-        if (isCorrect) {
-            student_exam.obtained_score += question.points;
+        const questionIndex = exam.questions.findIndex(q => String(q.question) === String(question._id));
+        const questionEntry = questionIndex >= 0 ? exam.questions[questionIndex] : null;
+
+        // Handle the case where the answer is null
+        if (answer === null) {
+            if (questionEntry) {
+                // Remove the question entry and adjust the obtained score
+                exam.questions.splice(questionIndex, 1);
+
+                if (questionEntry.answer === question.answer) {
+                    exam.obtained_score -= question.points;
+                }
+            }
+        } else {
+            if (!questionEntry) {
+                // Add a new question and update the score
+                exam.questions.push({
+                    question: question._id,
+                    answer,
+                });
+
+                if (question.answer === answer) {
+                    exam.obtained_score += question.points;
+                }
+            } else {
+                // Update the existing answer and adjust the score
+                if (questionEntry.answer === question.answer) {
+                    exam.obtained_score -= question.points;
+                }
+
+                exam.questions[questionIndex].answer = answer;
+
+                if (answer === question.answer) {
+                    exam.obtained_score += question.points;
+                }
+            }
         }
 
+        // Explicitly assign the updated exam back to the student's data
+        student.givenExams[examIndex] = exam;
+
+        // Save the updated student data
         await student.save();
 
-        return res.status(200).json({
-            message: isCorrect ? 'Answer is correct. Score updated!' : 'Answer is incorrect.',
-            obtained_score: student_exam.obtained_score,
-        });
+        res.json({ message: "Answer updated successfully", updatedExam: exam });
     } catch (error) {
-        console.error('Error submitting answer:', error);
-        return res.status(500).json({ message: 'Internal server error' });
+        console.error(error);
+        res.status(500).json({ message: error.message });
     }
 };
+
+
 
 export const all_students = async (req, res) => {
     try{
@@ -247,3 +292,59 @@ export const update_student = async (req, res) => {
     }
 };
 
+
+export const submit_exam_student = async (req, res) => {
+    try {
+
+        const username = req?.user?.username;
+
+        if (!username) {
+            return res.status(404).json({ message: "No Username Found" });
+        }
+
+        const student = await Student.findOne({ username });
+        if (!student) {
+            return res.status(404).json({ message: "Student not found" });
+        }
+
+        const { examId } = req.body;
+
+        // Find the exam by ID without fetching questions
+        const examData = await Exam.findOne({ examId });
+
+        if (!examData) {
+            return res.status(404).json({ message: "Exam not found." });
+        }
+
+        // Find the exam in the student's data
+        let examIndex = student.givenExams.findIndex(e => String(e.exam) === String(examData._id));
+        let exam = examIndex >= 0 ? student.givenExams[examIndex] : null;
+
+        if (!exam) {
+            exam = {
+                exam: examData._id,
+                questions: [],
+                obtained_score: 0,
+            };
+            student.givenExams.push(exam);
+            examIndex = student.givenExams.length - 1; // Update the index
+        }
+
+        if(exam.submitted){
+            return res.status(401).json({ message: "Exam was already submitted"});
+        }
+
+        exam.submitted = true;
+
+        student.givenExams[examIndex] = exam;
+
+        await student.save();
+
+        return res.status(200).json({ 
+            message: "Exam submitted Successfully"
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Failed to submit exam" });
+    }
+}

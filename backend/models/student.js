@@ -23,6 +23,10 @@ const studentSchema = new mongoose.Schema({
         required: true
     },
 
+    bookmarkedQuestions: [{
+        type: Number
+    }],
+
     givenExams: [
         {
             exam: {
@@ -47,6 +51,10 @@ const studentSchema = new mongoose.Schema({
             obtained_score: {
                 type: Number,
                 default: 0
+            },
+            submitted: {
+                type: Boolean,
+                default: false
             }
         },
     ],

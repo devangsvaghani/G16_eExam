@@ -93,7 +93,23 @@ export const create_student = async (req, res) => {
 
         const number_of_students = await Student.countDocuments();
 
-        const studentId = generate_student_id(batch, graduation, number_of_students + 1);
+        const maxStudentID = await Student.aggregate([
+            {
+              $group: {
+                _id: null, // Group all documents together
+                maxStudentID: { $max: "$username" } // Find the maximum value of studentID
+              }
+            }
+        ]);
+        
+        // Extract the maximum student ID or handle case where no documents are found
+        const maximumStudentID = maxStudentID.length > 0 ? maxStudentID[0].maxStudentID : null;
+        
+        let studentId = generate_student_id(batch, graduation, 1)
+        if(maximumStudentID){
+            studentId = Number(maximumStudentID) + 1;
+        }
+        
 
         const user = new User({
             username: studentId,
