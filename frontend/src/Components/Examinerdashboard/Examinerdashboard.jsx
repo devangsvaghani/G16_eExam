@@ -9,7 +9,7 @@ import CreateExam from "../CreateExam/CreateExam.jsx";
 import ExamResults from "./ExamResults.jsx";
 import Examreport from "../ResultPage/Examreport.jsx";
 import FetchedQuestions from "../Questions/FetchedQuestions.jsx";
-import UpdateExam from "./UpdateExam.jsx";
+import UpdateExam from "./updateExam.jsx";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import axios from "axios";
