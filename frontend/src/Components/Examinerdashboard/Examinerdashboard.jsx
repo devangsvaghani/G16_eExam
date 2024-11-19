@@ -14,122 +14,122 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import axios from "axios";
 import config from "../../config.js";
-import ExaminerProfile from "../../Components/Profile/ExaminerProfile.jsx"
+import ExaminerProfile from "../../Components/Profile/ExaminerProfile.jsx";
 
 const exams = [
-  {
-    name: 'Mathematics Final Exam',
-    subject: 'Mathematics',
-    duration: '2 hours',
-    startTime: '10:00 AM',
-    questions: 50,
-  },
-  {
-    name: 'Physics Quiz',
-    subject: 'Physics',
-    duration: '1 hour',
-    startTime: '2:00 PM',
-    questions: 30,
-  },
-  {
-    name: 'History Test',
-    subject: 'History',
-    duration: '1.5 hours',
-    startTime: '11:00 AM',
-    questions: 40,
-  },
-  {
-    name: 'History Test',
-    subject: 'History',
-    duration: '1.5 hours',
-    startTime: '11:00 AM',
-    questions: 40,
-  },
-  {
-    name: 'History Test',
-    subject: 'History',
-    duration: '1.5 hours',
-    startTime: '11:00 AM',
-    questions: 40,
-  },
-  {
-    name: 'History Test',
-    subject: 'History',
-    duration: '1.5 hours',
-    startTime: '11:00 AM',
-    questions: 40,
-  },
-  {
-    name: 'History Test',
-    subject: 'History',
-    duration: '1.5 hours',
-    startTime: '11:00 AM',
-    questions: 40,
-  },
-  {
-    name: 'History Test',
-    subject: 'History',
-    duration: '1.5 hours',
-    startTime: '11:00 AM',
-    questions: 40,
-  },
-  {
-    name: 'History Test',
-    subject: 'History',
-    duration: '1.5 hours',
-    startTime: '11:00 AM',
-    questions: 40,
-  },
-  {
-    name: 'History Test',
-    subject: 'History',
-    duration: '1.5 hours',
-    startTime: '11:00 AM',
-    questions: 40,
-  },
-  {
-    name: 'History Test',
-    subject: 'History',
-    duration: '1.5 hours',
-    startTime: '11:00 AM',
-    questions: 40,
-  },
-  {
-    name: 'History Test',
-    subject: 'History',
-    duration: '1.5 hours',
-    startTime: '11:00 AM',
-    questions: 40,
-  },
-  // Add more exam objects as needed
+    {
+        name: "Mathematics Final Exam",
+        subject: "Mathematics",
+        duration: "2 hours",
+        startTime: "10:00 AM",
+        questions: 50,
+    },
+    {
+        name: "Physics Quiz",
+        subject: "Physics",
+        duration: "1 hour",
+        startTime: "2:00 PM",
+        questions: 30,
+    },
+    {
+        name: "History Test",
+        subject: "History",
+        duration: "1.5 hours",
+        startTime: "11:00 AM",
+        questions: 40,
+    },
+    {
+        name: "History Test",
+        subject: "History",
+        duration: "1.5 hours",
+        startTime: "11:00 AM",
+        questions: 40,
+    },
+    {
+        name: "History Test",
+        subject: "History",
+        duration: "1.5 hours",
+        startTime: "11:00 AM",
+        questions: 40,
+    },
+    {
+        name: "History Test",
+        subject: "History",
+        duration: "1.5 hours",
+        startTime: "11:00 AM",
+        questions: 40,
+    },
+    {
+        name: "History Test",
+        subject: "History",
+        duration: "1.5 hours",
+        startTime: "11:00 AM",
+        questions: 40,
+    },
+    {
+        name: "History Test",
+        subject: "History",
+        duration: "1.5 hours",
+        startTime: "11:00 AM",
+        questions: 40,
+    },
+    {
+        name: "History Test",
+        subject: "History",
+        duration: "1.5 hours",
+        startTime: "11:00 AM",
+        questions: 40,
+    },
+    {
+        name: "History Test",
+        subject: "History",
+        duration: "1.5 hours",
+        startTime: "11:00 AM",
+        questions: 40,
+    },
+    {
+        name: "History Test",
+        subject: "History",
+        duration: "1.5 hours",
+        startTime: "11:00 AM",
+        questions: 40,
+    },
+    {
+        name: "History Test",
+        subject: "History",
+        duration: "1.5 hours",
+        startTime: "11:00 AM",
+        questions: 40,
+    },
+    // Add more exam objects as needed
 ];
 
-const questions = [
-  {
-    id: 1,
-    qText: "What is the capital of France?",
-    options: ["Paris", "Berlin", "Madrid", "Rome"],
-    answer: "Paris",
-    difficulty: "Easy",
-    points: 5,
-  },
-  {
-    id: 2,
-    qText: 'Which programming language is known as the "language of the web"?',
-    options: ["Python", "JavaScript", "Java"],
-    answer: "JavaScript",
-    difficulty: "Medium",
-    points: 10,
-  },
-  {
-    id: 3,
-    qText: "What is the square root of 64?",
-    options: ["6", "8", "10", "12"],
-    answer: "8",
-    difficulty: "Easy",
-    points: 5,
-  },
-];
+// const questions = [
+//   {
+//     id: 1,
+//     qText: "What is the capital of France?",
+//     options: ["Paris", "Berlin", "Madrid", "Rome"],
+//     answer: "Paris",
+//     difficulty: "Easy",
+//     points: 5,
+//   },
+//   {
+//     id: 2,
+//     qText: 'Which programming language is known as the "language of the web"?',
+//     options: ["Python", "JavaScript", "Java"],
+//     answer: "JavaScript",
+//     difficulty: "Medium",
+//     points: 10,
+//   },
+//   {
+//     id: 3,
+//     qText: "What is the square root of 64?",
+//     options: ["6", "8", "10", "12"],
+//     answer: "8",
+//     difficulty: "Easy",
+//     points: 5,
+//   },
+// ];
 
 const Calendar = ({ exams, changeMonth, events, setEvents, set_events }) => {
     const today = new Date();
@@ -291,6 +291,15 @@ function Examinerdashboard() {
     const [upcomingexams, setUpcomingexams] = useState([]);
     const [upcomingexamscurmonth, setUpcomingexamscurmonth] = useState([]);
     const [opneExaminerProfile, setOpneExaminerProfile] = useState(false);
+    const [questions, setQuestions] = useState([]);
+    const [allquestions, setAllQuestions] = useState([]);
+    const [subjects, setSubjects] = useState([]);
+    const [subject, setSubject] = useState("");
+
+    const [pastexamsofexaminer, setpastexamsofexaminer] = useState([]);
+    const [upcomingexamsofexaminer, setupcomingexamsofexaminer] = useState([]);
+
+    const [currExam, setCurrExam] = useState("");
 
     useEffect(() => {
         if (
@@ -304,6 +313,9 @@ function Examinerdashboard() {
             fetch_upcoming_exams();
             fetch_upcoming_exams_5();
             fetch_past_exams_5();
+            fetch_all_questions();
+            fetch_upcoming_exams_of_examiner();
+            fetch_past_exams_of_examiner();
         }
     }, []);
 
@@ -350,7 +362,7 @@ function Examinerdashboard() {
                 { headers }
             );
 
-            console.log(result);
+            // console.log(result);
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
@@ -377,7 +389,7 @@ function Examinerdashboard() {
                 { headers }
             );
 
-            console.log(result);
+            // console.log(result);
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
@@ -404,7 +416,7 @@ function Examinerdashboard() {
                 { headers }
             );
 
-            console.log(result);
+            // console.log(result);
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
@@ -412,6 +424,97 @@ function Examinerdashboard() {
             }
 
             setUpcomingexams(Object.values(result.data.upcomingExams));
+        } catch (e) {
+            console.log(e);
+            toast.error(e?.response?.data?.message || "Internal server error");
+        }
+    };
+
+    const fetch_upcoming_exams_of_examiner = async () => {
+        try {
+            const headers = {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+            };
+
+            const result = await axios.get(
+                (config.BACKEND_API || "http://localhost:8000") +
+                    "/upcoming-exams-examiner",
+                { headers }
+            );
+
+            // console.log(result);
+
+            if (result.status !== 200) {
+                toast.error(result.data.message);
+                return;
+            }
+
+            setupcomingexamsofexaminer(Object.values(result.data.upcomingExams));
+        } catch (e) {
+            console.log(e);
+            toast.error(e?.response?.data?.message || "Internal server error");
+        }
+    };
+
+    const fetch_past_exams_of_examiner = async () => {
+        try {
+            const headers = {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+            };
+
+            const result = await axios.get(
+                (config.BACKEND_API || "http://localhost:8000") +
+                    "/past-exams-examiner",
+                { headers }
+            );
+
+            // console.log(result);
+
+            if (result.status !== 200) {
+                toast.error(result.data.message);
+                return;
+            }
+
+            setpastexamsofexaminer(Object.values(result.data.pastExams));
+        } catch (e) {
+            console.log(e);
+            toast.error(e?.response?.data?.message || "Internal server error");
+        }
+    };
+
+    const getSubjectsArray = (questions) => {
+        const subjects = [
+            ...new Set(
+                questions.map((question) => question.subject || "Uncategorized")
+            ),
+        ];
+        return subjects;
+    };
+
+    const fetch_all_questions = async () => {
+        try {
+            const headers = {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+            };
+
+            const result = await axios.get(
+                (config.BACKEND_API || "http://localhost:8000") +
+                    "/all-questions-examiner",
+                { headers }
+            );
+
+            // console.log(result);
+
+            if (result.status !== 200) {
+                toast.error(result.data.message);
+                return;
+            }
+
+            setAllQuestions(Object.values(result.data.questions));
+            setSubjects(getSubjectsArray(Object.values(result.data.questions)));
         } catch (e) {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal server error");
@@ -429,11 +532,15 @@ function Examinerdashboard() {
         });
     };
 
+    useEffect(() => {
+        setQuestions(allquestions.filter((q) => q.subject === subject));
+    }, [subject])
+
     const items = [
         { id: "home", label: "Home" },
         { id: "question", label: "Questions" },
-        { id: "Upcoming Exam", label: "My Upcoming Exam" },
-        { id: "Past Exam", label: "My Past Exam" },
+        { id: "Upcoming Exam", label: "Upcoming Exam" },
+        { id: "Past Exam", label: "Past Exam" },
         { id: "profile", label: "Profile" },
     ];
 
@@ -488,6 +595,16 @@ function Examinerdashboard() {
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
+    
+    const getDate = (datetime) => {
+        const date = new Date(datetime);
+        return date.toLocaleDateString();
+    };
+
+    const getTime = (datetime) => {
+        const date = new Date(datetime);
+        return date.toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata' });
+    };
 
     return (
         <div className="dashboard">
@@ -538,7 +655,9 @@ function Examinerdashboard() {
             <div className="main-content">
                 {/* Top Bar */}
                 <header className="top-bar">
-                    <span className="welcome-text">Welcome, {Cookies.get("username")}!</span>
+                    <span className="welcome-text">
+                        Welcome, {Cookies.get("username")}!
+                    </span>
                     <img
                         src={user}
                         alt="User profile"
@@ -588,7 +707,7 @@ function Examinerdashboard() {
 
                         {/* Calendar */}
                         <div className="secondcol">
-                        <Calendar
+                            <Calendar
                                 exams={upcomingexams}
                                 changeMonth={change_upcoming_exams_for_month}
                                 events={events}
@@ -598,8 +717,8 @@ function Examinerdashboard() {
                         </div>
 
                         <div className="thirdcol">
-                        <div className="anonouncementsBox">
-                                <h2>Upcoming Exam For Choosed Month</h2>
+                            <div className="anonouncementsBox">
+                                <h2>Upcoming Exams For Choosed Month</h2>
                                 <div className="card">
                                     {upcomingexamscurmonth.length === 0 ? (
                                         <div className="exam">
@@ -678,61 +797,23 @@ function Examinerdashboard() {
                 {activeIndex == 1 &&
                     !isOpenQuestion &&
                     !iscreateQuestionopen && (
-                        <div class="Examiner-subject-grid-container">
-                            <div
-                                class="subject"
-                                onClick={() => setisOpenQuestion(true)}
-                            >
-                                Mathematics
-                            </div>
-                            <div
-                                class="subject"
-                                onClick={() => setisOpenQuestion(true)}
-                            >
-                                Physics
-                            </div>
-                            <div
-                                class="subject"
-                                onClick={() => setisOpenQuestion(true)}
-                            >
-                                Chemistry
-                            </div>
-                            <div
-                                class="subject"
-                                onClick={() => setisOpenQuestion(true)}
-                            >
-                                Biology
-                            </div>
-                            <div
-                                class="subject"
-                                onClick={() => setisOpenQuestion(true)}
-                            >
-                                Mathematics
-                            </div>
-                            <div
-                                class="subject"
-                                onClick={() => setisOpenQuestion(true)}
-                            >
-                                Physics
-                            </div>
-                            <div
-                                class="subject"
-                                onClick={() => setisOpenQuestion(true)}
-                            >
-                                Chemistry
-                            </div>
-                            <div
-                                class="subject"
-                                onClick={() => setisOpenQuestion(true)}
-                            >
-                                Biology
-                            </div>
-                            <div
-                                class="subject"
-                                onClick={() => setisOpenQuestion(true)}
-                            >
-                                Mathematics
-                            </div>
+                        <div className="Examiner-subject-grid-container">
+                            {subjects.length ? (
+                                subjects.map((subject, index) => (
+                                    <div
+                                        className="subject"
+                                        key={index}
+                                        onClick={() => {
+                                            setisOpenQuestion(true);
+                                            setSubject(subject);
+                                        }}
+                                    >
+                                        {subject}
+                                    </div>
+                                ))
+                            ) : (
+                                <div>No Questions Found</div>
+                            )}
                             <button
                                 className="create-examiner-button"
                                 onClick={() => setiscreateQuestionopen(true)}
@@ -747,14 +828,14 @@ function Examinerdashboard() {
                     !iscreateQuestionopen && (
                         <div>
                             <div className="Examiner-Question-grid-container">
-                                {questions.map((question) => (
+                                {questions.map((question, index) => (
                                     <div
                                         className="question-card"
-                                        key={question.id}
+                                        key={index}
                                     >
-                                        <div className="question-header">{`Q${question.id}: ${question.qText}`}</div>
+                                        <div className="question-header">{`Q${index+1}: ${question.desc}`}</div>
                                         <div className="options">
-                                            {question.options.map(
+                                            {questions.length ? question.options.map(
                                                 (option, index) => (
                                                     <div
                                                         className="option"
@@ -767,10 +848,11 @@ function Examinerdashboard() {
                                                             option}
                                                     </div>
                                                 )
-                                            )}
+                                            ): 
+                                            <div>No Questions Found</div>}
                                         </div>
                                         <div className="metadata">
-                                            <span>{`Answer: ${question.answer}`}</span>
+                                            <span>{`Answer: ${question.options[question.answer]}`}</span>
                                             <span>{`Difficulty: ${question.difficulty}`}</span>
                                             <span>{`Points: ${question.points}`}</span>
                                         </div>
@@ -790,7 +872,7 @@ function Examinerdashboard() {
                     !isOpenQuestion &&
                     iscreateQuestionopen && (
                         <>
-                            <FetchedQuestions />
+                            <FetchedQuestions onClose={setiscreateQuestionopen} subjects={subjects} setSubjects={setSubjects} setQuestions={setAllQuestions}/>
                             <button
                                 className="create-examiner-button"
                                 onClick={() => setiscreateQuestionopen(false)}
@@ -803,32 +885,36 @@ function Examinerdashboard() {
                 {activeIndex == 2 && !iscreateexamopen && (
                     <div>
                         <div className="exam-grid">
-                            {exams.map((exam, index) => (
+                            {upcomingexamsofexaminer.length ? upcomingexamsofexaminer.map((exam, index) => (
                                 <div className="exam-card" key={index}>
-                                    <h3>{exam.name}</h3>
+                                    <h3>{exam.title}</h3>
                                     <p>
                                         <strong>Subject:</strong> {exam.subject}
                                     </p>
                                     <p>
                                         <strong>Duration:</strong>{" "}
-                                        {exam.duration}
+                                        {exam.duration} minutes
+                                    </p>
+                                    <p>
+                                        <strong>Start Date:</strong>{" "}
+                                        {getDate(exam.startTime)}
                                     </p>
                                     <p>
                                         <strong>Start Time:</strong>{" "}
-                                        {exam.startTime}
+                                        {getTime(exam.startTime)}
                                     </p>
                                     <p>
                                         <strong>No. of Questions:</strong>{" "}
-                                        {exam.questions}
+                                        {exam.questions.length}
                                     </p>
                                     <button
                                         className="exam-grid-editbtn"
-                                        onClick={handleEditExam}
+                                        onClick={() => {handleEditExam(); setCurrExam(exam)}}
                                     >
                                         Edit
                                     </button>
                                 </div>
-                            ))}
+                            )): <div>No Upcoming Exams</div>}
                         </div>
                         <button
                             className="create-examiner-button"
@@ -840,7 +926,7 @@ function Examinerdashboard() {
                 )}
                 {activeIndex == 2 && iscreateexamopen && (
                     <div className="CreateExam-comp">
-                        <CreateExam onclose={handleCloseCreateExam} />
+                        <CreateExam onClose={handleCloseCreateExam} questionBank={allquestions} setQuestionBank={setAllQuestions} toast={toast} fetchAgain={() => {fetch_upcoming_exams_of_examiner(); fetch_all_questions();}}/>
                         <button
                             className="create-examiner-button"
                             onClick={handleCloseCreateExam}
@@ -852,44 +938,43 @@ function Examinerdashboard() {
                 {activeIndex == 3 && !isresultopen && (
                     <div>
                         <div className="exam-grid">
-                            {exams.map((exam, index) => (
+                            {pastexamsofexaminer.length ? pastexamsofexaminer.map((exam, index) => (
                                 <div className="exam-card" key={index}>
-                                    <h3>{exam.name}</h3>
+                                    <h3>{exam.title}</h3>
                                     <p>
                                         <strong>Subject:</strong> {exam.subject}
                                     </p>
                                     <p>
                                         <strong>Duration:</strong>{" "}
-                                        {exam.duration}
+                                        {exam.duration} minutes
+                                    </p>
+                                    <p>
+                                        <strong>Start Date:</strong>{" "}
+                                        {getDate(exam.startTime)}
                                     </p>
                                     <p>
                                         <strong>Start Time:</strong>{" "}
-                                        {exam.startTime}
+                                        {getTime(exam.startTime)}
                                     </p>
                                     <p>
                                         <strong>No. of Questions:</strong>{" "}
-                                        {exam.questions}
+                                        {exam.questions.length}
                                     </p>
                                     <button
                                         className="exam-grid-resultbtn"
-                                        onClick={() => setisresultopen(true)}
+                                        onClick={() => {setisresultopen(true), setCurrExam(exam)}}
                                     >
                                         Result
                                     </button>
                                 </div>
-                            ))}
+                            )): <div>No Past Exams</div>}
                         </div>
                     </div>
                 )}
                 {activeIndex == 3 && isresultopen && (
                     <div>
                         <ExamResults
-                            examtitle="Mathsmatics insem exam"
-                            subject="Mathematics"
-                            duration="2 hour"
-                            starttime="10 pm"
-                            numquestion="20"
-                            totalmarks="100"
+                            exam={currExam}
                         />
                         <button
                             className="create-examiner-button"
@@ -900,7 +985,7 @@ function Examinerdashboard() {
                     </div>
                 )}
                 {iseditExam && (
-                    <UpdateExam onClose={() => setisEditExam(false)} />
+                    <UpdateExam onClose={() => setisEditExam(false)} toast={toast} examId={currExam.examId} fetchAgain={() => {fetch_upcoming_exams_of_examiner(); fetch_all_questions();}}/>
                 )}
                 {activeIndex == 4 && opneExaminerProfile && (
                     <div className="student-profile-div">

@@ -26,6 +26,7 @@ export const student_performance = async (req, res) => {
         let totalPointsEarned = 0;
 
         // Iterate through each exam
+        if(student?.givenExams && student.g)
         student.givenExams.forEach((examRecord) => {
             totalPointsPossible += examRecord.exam.total_points;
 
@@ -44,8 +45,8 @@ export const student_performance = async (req, res) => {
             percentage: percentage.toFixed(2) + "%"
         });
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Internal Server error" });
+        console.log(error);
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -79,13 +80,20 @@ export const student_submit_answer = async (req, res) => {
             return res.status(404).json({ message: "Exam is not for your batch/branch" });
         }
 
+        const startTime = new Date(examData.startTime);
+        const endTime = new Date(
+            startTime.getTime() + examData.duration * 60000
+        ); 
+        const currentTime = new Date();
+
+        if(currentTime < startTime || currentTime > endTime + 60000){
+            return res.status(401).json({ message: "Exam is either ended or not started yet"});
+        }
+
+
         // Find the exam in the student's data
         let examIndex = student.givenExams.findIndex(e => String(e.exam) === String(examData._id));
         let exam = examIndex >= 0 ? student.givenExams[examIndex] : null;
-
-        if(exam.submitted){
-            return res.status(401).json({ message: "Exam was already submitted"});
-        }
 
         // If the exam doesn't exist, add a new entry
         if (!exam) {
@@ -96,6 +104,10 @@ export const student_submit_answer = async (req, res) => {
             };
             student.givenExams.push(exam);
             examIndex = student.givenExams.length - 1; // Update the index
+        }
+
+        if(exam.submitted){
+            return res.status(401).json({ message: "Exam was already submitted"});
         }
 
         const questionIndex = exam.questions.findIndex(q => String(q.question) === String(question._id));
@@ -144,7 +156,7 @@ export const student_submit_answer = async (req, res) => {
 
         res.json({ message: "Answer updated successfully", updatedExam: exam });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         res.status(500).json({ message: error.message });
     }
 };
@@ -157,7 +169,7 @@ export const all_students = async (req, res) => {
 
         return res.status(200).json({ students: students, message: "Students fetched successfully"});
     } catch(error){
-        console.error(error);
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 };
@@ -176,8 +188,8 @@ export const delete_student = async (req, res) => {
 
         return res.status(200).json({ message: "Student and associated User deleted successfully." });
     } catch (error) {
-        console.error("Error deleting student:", error);
-        return res.status(500).json({ message: "Internal Server Error" });
+        console.log(error);
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -222,7 +234,7 @@ export const get_student = async (req, res) => {
 
         return res.status(200).json({user: response, message: "Profile Feched Successfully"});
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 };
@@ -287,7 +299,7 @@ export const update_student = async (req, res) => {
 
         return res.status(200).json({ message: "Student updated successfully", user: user });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 };
@@ -314,6 +326,16 @@ export const submit_exam_student = async (req, res) => {
 
         if (!examData) {
             return res.status(404).json({ message: "Exam not found." });
+        }
+
+        const startTime = new Date(examData.startTime);
+        const endTime = new Date(
+            startTime.getTime() + examData.duration * 60000
+        ); 
+        const currentTime = new Date();
+
+        if(currentTime < startTime || currentTime > endTime + 60000){
+            return res.status(401).json({ message: "Exam is either ended or not started yet"});
         }
 
         // Find the exam in the student's data
@@ -344,7 +366,7 @@ export const submit_exam_student = async (req, res) => {
             message: "Exam submitted Successfully"
         });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res.status(500).json({ message: "Failed to submit exam" });
     }
 }

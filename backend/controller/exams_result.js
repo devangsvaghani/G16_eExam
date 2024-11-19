@@ -1,4 +1,6 @@
+import Exam from "../models/exam.js";
 import Student from "../models/student.js";
+import User from "../models/user.js";
 
 export const exams_result = async (req,res) => {
     try {
@@ -38,21 +40,24 @@ export const exams_result = async (req,res) => {
         return res.status(200).json({ message: "Results Fetched Successfully", pastExams: results});
 
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'Error fetching student results' });
+        console.log(error);
+        return res.status(500).json({ message: error.message });
     }
 };
 
 
 export const show_exam = async (req,res) => {
     try {
-        const username = req?.user?.username; 
+
+        const { examId, username } = req.params;
 
         if (!username) {
             return res.status(404).json({ message: "No username found" });
         }
 
-        const { examId } = req.params;
+        if (!examId) {
+            return res.status(404).json({ message: "No Exam found" });
+        }
 
         const student = await Student.findOne({ username })
             .populate({
@@ -99,7 +104,55 @@ export const show_exam = async (req,res) => {
         });
 
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'Error fetching exam details' });
+        console.log(error);
+        return res.status(500).json({ message: error.message });
     }
 };
+
+export const exam_attempted_student = async (req, res) => {
+    try {
+        const { examId } = req.params;
+
+        if (!examId) {
+            return res.status(400).json({ message: "Exam ID is required" });
+        }
+
+        const exam = await Exam.findOne({ examId });
+
+        if (!exam) {
+            return res.status(404).json({ message: "Exam not found" });
+        }
+
+        const students = await Student.find({ "givenExams.exam": exam._id }, "username givenExams batch")
+            .populate("givenExams.exam");
+
+        if (students.length === 0) {
+            return res.status(404).json({ message: "No students have attempted this exam" });
+        }
+
+        const results = await Promise.all(students.map(async (student) => {
+            const examData = student.givenExams.find((e) => e.exam._id.equals(exam._id));
+
+
+            const user = await User.findOne({ username: student.username });
+
+            return {
+                username: student.username,
+                name: `${user.firstname} ${user.lastname}`,
+                batch: student.batch,
+                obtainedPoints: examData.obtained_score,
+                totalPoints: examData.exam.total_points || 0, 
+            };
+        }));
+
+        // Sort results by obtained points in descending order
+        results.sort((a, b) => b.obtainedPoints - a.obtainedPoints);
+
+        return res.status(200).json({ message: "Student Data fetched successfully", results });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: error.message });
+    }
+};
+

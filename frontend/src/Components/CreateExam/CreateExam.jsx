@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./CreateExam.css";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import axios from "axios";
+import config from "../../config.js";
 
-const CreateExam = () => {
+const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
   const [step, setStep] = useState(1);
+  const [filteredQuestions, setFilteredQuestions] = useState([]);
 
   // Step 1: Basic Details
   const [examTitle, setExamTitle] = useState("");
@@ -10,14 +15,14 @@ const CreateExam = () => {
   const [degree, setDegree] = useState("B.Tech");
   const [program, setProgram] = useState("");
   const [semester, setSemester] = useState("");
-  const [totalmarks, settotalmarks] = useState("");
+  const [totalmarks, settotalmarks] = useState(0);
   const [instructions, setInstructions] = useState("");
 
   // Step 2: Timing Details
   const [duration, setDuration] = useState("");
   const [date, setDate] = useState("");
   const [startTime, setStartTime] = useState("");
-  const [difficulty, setDifficulty] = useState("easy");
+  const [difficulty, setDifficulty] = useState("Easy");
 
 
   // Step 3: Questions
@@ -46,14 +51,6 @@ const CreateExam = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBankQuestions, setSelectedBankQuestions] = useState([]);
 
-  // Sample Question Bank
-  const questionBank = [
-    { id: 1, questionText: "What is React?", options: ["Library", "Framework", "Language", "Tool"], correctOption: 0, points: 2, difficulty: "easy" },
-    { id: 2, questionText: "What is JSX?", options: ["Syntax", "Style", "Library", "API"], correctOption: 0, points: 2, difficulty: "easy" },
-    { id: 3, questionText: "What is useState?", options: ["Hook", "Function", "Class", "Event"], correctOption: 0, points: 2, difficulty: "easy" },
-    // Additional questions can be added here
-  ];
-
   // Handlers
   const handleNext = () => {
     setStep((prevStep) => prevStep + 1);
@@ -65,13 +62,13 @@ const CreateExam = () => {
 
   const handleAddQuestion = () => {
     if (!currentQuestion || correctOption === null) {
-      alert("Please enter the question and select a correct answer.");
+      toast.error("Please enter the question and select a correct answer.");
       return;
     }
     const newQuestion = {
-      questionText: currentQuestion,
+      desc: currentQuestion,
       options: [...currentOptions],
-      correctOption,
+      answer:correctOption,
       points,
       difficulty, // Add difficulty here
     };
@@ -100,62 +97,110 @@ const CreateExam = () => {
   };
 
   const handleQuestionSelect = (question) => {
-    if (selectedBankQuestions.some((q) => q.id === question.id)) {
+    
+    if (selectedBankQuestions.some((q) => q.questionId === question.questionId)) {
       // If question is already selected, deselect it
-      setSelectedBankQuestions(selectedBankQuestions.filter((q) => q.id !== question.id));
+      setSelectedBankQuestions(prev => prev.filter((q) => q.questionId !== question.questionId));
     } else {
       // If not selected, add it to the selection
-      setSelectedBankQuestions([...selectedBankQuestions, question]);
+      setSelectedBankQuestions(prev => [...prev, question]);
     }
   };
-
 
   const handleAddSelectedQuestions = () => {
     setQuestions([...questions, ...selectedBankQuestions]);
     handleCloseModal();
   };
 
-  const handleSubmitExam = () => {
+  const mergeDateAndTimeIST = (date, time) => {
+
+    // Combine the date and time strings
+    const dateTimeString = `${date}T${time}:00`;
+
+    // Create a new Date object from the combined string
+    const mergedDate = new Date(dateTimeString);
+
+    if (isNaN(mergedDate)) {
+        toast.error("Invalid date or time format.");
+    }
+
+    const istDate = new Date(mergedDate.getTime());
+
+    return istDate;
+};
+
+  const handleSubmitExam = async () => {
     if (examTitle && subject && program && semester && questions.length) {
       const examData = {
-        examTitle,
+        title:examTitle,
         subject,
-        degree,
-        program,
-        semester,
+        batch:"2022",
+        branch:program,
         duration,
-        date,
-        startTime,
+        semester,
+        startTime:mergeDateAndTimeIST(date, startTime),
         questions,
-        totalmarks,
+        total_points: totalmarks,
         difficulty,
-        instructions, // Include instructions here
+        instructions,
+        examType: 1,
+        status: "Published"
       };
-      console.log("Exam Created:", examData);
-      alert("Exam created successfully!");
-      // Reset all fields
-      settotalmarks("");
-      setExamTitle("");
-      setSubject("");
-      setProgram("");
-      setSemester("");
-      setDuration("");
-      setDate("");
-      setStartTime("");
-      setInstructions(""); // Reset instructions
-      setQuestions([]);
-      setStep(1);
+
+    //   console.log(examData);
+      
+
+      try {
+        const headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+        };
+
+        const result = await axios.post(
+            (config.BACKEND_API || "http://localhost:8000") +
+                "/create-exam",
+                examData,
+            { headers }
+        );
+
+        // console.log(result);
+
+        if (result.status !== 200) {
+            toast.error(result.data.message);
+            return;
+        }
+
+        toast.success(result.data.message);
+        onClose();
+        fetchAgain();
+
+        // Reset all fields
+        settotalmarks("");
+        setExamTitle("");
+        setSubject("");
+        setProgram("");
+        setSemester("");
+        setDuration("");
+        setDate("");
+        setStartTime("");
+        setInstructions(""); // Reset instructions
+        setQuestions([]);
+        setStep(1);
+    } catch (e) {
+        console.log(e);
+        toast.error(e?.response?.data?.message || "Internal server error");
+    }
     } else {
-      alert("Please complete all fields and add at least one question.");
+      toast.error("Please complete all fields and add at least one question.");
     }
   };
   
+  useEffect(() => {
+    setFilteredQuestions(questionBank.filter((q) =>
+        q.desc.toLowerCase().includes(searchQuery.toLowerCase())
+    ));
+  }, [questionBank]);
 
-
-  // Filtered Question Bank for Search
-  const filteredQuestions = questionBank.filter((q) =>
-    q.questionText.toLowerCase().includes(searchQuery.toLowerCase())
-  );
   useEffect(() => {
     const sum = questions.reduce((acc, question) => acc + question.points, 0);
     settotalmarks(sum);
@@ -202,6 +247,32 @@ const CreateExam = () => {
           </div>
         )}
 
+{step === 2 && (
+          <div className="step-two">
+            <h2>Step 2: Timing Details</h2>
+            <input
+              type="number"
+              value={duration}
+              onChange={(e) => setDuration(e.target.value)}
+              placeholder="Duration (in minutes)"
+              min="1"
+              step="1"
+            />
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
+            <input
+              type="time"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+            />
+            <button onClick={handlePrevious}>Previous</button>
+            <button onClick={handleNext}>Next</button>
+          </div>
+        )}
+
 
         {step === 3 && (
           <div className="step-three">
@@ -231,9 +302,9 @@ const CreateExam = () => {
               value={difficulty}
               onChange={(e) => setDifficulty(e.target.value)}
             >
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
             </select>
             <div className="option-div">
               {Array.from({ length: numOptions }).map((_, index) => (
@@ -287,7 +358,7 @@ const CreateExam = () => {
           {questions.map((q, index) => (
             <div key={index} className="question-preview">
               <p>
-                Q{index + 1}: {q.questionText} (Points: {q.points} Difficulty: {q.difficulty})
+                Q{index + 1}: {q.desc} (Points: {q.points} Difficulty: {q.difficulty})
                 <button className="exam-preview-deletebtn" onClick={() => handleDeleteQuestion(index)}>Delete</button>
               </p>
               <ul>
@@ -319,17 +390,17 @@ const CreateExam = () => {
 
               <div className="question-bank">
                 {filteredQuestions.map((question) => {
-                  const isSelected = selectedBankQuestions.some((q) => q.id === question.id);
 
                   return (
-                    <label key={question.id} className="question-item">
+                    <label key={question.questionId} className="question-item">
                       <input
                         className="question-item-input"
                         type="checkbox"
-                        checked={isSelected}
-                        onChange={() => handleQuestionSelect(question)}
+                        checked={selectedBankQuestions.some((q) => q.questionId === question.questionId)}
+                        onChange={() => {handleQuestionSelect(question);
+                        }}
                       />
-                      <span>{question.questionText}</span>
+                      <span>{question.desc}</span>
                     </label>
                   );
                 })}

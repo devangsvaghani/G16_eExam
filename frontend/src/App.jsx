@@ -22,7 +22,7 @@ const App = () => {
         <>
             <Routes>
                 <Route path="/" element={<Homepage />} />
-                <Route path="/dashboard" element={Cookies.get("role") === "Examiner" ? <Examinerdashboard />: <Dashboard />} />
+                <Route path="/dashboard" element={Cookies.get("role") == "Examiner" ? <Examinerdashboard />: <Dashboard />} />
                 <Route path="/admin" element={<Adminlogin />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/forgot-password" element={<Forgetpassword />} />

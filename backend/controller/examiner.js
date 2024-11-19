@@ -7,7 +7,7 @@ export const all_examiners = async (req, res) => {
 
         return res.status(200).json({ examiners: examiners, message: "Examiners fetched successfully"});
     } catch(error){
-        console.error(error);
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 };
@@ -34,8 +34,8 @@ export const delete_examiner = async (req, res) => {
 
         return res.status(200).json({ message: "Examiner and associated User deleted successfully." });
     } catch (error) {
-        console.error("Error deleting examiner:", error);
-        return res.status(500).json({ message: "Failed to delete examiner." });
+        console.log(error);
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -70,13 +70,11 @@ export const get_examiner = async (req, res) => {
             "dob": formatDate(user.dob),
             "gender": user.gender,
         };
-
-        // console.log(response);
         
 
         return res.status(200).json({user: response, message: "Profile Feched Successfully"});
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 };
@@ -132,7 +130,7 @@ export const update_profile = async (req, res) => {
 
         return res.status(200).json({ message: "Profile updated successfully.", user });
     } catch (error) {
-        console.error("Error updating profile:", error);
-        return res.status(500).json({ message: "Failed to update profile." });
+        console.log(error);
+        return res.status(500).json({ message: error.message });
     }
 };

@@ -46,7 +46,7 @@ function Examinterface() {
                     `/fetch-exam-student/${examId}`,
                 { headers }
             );
-            console.log(result);
+            // console.log(result);
 
             if (result.status !== 200) {
                 toast.error(result?.data?.message || "Internal server error");
@@ -106,7 +106,7 @@ function Examinterface() {
                     },
                 { headers }
             );
-            console.log(result);
+            // console.log(result);
 
             if (result.status !== 200) {
                 toast.error(result?.data?.message || "Internal server error");

@@ -57,7 +57,7 @@ function ResetPassword() {
             { headers }
         );
 
-        console.log(result);
+        // console.log(result);
 
         toast.success(result.data.message);
 

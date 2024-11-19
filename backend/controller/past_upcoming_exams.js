@@ -1,7 +1,8 @@
 import Exam from "../models/exam.js";
 import Student from "../models/student.js";
 import Examiner from "../models/examiner.js";
-
+import User from "../models/user.js";
+import Question from "../models/question.js";
 
 export const get_past_exams = async (req, res) => {
     try {
@@ -27,10 +28,10 @@ export const get_past_exams = async (req, res) => {
             .status(200)
             .json({ message: "Past exams retrieved successfully.", pastExams });
     } catch (error) {
-        console.error("Error fetching past exams:", error);
+        console.log(error);
         return res
             .status(500)
-            .json({ message: "Failed to retrieve past exams." });
+            .json({ message: error.message });
     }
 };
 
@@ -55,10 +56,6 @@ export const get_upcoming_exams = async (req, res) => {
             status: "Published",
         }).select("-questions");
 
-        // if (upcomingExams.length === 0) {
-        //     return res.status(404).json({ message: "No upcoming exams found." });
-        // }
-
         return res
             .status(200)
             .json({
@@ -66,10 +63,10 @@ export const get_upcoming_exams = async (req, res) => {
                 upcomingExams,
             });
     } catch (error) {
-        console.error("Error fetching upcoming exams:", error);
+        console.log(error);
         return res
             .status(500)
-            .json({ message: "Failed to retrieve upcoming exams." });
+            .json({ message: error.message });
     }
 };
 
@@ -111,10 +108,6 @@ export const get_upcoming_exams_5_student = async (req, res) => {
             .limit(5)
             .select("-questions"); // Limit to 5 results
 
-        // if (upcomingExams.length === 0) {
-        //     return res.status(404).json({ message: "No upcoming exams found." });
-        // }
-
         return res
             .status(200)
             .json({
@@ -122,10 +115,10 @@ export const get_upcoming_exams_5_student = async (req, res) => {
                 upcomingExams,
             });
     } catch (error) {
-        console.error("Error fetching upcoming exams:", error);
+        console.log(error);
         return res
             .status(500)
-            .json({ message: "Failed to retrieve upcoming exams." });
+            .json({ message: error.message });
     }
 };
 
@@ -170,10 +163,10 @@ export const get_past_exams_5_student = async (req, res) => {
             .status(200)
             .json({ message: "Past exams retrieved successfully.", pastExams });
     } catch (error) {
-        console.error("Error fetching past exams:", error);
+        console.log(error);
         return res
             .status(500)
-            .json({ message: "Failed to retrieve past exams." });
+            .json({ message: error.message });
     }
 };
 
@@ -218,10 +211,6 @@ export const get_upcoming_exams_student = async (req, res) => {
             return dateA - dateB; // Ascending order
         });
 
-        // if (upcomingExams.length === 0) {
-        //     return res.status(404).json({ message: "No upcoming exams found." });
-        // }
-
         return res
             .status(200)
             .json({
@@ -229,10 +218,10 @@ export const get_upcoming_exams_student = async (req, res) => {
                 upcomingExams,
             });
     } catch (error) {
-        console.error("Error fetching upcoming exams:", error);
+        console.log(error);
         return res
             .status(500)
-            .json({ message: "Failed to retrieve upcoming exams." });
+            .json({ message: error.message });
     }
 };
 
@@ -271,10 +260,6 @@ export const get_upcoming_exams_5_examiner = async (req, res) => {
             .limit(5)
             .select("-questions"); // Limit to 5 results
 
-        // if (upcomingExams.length === 0) {
-        //     return res.status(404).json({ message: "No upcoming exams found." });
-        // }
-
         return res
             .status(200)
             .json({
@@ -282,10 +267,10 @@ export const get_upcoming_exams_5_examiner = async (req, res) => {
                 upcomingExams,
             });
     } catch (error) {
-        console.error("Error fetching upcoming exams:", error);
+        console.log(error);
         return res
             .status(500)
-            .json({ message: "Failed to retrieve upcoming exams." });
+            .json({ message: error.message });
     }
 };
 
@@ -327,9 +312,127 @@ export const get_past_exams_5_examiner = async (req, res) => {
             .status(200)
             .json({ message: "Past exams retrieved successfully.", pastExams });
     } catch (error) {
-        console.error("Error fetching past exams:", error);
+        console.log(error);
         return res
             .status(500)
-            .json({ message: "Failed to retrieve past exams." });
+            .json({ message: error.message });
+    }
+};
+
+export const get_upcoming_exams_examiner = async (req, res) => {
+    try {
+        const username = req?.user?.username;
+
+        if (!username) {
+            return res.status(404).json({ message: "No Username Found" });
+        }
+
+        const examiner = await User.findOne({ username });
+
+        if (!examiner) {
+            return res.status(404).json({ message: "No Examiner Found" });
+        }
+
+        const currentTime = new Date();
+
+        // Fetch exams with a startTime in the future  (startTime > currentTime)
+        const upcomingExams = await Exam.find({
+            $expr: {
+                $gt: [
+                    {
+                        $add: [
+                            "$startTime",
+                            { $multiply: ["$duration", 60000] },
+                        ],
+                    },
+                    currentTime,
+                ],
+            },
+            status: "Published",
+            creatorUsername: username
+        }).sort({ startTime: -1 }).lean();
+
+        const upcomingExamsQuestions = await Promise.all(
+            upcomingExams.map(async (exam) => {
+                // Fetch the questions for this exam
+                const questions = await Question.find({ questionId: { $in: exam.questions } }).lean();
+
+                return {
+                    ...exam,
+                    questions, // Attach full question details
+                };
+            })
+        );
+
+        return res
+            .status(200)
+            .json({
+                message: "Upcoming exams retrieved successfully.",
+                upcomingExams:upcomingExamsQuestions,
+            });
+    } catch (error) {
+        console.log(error);
+        return res
+            .status(500)
+            .json({ message: error.message });
+    }
+};
+
+export const get_past_exams_examiner = async (req, res) => {
+    try {
+        const username = req?.user?.username;
+
+        if (!username) {
+            return res.status(404).json({ message: "No Username Found" });
+        }
+
+        const examiner = await User.findOne({ username });
+
+        if (!examiner) {
+            return res.status(404).json({ message: "No Examiner Found" });
+        }
+
+        const currentTime = new Date();
+
+        // Fetch exams with a startTime in the future  (startTime > currentTime)
+        const pastExams = await Exam.find({
+            $expr: {
+                $lt: [
+                    {
+                        $add: [
+                            "$startTime",
+                            { $multiply: ["$duration", 60000] },
+                        ],
+                    },
+                    currentTime,
+                ],
+            },
+            status: "Published",
+            creatorUsername: username
+        }).sort({ startTime: -1 }).lean();
+
+        const pastExamsQuestions = await Promise.all(
+            pastExams.map(async (exam) => {
+                // Fetch the questions for this exam
+                const questions = await Question.find({ questionId: { $in: exam.questions } }).lean();
+
+                return {
+                    ...exam,
+                    questions, // Attach full question details
+                };
+            })
+        );
+
+        return res
+            .status(200)
+            .json({
+                message: "Past exams retrieved successfully.",
+                pastExams:pastExamsQuestions,
+            });
+    } catch (error) {
+        console.log(error);
+        return res
+            .status(500)
+            .json({ message: error.message });
     }
 };

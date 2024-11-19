@@ -47,7 +47,7 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
                 { headers }
             );
 
-            console.log(result);
+            // console.log(result);
 
             setUserData(result.data.user);
         } catch (e) {
@@ -68,7 +68,7 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
             ...userData,
             [name]: value,
         });
-        console.log(userData);
+        // console.log(userData);
     };
 
     const handleSaveProfile = async (e) => {
@@ -94,7 +94,7 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
                 { headers }
             );
 
-            console.log(result);
+            // console.log(result);
 
             if (result.status !== 200) {
                 toast.error(result?.data?.message || "Internal server error");

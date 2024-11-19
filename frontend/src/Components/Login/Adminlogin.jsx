@@ -47,7 +47,7 @@ const Login = () => {
         }
       );
 
-      console.log(results);
+    //   console.log(results);
       
 
       if(results.status === 200){

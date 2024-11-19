@@ -24,7 +24,7 @@ export const create_session = async (req, res) => {
         return res.status(200).json({ token: token, username: user.username, role: user.role, message: "Logged in successfully" });
 
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 };
@@ -35,6 +35,10 @@ export const admin_login = async (req, res) => {
 
         const admin = await User.findOne({username: "admin"});
 
+        if(!admin){
+            return res.status(401).json({ message: "Admin not found"});
+        }
+
         const pass_match = await bcrypt.compare(password, admin.password);
         if(!admin || !pass_match){
             return res.status(401).json({ message: 'Invalid Email/Username or Password!' });
@@ -44,7 +48,7 @@ export const admin_login = async (req, res) => {
         return res.status(200).json({ token: token, username: admin.username, role: admin.role, message: "Logged in successfully" });
 
     } catch(error){
-        console.error(error);
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 };
@@ -91,8 +95,6 @@ export const create_student = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const number_of_students = await Student.countDocuments();
-
         const maxStudentID = await Student.aggregate([
             {
               $group: {
@@ -138,7 +140,7 @@ export const create_student = async (req, res) => {
 
         return res.status(200).json({ message: "Student created successfully", user: savedUser });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 }
@@ -207,7 +209,7 @@ export const create_examiner = async (req, res) => {
 
         return res.status(200).json({ message: "Examiner created successfully", user: savedUser});
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 }
@@ -248,7 +250,7 @@ export const create_admin = async (req, res) => {
 
         return res.status(200).json({ message: "Admin created successfully" });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 }
@@ -298,7 +300,7 @@ export const forgot_password = async (req, res) => {
             },
         });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 };
@@ -349,7 +351,7 @@ export const resend_otp = async (req, res) => {
             },
         });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 };
@@ -397,7 +399,7 @@ export const verify_otp = async (req, res) => {
             message: "Password changed successfully."
         });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 };
@@ -436,7 +438,7 @@ export const reset_password = async (req,res) => {
             message: "Password has been changed"
         });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 }

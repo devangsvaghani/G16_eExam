@@ -6,7 +6,14 @@ import User from "../models/user.js"
 // Create a new question
 export const create_question = async (req, res) => {
     try {
-        const { desc, options, points, creator, difficulty, answer, subject } =
+
+        const username = req?.user?.username;
+
+        if (!username) {
+            return res.status(404).json({ message: "No Examiner Found" });
+        }
+
+        const { desc, options, points, difficulty, answer, subject } =
             req.body;
 
         if (!options || options.length < 2) {
@@ -15,12 +22,19 @@ export const create_question = async (req, res) => {
                 .json({ message: "At least two options are required." });
         }
 
+        const examiner = await User.findOne({ username });
+
+        if (!examiner) {
+            return res.status(404).json({ message: "No Student Found" });
+        }
+
         // Create a new question
         const question = new Question({
             desc,
             options,
+            creatorUsername:username,
             points,
-            creator,
+            creator:`${examiner.firstname} ${examiner.lastname}`,
             difficulty,
             answer,
             subject,
@@ -30,20 +44,33 @@ export const create_question = async (req, res) => {
         await question.save();
 
         return res
-            .status(201)
+            .status(200)
             .json({ message: "Question created successfully.", question });
     } catch (error) {
-        console.error("Error creating question:", error);
-        return res.status(500).json({ message: "Failed to create question." });
+        console.log(error);
+        return res.status(500).json({ message: error.message });
     }
 };
 
 // Update a question by its ID
 export const update_question = async (req, res) => {
     try {
+
+        const username = req?.user?.username;
+
+        if (!username) {
+            return res.status(404).json({ message: "No Examiner Found" });
+        }
+
         const { id } = req.params; // ID of the question to update
-        const { desc, options, points, creator, difficulty, answer, subject } =
+        const { desc, options, points, difficulty, answer, subject } =
             req.body;
+
+        const examiner = await User.findOne({ username });
+
+        if (!examiner) {
+            return res.status(404).json({ message: "No Student Found" });
+        }
 
         if (options && options.length < 2) {
             return res
@@ -55,7 +82,7 @@ export const update_question = async (req, res) => {
         const question = await Question.findOne({ questionId: id });
 
         // If the question is not found, return a 404 error
-        if (!question) {
+        if (!question || question.creatorUsername !== username) {
             return res.status(404).json({ message: "Question not found." });
         }
 
@@ -63,7 +90,6 @@ export const update_question = async (req, res) => {
         question.desc = desc || question.desc;
         question.options = options || question.options;
         question.points = points || question.points;
-        question.creator = creator || question.creator;
         question.difficulty = difficulty || question.difficulty;
         question.answer = answer || question.answer;
         question.subject = subject || question.subject;
@@ -75,20 +101,33 @@ export const update_question = async (req, res) => {
             .status(200)
             .json({ message: "Question updated successfully.", question });
     } catch (error) {
-        console.error("Error updating question:", error);
-        return res.status(500).json({ message: "Failed to update question." });
+        console.log(error);
+        return res.status(500).json({ message: error.message });
     }
 };
 
 // Delete a question by its ID
 export const delete_question = async (req, res) => {
     try {
+
+        const username = req?.user?.username;
+
+        if (!username) {
+            return res.status(404).json({ message: "No Examiner Found" });
+        }
+
+        const examiner = await User.findOne({ username });
+
+        if (!examiner) {
+            return res.status(404).json({ message: "No Student Found" });
+        }
+
         const { id } = req.params; // ID of the question to delete
 
         // Find the question by ID and delete it
         const question = await Question.findOne({ questionId: id }); // Use findOne with _id filter
 
-        if (!question) {
+        if (!question || question.creatorUsername !== username) {
             return res.status(404).json({ message: "Question not found." });
         }
 
@@ -99,8 +138,8 @@ export const delete_question = async (req, res) => {
             .status(200)
             .json({ message: "Question deleted successfully." });
     } catch (error) {
-        console.error("Error deleting question:", error);
-        return res.status(500).json({ message: "Failed to delete question." });
+        console.log(error);
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -173,10 +212,10 @@ export const all_questions_subject_wise_student = async (req, res) => {
                 groupedQuestions,
             });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res
             .status(500)
-            .json({ message: "Failed to retrieve questions." });
+            .json({ message: error.message });
     }
 };
 
@@ -209,10 +248,10 @@ export const add_question_bookmark_student = async (req, res) => {
             .status(200)
             .json({ message: "Question bookmarked successfully." });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res
             .status(500)
-            .json({ message: "Failed to bookmark questions." });
+            .json({ message: error.message });
     }
 };
 
@@ -252,15 +291,15 @@ export const delete_question_bookmark_student = async (req, res) => {
             .status(200)
             .json({ message: "Question unbookmarked successfully." });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res
             .status(500)
-            .json({ message: "Failed to unbookmark questions." });
+            .json({ message: error.message });
     }
 };
 
-// get all questions subject wise
-export const all_questions_subject_wise_examiner = async (req, res) => {
+// get all questions examiner
+export const all_questions_examiner = async (req, res) => {
     try {
         const username = req?.user?.username;
 
@@ -274,63 +313,20 @@ export const all_questions_subject_wise_examiner = async (req, res) => {
             return res.status(404).json({ message: "No Student Found" });
         }
 
-        const currentTime = new Date();
-
-        // Fetch exams that have ended (startTime + duration < currentTime)
-        const pastExams = await Exam.find({
-            $expr: {
-                $lt: [
-                    {
-                        $add: [
-                            "$startTime",
-                            { $multiply: ["$duration", 60000] },
-                        ],
-                    },
-                    currentTime,
-                ],
-            },
-            status: "Published",
-            batch: student.batch,
-            branch: student.branch,
-        });
-
-        // Extract and flatten questionIds from past exams
-        const questionIds = [
-            ...new Set(pastExams.flatMap((exam) => exam.questions)),
-        ];
-
-        // Fetch and group questions by subject for the unique questionIds
-        const groupedQuestions = await Question.aggregate([
-            {
-                $match: {
-                    questionId: { $in: questionIds }, // Filter questions by unique questionIds
-                },
-            },
-            {
-                $group: {
-                    _id: "$subject", // Group by the subject field
-                    questions: { $push: "$$ROOT" }, // Push the entire question document into the array
-                },
-            },
-            {
-                $project: {
-                    _id: 0, // Remove the _id field from the output
-                    subject: "$_id", // Rename _id to subject
-                    questions: 1, // Keep the questions array
-                },
-            },
-        ]);
+        const questions = await Question.find({
+            creatorUsername: username
+        }).lean();
 
         return res
             .status(200)
             .json({
                 message: "Questions retrieved successfully.",
-                groupedQuestions,
+                questions,
             });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res
             .status(500)
-            .json({ message: "Failed to retrieve questions." });
+            .json({ message: error.message });
     }
 };

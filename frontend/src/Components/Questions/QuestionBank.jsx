@@ -40,14 +40,14 @@ const QuestionBank = () => {
                 { headers }
             );
 
-            console.log(result);
+            // console.log(result);
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
                 return;
             }
 
-            console.log(result.data.groupedQuestions);
+            // console.log(result.data.groupedQuestions);
 
             const subjectWiseQuestionsArray = Object.values(
                 result.data.groupedQuestions
@@ -158,7 +158,7 @@ const QuestionBank = () => {
                 { headers }
             );
 
-            console.log(result);
+            // console.log(result);
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
@@ -178,6 +178,7 @@ const QuestionBank = () => {
         <div className="question-bank-div">
             <h2 className="title">Question Bank</h2>
             <center>
+                {Object.keys(subjectQuestions).length === 0 && <div>No Questions Found</div>}
                 {!isSubjectSelected ? (
                     <div className="subject-boxes">
                         {Object.keys(subjectQuestions).map((subject, index) => (

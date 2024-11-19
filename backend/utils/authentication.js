@@ -1,7 +1,5 @@
 import {password_reset_templet} from "./mailTemplets.js"
 import {transporter} from "../config/nodemailer.js"
-import Otp from "../models/otp.js"
-import bcrypt from 'bcrypt';
 
 export const generate_otp = () => {
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;   
@@ -39,7 +37,7 @@ export const send_otp = async (email, otp) => {
         
     }
     catch (error){
-        // console.log(error)
+        console.log(error)
         throw error
     }
     

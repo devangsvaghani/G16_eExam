@@ -53,7 +53,7 @@ const Login = ({ onClose }) => {
         }
       );
 
-      console.log(results);
+    //   console.log(results);
 
 
       if (results.status === 200) {

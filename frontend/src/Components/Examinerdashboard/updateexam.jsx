@@ -1,106 +1,105 @@
 import React, { useState, useEffect } from "react";
 import "./updateexam.css";
-import Examinerdashboard from "./Examinerdashboard";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import axios from "axios";
+import config from "../../config.js";
+import { useNavigate } from "react-router-dom";
 
-const UpdateExam = ({ onClose }) => {
-  const [exam, setExam] = useState({
-    name: "Sample Exam",
-    duration: 60,
-    date: "2024-12-01",
-    time: "10:00",
-    syllabus: "Array, Linked List, Stacks, Queues, Trees",
-    extraNotes: "Focus on problem-solving and key concepts.",
-    questions: [
-      {
-        id: 1,
-        text: "What is your favorite type of cuisine?",
-        options: ["Italian", "Chinese", "Mexican", "Indian"],
-        correctOption: 0,
-        marks: 5,
-      },
-      {
-        id: 2,
-        text: "What type of transportation do you use most often?",
-        options: ["Car", "Bicycle", "Public Transport", "Walking"],
-        correctOption: 1,
-        marks: 5,
-      },
-      {
-        id: 3,
-        text: "How often do you exercise in a week?",
-        options: ["1-2 times", "3-4 times", "5-6 times", "I don't exercise"],
-        correctOption: 1,
-        marks: 5,
-      },
-      {
-        id: 4,
-        text: "Which device do you use most frequently for browsing the internet?",
-        options: ["Laptop/PC", "Smartphone", "Tablet", "Smartwatch"],
-        correctOption: 1,
-        marks: 5,
-      },
-      {
-        id: 5,
-        text: "What is your primary source of news?",
-        options: ["Television", "Internet/Social Media", "Newspaper", "Radio"],
-        correctOption: 2,
-        marks: 5,
-      },
-      {
-        id: 6,
-        text: "How often do you order food online?",
-        options: ["Never", "Once a week", "Once a month", "Multiple times a week"],
-        correctOption: 3,
-        marks: 5,
-      },
-      {
-        id: 7,
-        text: "What time do you usually wake up in the morning?",
-        options: ["Before 6 AM", "6 AM to 7 AM", "7 AM to 8 AM", "After 8 AM"],
-        correctOption: 2,
-        marks: 5,
-      },
-      {
-        id: 8,
-        text: "Do you prefer to travel internationally or domestically?",
-        options: ["Internationally", "Domestically", "Both equally", "Neither, I don’t travel much"],
-        correctOption: 0,
-        marks: 5,
-      },
-      {
-        id: 9,
-        text: "What kind of movies do you prefer to watch?",
-        options: ["Action", "Comedy", "Drama", "Horror"],
-        correctOption: 1,
-        marks: 5,
-      },
-      {
-        id: 10,
-        text: "What is your preferred method of communication?",
-        options: ["Text messages", "Phone calls", "Video calls", "Emails"],
-        correctOption: 0,
-        marks: 5,
-      }
-    ],
-  });
+const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
+  const [exam, setExam] = useState({});
 
   const [totalMarks, setTotalMarks] = useState(0);
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [selectedQuestion, setSelectedQuestion] = useState("");
   const [showQuestions, setShowQuestions] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showCancelExamModal, setShowCancelExamModal] = useState(false);
   const [Isclosepage, setIsclosepage] = useState(false);
+  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    if(!Cookies.get("token")){
+        navigate("/");
+    }else{
+        fetch_exam();
+    }
+  }, []);
+
+  const fetch_exam = async () => {
+    try {
+        const headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+        };
+
+        const result = await axios.get(
+            (config.BACKEND_API || "http://localhost:8000") +
+                `/fetch-exam-examiner/${examId}`,
+            { headers }
+        );
+
+        // console.log(result);
+
+        if (result.status !== 200) {
+            toast.error(result.data.message);
+            return;
+        }
+
+        result.data.exam.questions.map((_, index) => {
+            result.data.exam.questions[index].id = index + 1;
+        });
+
+        setExam(result.data.exam);
+    } catch (e) {
+        console.log(e);
+        toast.error(e?.response?.data?.message || "Internal server error");
+    }
+};
+
+const delete_exam = async () => {
+    try {
+        const headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+        };
+
+        const result = await axios.delete(
+            (config.BACKEND_API || "http://localhost:8000") +
+                `/delete-exam/${examId}`,
+            { headers }
+        );
+
+        // console.log(result);
+
+        if (result.status !== 200) {
+            toast.error(result.data.message);
+            return;
+        }
+
+        toast.success(result.data.message);
+
+        fetchAgain();
+        onClose();
+    } catch (e) {
+        console.log(e);
+        toast.error(e?.response?.data?.message || "Internal server error");
+    }
+};
 
   // Function to calculate total marks
   const calculateTotalMarks = () => {
-    const sum = exam.questions.reduce((acc, question) => acc + question.marks, 0);
-    setTotalMarks(sum);
+    if(exam?.questions){
+        const sum = exam.questions.reduce((acc, question) => acc + question.points, 0);
+        setTotalMarks(sum);
+    }
+    
   };
 
   // Recalculate total marks whenever questions array changes
   useEffect(() => {
     calculateTotalMarks();
-  }, [exam.questions]);
+  }, [exam]);
 
   const validateDateTime = () => {
     const currentDate = new Date();
@@ -112,10 +111,37 @@ const UpdateExam = ({ onClose }) => {
     return true;
   };
 
-  const saveExamDetails = () => {
-    if (!validateDateTime()) return;
-    alert("Exam details saved successfully!");
+  const saveExamDetails = async () => {
+    try {
+        const headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+        };
+
+        const result = await axios.put(
+            (config.BACKEND_API || "http://localhost:8000") +
+                `/update-exam/${examId}`,
+                exam,
+            { headers }
+        );
+
+        // console.log(result);
+
+        if (result.status !== 200) {
+            toast.error(result.data.message);
+            return;
+        }
+
+        toast.success(result.data.message);
+
+        fetchAgain();
+        onClose();
+    } catch (e) {
+        console.log(e);
+        toast.error(e?.response?.data?.message || "Internal server error");
+    }
   };
+
   const handleclosepage = () => {
     setIsclosepage(true);
   }
@@ -171,7 +197,7 @@ const UpdateExam = ({ onClose }) => {
       ...prevExam,
       questions: [
         ...prevExam.questions,
-        { ...selectedQuestion, id: prevExam.questions.length + 1 },
+        { ...selectedQuestion, id: prevExam.questions.length + 1},
       ],
     }));
     setShowModal(false);
@@ -182,7 +208,7 @@ const UpdateExam = ({ onClose }) => {
     const questionToDelete = exam.questions.find((q) => q.id === id);
     if (
       window.confirm(
-        `Do you want to delete the question: "${questionToDelete.text}"?`
+        `Do you want to delete the question: "${questionToDelete.desc}"?`
       )
     ) {
       setExam((prevExam) => ({
@@ -196,21 +222,57 @@ const UpdateExam = ({ onClose }) => {
     setShowCancelExamModal(true);
   };
 
-  const confirmCancelExam = () => {
-    alert("Exam has been cancelled.");
-    setShowCancelExamModal(false);
-    setExam(null);
+  const confirmCancelExam = async () => {
+    
+    try{
+        await delete_exam();
+
+        setShowCancelExamModal(false);
+        setExam(null);
+    }catch(e){
+        console.log(e);
+        toast.error(e?.response?.data?.message || "Internal server error");
+    }
+    
   };
 
   const addNewQuestion = () => {
     setSelectedQuestion({
-      text: "",
+      desc: "",
       options: ["Option 1", "Option 2"],
-      correctOption: 0,
-      marks: 1,
+      answer: 0,
+      points: 1,
+      difficulty: "Easy",
     });
     setShowModal(true);
   };
+
+  const convertUTCToIST = (datetime) => {
+
+    const utcDate = new Date(datetime);
+
+    const istDate = new Date(utcDate.getTime());
+
+    // Format "yyyy-MM-dd"
+    const yyyy = istDate.getFullYear();
+    const mm = String(istDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const dd = String(istDate.getDate()).padStart(2, '0');
+    const formattedDate = `${yyyy}-${mm}-${dd}`;
+
+    // Format "hh:mm:ss AM/PM"
+    const hours = String(istDate.getHours()).padStart(2, '0');
+    const minutes = String(istDate.getMinutes()).padStart(2, '0');
+    const seconds = String(istDate.getSeconds()).padStart(2, '0');
+
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+    return {
+        date: formattedDate,
+        time: formattedTime,
+    };
+};
+
+
 
   return (
     <div className="update-exam-div">
@@ -223,7 +285,7 @@ const UpdateExam = ({ onClose }) => {
           <input
             type="text"
             name="name"
-            value={exam.name}
+            value={exam?.title}
             onChange={(e) => setExam({ ...exam, name: e.target.value })}
           />
         </label>
@@ -233,7 +295,7 @@ const UpdateExam = ({ onClose }) => {
           <input
             type="number"
             name="duration"
-            value={exam.duration}
+            value={exam?.duration}
             onChange={(e) => setExam({ ...exam, duration: e.target.value })}
           />
         </label>
@@ -243,7 +305,7 @@ const UpdateExam = ({ onClose }) => {
           <input
             type="date"
             name="date"
-            value={exam.date}
+            value={convertUTCToIST(exam?.startTime).date}
             onChange={(e) => setExam({ ...exam, date: e.target.value })}
           />
         </label>
@@ -253,7 +315,7 @@ const UpdateExam = ({ onClose }) => {
           <input
             type="time"
             name="time"
-            value={exam.time}
+            value={convertUTCToIST(exam?.startTime).time}
             onChange={(e) => setExam({ ...exam, time: e.target.value })}
           />
         </label>
@@ -263,11 +325,11 @@ const UpdateExam = ({ onClose }) => {
         </label>
 
         <label>
-          Syllabus:
+          Subject:
           <textarea
-            name="syllabus"
-            value={exam.syllabus}
-            onChange={(e) => setExam({ ...exam, syllabus: e.target.value })}
+            name="subject"
+            value={exam?.subject}
+            onChange={(e) => setExam({ ...exam, subject: e.target.value })}
           />
         </label>
 
@@ -289,19 +351,19 @@ const UpdateExam = ({ onClose }) => {
         {showQuestions && (
           <div className="update-questions">
             <ul>
-              {exam.questions.map((question) => (
-                <li key={question.id}>
+              {exam?.questions && exam.questions.map((question, index) => (
+                <li key={index}>
                   <div className="question-item">
-                    <span>{question.text}</span>
+                    <span>{question?.desc}</span>
                     <button
                       className="update-btn"
-                      onClick={() => handleQuestionSelect(question.id)}
+                      onClick={() => handleQuestionSelect(question?.id)}
                     >
                       Update
                     </button>
                     <button
                       className="delete-btn"
-                      onClick={() => handleDeleteQuestion(question.id)}
+                      onClick={() => handleDeleteQuestion(question?.id)}
                       style={{ marginLeft: "10px" }}
                     >
                       Remove
@@ -330,14 +392,14 @@ const UpdateExam = ({ onClose }) => {
             <label>
               Question Text:
               <textarea
-                value={selectedQuestion.text}
-                onChange={(e) => handleQuestionUpdate("text", e.target.value)}
+                value={selectedQuestion.desc}
+                onChange={(e) => handleQuestionUpdate("desc", e.target.value)}
               />
             </label>
 
             <label>Options:</label>
             <div className="options-container">
-              {selectedQuestion.options.map((option, index) => (
+              {selectedQuestion?.options && selectedQuestion.options.map((option, index) => (
                 <div key={index} className="option-item">
                   <input
                     type="text"
@@ -346,10 +408,10 @@ const UpdateExam = ({ onClose }) => {
                   />
                   <input
                     type="radio"
-                    name="correctOption"
-                    checked={selectedQuestion.correctOption === index}
+                    name="answer"
+                    checked={selectedQuestion.answer === index}
                     onChange={() =>
-                      handleQuestionUpdate("correctOption", index)
+                      handleQuestionUpdate("answer", index)
                     }
                   />
                   <button
@@ -374,11 +436,25 @@ const UpdateExam = ({ onClose }) => {
               Marks:
               <input
                 type="number"
-                value={selectedQuestion.marks}
+                value={selectedQuestion.points}
                 onChange={(e) =>
-                  handleQuestionUpdate("marks", parseInt(e.target.value, 10))
+                  handleQuestionUpdate("points", parseInt(e.target.value, 10))
                 }
               />
+            </label>
+            <label>
+              Difficulty:
+              <select
+                type="String"
+                value={selectedQuestion.difficulty}
+                onChange={(e) =>
+                  handleQuestionUpdate("difficulty", e.target.value)
+                }
+              >
+              <option value="Easy" selected> Easy </option>
+              <option value="Medium"> Medium </option>
+              <option value="Hard"> Hard </option>
+                </select>
             </label>
 
             <div className="modal-buttons">

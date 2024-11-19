@@ -31,7 +31,7 @@ const SubmitConfirmationModal = ({ onCancel, autoSubmit, examId, toast }) => {
                 },
                 { headers }
             );
-            console.log(result);
+            // console.log(result);
 
             if (result.status !== 200) {
                 toast.error(result?.data?.message || "Internal server error");

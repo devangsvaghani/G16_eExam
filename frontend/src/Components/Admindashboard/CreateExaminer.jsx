@@ -44,7 +44,7 @@ const CreateExaminer = ({ onClose, setExaminers, toast }) => {
     
             const result = await axios.post((config.BACKEND_API || "http://localhost:8000") + "/create-examiner", formData, {headers});
 
-            console.log(result);
+            // console.log(result);
     
             if(result.status !== 200){
                 toast.error((result?.data?.message) || ("Internal server error"));
@@ -75,7 +75,7 @@ const CreateExaminer = ({ onClose, setExaminers, toast }) => {
             gender: "",
             expertise: "",
         });
-        console.log("Form closed or reset");
+        // console.log("Form closed or reset");
     };
 
     return (

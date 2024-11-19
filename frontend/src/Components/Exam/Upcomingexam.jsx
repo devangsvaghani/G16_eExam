@@ -98,7 +98,7 @@ const Upcomingexam = () => {
 
     const getTime = (datetime) => {
         const date = new Date(datetime);
-        return date.toLocaleTimeString();
+        return date.toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata' });
     };
 
     const startExam = (exam) => {
@@ -126,6 +126,9 @@ const Upcomingexam = () => {
                     <div className="uheader-item">Start In</div>
                     <div className="uheader-item">Detail</div>
                 </div>
+                {
+                    exams.length === 0 && <div>No Upcoming Exams found</div>
+                }
                 {exams.map((exam, index) => (
                     <div key={index} className="utable-row">
                         <div className="utable-cell">{exam.title}</div>

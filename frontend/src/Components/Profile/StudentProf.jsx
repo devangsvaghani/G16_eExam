@@ -55,7 +55,7 @@ function StudentProf({ onClose, toast, username, setStudents }) {
                 { headers }
             );
 
-            console.log(result);
+            // console.log(result);
 
             setUserData(result.data.user);
         } catch (e) {
@@ -76,7 +76,7 @@ function StudentProf({ onClose, toast, username, setStudents }) {
             ...userData,
             [name]: value,
         });
-        console.log(userData);
+        // console.log(userData);
     };
 
     const handleSaveProfile = async (e) => {
@@ -106,7 +106,7 @@ function StudentProf({ onClose, toast, username, setStudents }) {
                 { headers }
             );
 
-            console.log(result);
+            // console.log(result);
 
             if (result.status !== 200) {
                 toast.error(result?.data?.message || "Internal server error");

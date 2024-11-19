@@ -24,6 +24,11 @@ const questionSchema = new mongoose.Schema({
         required : true
     },
 
+    creatorUsername : {
+        type : String,
+        required : true
+    },
+
     difficulty : {
         type : String,
         enum : ['Easy', 'Medium', 'Hard'],
@@ -51,12 +56,12 @@ questionSchema.pre('save', async function (next) {
       try {
         // Find the counter and increment it
         const counter = await Counter.findByIdAndUpdate(
-          { _id: 'questionId' },      // The name of the counter document
-          { $inc: { seq: 1 } },        // Increment the sequence by 1
-          { new: true, upsert: true }  // Create the counter if it doesn't exist
+          { _id: 'questionId' },     
+          { $inc: { seq: 1 } },       
+          { new: true, upsert: true }  
         );
         
-        question.questionId = counter.seq;    // Assign the incremented sequence as the _id
+        question.questionId = counter.seq;   
         next();
       } catch (error) {
         next(error); // Pass any errors to the next middleware

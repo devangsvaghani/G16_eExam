@@ -6,6 +6,45 @@ import config from "../../config.js";
 import axios from "axios";
 import Cookies from "js-cookie";
 
+const CountdownTimer = ({ startTime, onExamStarted }) => {
+    const [timeLeft, setTimeLeft] = useState(null);
+
+    useEffect(() => {
+        const calculateTimeLeft = () => {
+            const now = new Date();
+            const targetTime = new Date(startTime);
+            const difference = targetTime - now;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (24 * 1000 * 60 * 60));
+                const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((difference / (1000 * 60)) % 60);
+                const seconds = Math.floor((difference / 1000) % 60);
+                setTimeLeft({ days, hours, minutes, seconds });
+            } else {
+                setTimeLeft(null); // Event time passed
+                if (onExamStarted) {
+                    onExamStarted();  // Notify the parent component that the exam can be started
+                }
+            }
+        };
+
+        const timerId = setInterval(calculateTimeLeft, 1000);
+        return () => clearInterval(timerId); // Cleanup interval on unmount
+    }, [startTime]);
+
+    if (!timeLeft) {
+        return <div>Exam has started!</div>;
+    }
+
+    return (
+            <p>
+            <strong>Time Left:</strong> {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m{" "}
+                {timeLeft.seconds}s
+            </p>
+    );
+};
+
 const StartExam = () => {
     const { examId } = useParams();
     const navigate = useNavigate();
@@ -17,6 +56,7 @@ const StartExam = () => {
     const [showError, setShowError] = useState(false);
     const [testCountdown, setTestCountdown] = useState(null);
     const [exam, setExam] = useState({});
+    const [startBtn, setStartBtn] = useState(false);
 
     useEffect(() => {
         if (!Cookies.get("token") || Cookies.get("role") !== "Student") {
@@ -38,7 +78,7 @@ const StartExam = () => {
                     `/fetch-exam-student/${examId}`,
                 { headers }
             );
-            console.log(result);
+            // console.log(result);
             
 
             if (result.status !== 200) {
@@ -129,6 +169,13 @@ const StartExam = () => {
                     <p>
                         <strong>Exam Duration:</strong> {exam?.duration} minutes
                     </p>
+                    <div>
+                        <CountdownTimer
+                            startTime={exam.startTime}
+                            onExamStarted={() => setStartBtn(true)}
+                        />
+                    </div>
+                    
                 </div>
                 <div className="instructions">
                     <p>
@@ -175,7 +222,7 @@ const StartExam = () => {
                         seconds.
                     </div>
                 ) : (
-                    <button className="start-btn" onClick={startTest}>
+                    <button className="start-btn" onClick={startTest} disabled={!startBtn}>
                         Start Test
                     </button>
                 )}

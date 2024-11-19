@@ -8,7 +8,7 @@ const db = mongoose
                 console.log("Successfully connected to Mongo-Database");
             })
             .catch((error) => {
-                console.error(error);
+                console.log(error);
             });
         
 export default db;

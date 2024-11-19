@@ -85,7 +85,7 @@ const UpcomingexamAdmin = () => {
 
   const getTime = (datetime) => {
     const date = new Date(datetime);
-    return date.toLocaleTimeString(); 
+    return date.toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata' }); 
 };
 
 
@@ -107,7 +107,7 @@ const UpcomingexamAdmin = () => {
             <div className="utable-cell">{exam.creator}</div>
             <div className="utable-cell">{getDate(exam.startTime)}</div>
             <div className="utable-cell">{getTime(exam.startTime)}</div>
-            <div className="utable-cell">{exam.duration}</div>
+            <div className="utable-cell">{exam.duration} minutes</div>
             <div className="utable-cell">
             <CountdownTimer startTime={exam.startTime} />
             </div>

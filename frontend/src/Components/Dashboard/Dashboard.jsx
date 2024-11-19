@@ -226,7 +226,7 @@ function Dashboard() {
                 { headers }
             );
 
-            console.log(result);
+            // console.log(result);
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
@@ -253,7 +253,7 @@ function Dashboard() {
                 { headers }
             );
 
-            console.log(result);
+            // console.log(result);
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
@@ -280,7 +280,7 @@ function Dashboard() {
                 { headers }
             );
 
-            console.log(result);
+            // console.log(result);
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
@@ -307,7 +307,7 @@ function Dashboard() {
                 { headers }
             );
 
-            console.log(result);
+            // console.log(result);
 
             if (result.status !== 200) {
                 toast.error(result.data.message);

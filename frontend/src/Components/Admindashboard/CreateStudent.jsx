@@ -63,7 +63,7 @@ const CreateStudent = ({ onClose, setStudents, toast }) => {
                 graduation: formData.studentType
             }, {headers});
 
-            console.log((result));
+            // console.log((result));
     
             if(result.status !== 200){
                 toast.error((result?.data?.message) || ("Internal server error"));

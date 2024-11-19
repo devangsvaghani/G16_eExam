@@ -6,15 +6,14 @@ import axios from "axios";
 import config from "../../config.js";
 import { useNavigate } from "react-router-dom";
 
-const ExamResultCard = ({ exam }) => {
+const ExamResultCard = ({ exam, username, obtainedPoints }) => {
     const navigate = useNavigate();
     const [examDetails, setExamDetails] = useState(null);
 
     useEffect(() => {
-        if (!Cookies.get("token") || Cookies.get("role") !== "Student") {
+        if (!Cookies.get("token") || !Cookies.get("token")) {
             navigate("/");
         }
-
         fetch_exam_details();
     }, []);
 
@@ -27,7 +26,7 @@ const ExamResultCard = ({ exam }) => {
 
             const result = await axios.get(
                 (config.BACKEND_API || "http://localhost:8000") +
-                    `/show-exam/${exam?.examId}`,
+                    `/show-exam/${exam?.examId}/${username || Cookies.get("username")}`,
                 { headers }
             );
 
@@ -35,9 +34,6 @@ const ExamResultCard = ({ exam }) => {
                 toast.error(result.data.message);
                 return;
             }
-
-            console.log(exam);
-            
             
             setExamDetails(result.data);
         } catch (e) {
@@ -80,7 +76,7 @@ const ExamResultCard = ({ exam }) => {
         <h2>{exam?.title}</h2>
         <p><strong>Subject:</strong> {exam?.subject}</p>
         <p><strong>Student ID:</strong> {Cookies.get("username")}</p>
-        <p><strong>Obtained Marks:</strong> {exam?.obtainedPoints}/{exam?.totalPoints}</p>
+        <p><strong>Obtained Marks:</strong> {exam?.obtainedPoints || obtainedPoints}/{exam?.totalPoints || exam?.total_points}</p>
 
         <div id="questions-section">
           <h3>Questions and Responses</h3>
