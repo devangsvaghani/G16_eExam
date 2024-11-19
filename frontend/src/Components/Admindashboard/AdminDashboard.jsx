@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Admindashboard.css";
+import "./AdminDashboard.css";
 import logo from "../assets/logo.png";
 import user from "../assets/user.png";
 import { useAuth } from "../../context/auth.jsx";

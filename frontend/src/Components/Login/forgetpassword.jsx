@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./ForgetPassword.css";
+import "./forgetPassword.css";
 import { useAuth } from "../../context/auth.jsx";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
