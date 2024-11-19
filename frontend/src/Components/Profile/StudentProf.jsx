@@ -30,6 +30,11 @@ function StudentProf({ onClose, toast, username, setStudents }) {
             navigate("/");
         }
 
+        if(!username){
+            toast.error("Profile not found");
+            navigate(-1);
+        }
+
         if (Cookies.get("role") === "Admin") {
             setIsAdmin(true);
         }

@@ -75,7 +75,7 @@ const Homepage = () => {
             </div>
             <div className="feature-item">
               <h4>Multiple Question Types</h4>
-              <p>Supports multiple-choice, descriptive, true/false, and more.</p>
+              <p>Supports multiple-choice, true/false, and more.</p>
             </div>
             <div className="feature-item">
               <h4>User-Friendly Interface</h4>

@@ -18,9 +18,6 @@ const Login = ({ onClose }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
-  const [role, setRole] = useState('Student');
-  const [errorMessage, setErrorMessage] = useState('');
   const [showForgetPassword, setShowForgetPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { setIsLoggedIn, validateUser, isLoggedIn } = useAuth();
@@ -71,8 +68,7 @@ const Login = ({ onClose }) => {
       }
     }
     catch (e) {
-      // console.log(e.response);
-      
+      console.log(e);
       toast.error((e?.response?.data?.message) || ("Internal server error"));
     }
 
@@ -146,9 +142,6 @@ const Login = ({ onClose }) => {
                 size={60}
               />
             </div>
-
-            {/* Error message */}
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
 
             {/* Submit button */}
             <button type="submit" className="login-button">

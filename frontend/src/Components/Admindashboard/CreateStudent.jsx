@@ -144,7 +144,6 @@ const CreateStudent = ({ onClose, setStudents, toast }) => {
                     </div>
                     <div className="half-width">
                         <label htmlFor="dob">Date of Birth:</label>
-                        <br />
                         <input
                             type="date"
                             id="dob"

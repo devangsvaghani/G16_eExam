@@ -262,7 +262,7 @@ function Admindashboard() {
         <div>
             <div className="examiner-list">
             <div className="examiners-grid">
-                {examiners.map((examiner) => (
+                {examiners.length ? examiners.map((examiner) => (
                 <div key={examiner._id} className="examiner-card">
                     <h3>{examiner.username}</h3>
                     <p>{examiner.email}</p>
@@ -271,7 +271,9 @@ function Admindashboard() {
                     <button onClick={() => handleUpdateExaminer(examiner.username)}>Update</button>
                     </div>
                 </div>
-                ))}
+                )) : <div>
+                    No Examiners Found
+                    </div>}
             </div>
             </div>
             <button className="create-examiner-button" onClick={handleCreateExaminer}>
@@ -290,7 +292,7 @@ function Admindashboard() {
         <div>
             <div className="examiner-list">
             <div className="examiners-grid">
-                {students.map((student, index) => (
+                {students.length ? students.map((student, index) => (
                 <div key={student._id} className="examiner-card">
                     <h3>{index + 1}</h3>
                     <p>{student.email}</p>
@@ -299,7 +301,9 @@ function Admindashboard() {
                     <button onClick={() => handleUpdateStudent(student.username)}>Update</button>
                     </div>
                 </div>
-                ))}
+                )) : <div>
+                No Students Found
+                </div>}
             </div>
             </div>
             <button className="create-student-button" onClick={handleCreateStudent}>

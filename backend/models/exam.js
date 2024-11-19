@@ -11,6 +11,11 @@ const examSchema = new mongoose.Schema({
         required: true
     },
 
+    creatorUsername: {
+        type: String,
+        required: true
+    },
+
     questions: [{
         type : Number
     }],

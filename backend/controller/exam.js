@@ -6,6 +6,7 @@ export const create_exam = async (req, res) => {
     try {
         const {
             creator,
+            creatorUsername,
             questions,
             startTime,
             duration,
@@ -22,6 +23,7 @@ export const create_exam = async (req, res) => {
 
         const exam = new Exam({
             creator,
+            creatorUsername,
             questions,
             startTime,
             duration,
@@ -37,7 +39,7 @@ export const create_exam = async (req, res) => {
         });
 
         await exam.save();
-        return res.status(201).json({ message: "Exam created successfully.", exam });
+        return res.status(200).json({ message: "Exam created successfully.", exam });
     } catch (error) {
         console.error("Error creating exam:", error);
         return res.status(500).json({ message: "Failed to create exam." });
@@ -50,6 +52,7 @@ export const update_exam = async (req, res) => {
         const { id } = req.params;
         const {
             creator,
+            creatorUsername,
             questions,
             startTime,
             duration,
@@ -72,19 +75,20 @@ export const update_exam = async (req, res) => {
         }
 
         // Update the fields
-        exam.creator = creator;
-        exam.questions = questions;
-        exam.startTime = startTime;
-        exam.duration = duration;
-        exam.title = title;
-        exam.semester = semester;
-        exam.examType = examType;
-        exam.batch = batch;
-        exam.branch = branch;
-        exam.total_points = total_points;
-        exam.status = status;
-        exam.instructions = instructions;
-        exam.subject = subject;
+        if(creator) exam.creator = creator;
+        if(creatorUsername) exam.creatorUsername = creatorUsername;
+        if(questions) exam.questions = questions;
+        if(startTime) exam.startTime = startTime;
+        if(duration) exam.duration = duration;
+        if(title) exam.title = title;
+        if(semester) exam.semester = semester;
+        if(examType) exam.examType = examType;
+        if(batch) exam.batch = batch;
+        if(branch) exam.branch = branch;
+        if(total_points) exam.total_points = total_points;
+        if(status) exam.status = status;
+        if(instructions) exam.instructions = instructions;
+        if(subject) exam.subject = subject;
 
         // Save the updated exam
         await exam.save();

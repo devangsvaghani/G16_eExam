@@ -14,8 +14,6 @@ const ForgetPassword = ({ onClose }) => {
     const [confirmPassword, setConfirmNewPassword] = useState("");
     const [error, setError] = useState("");
     const [resendTimer, setResendTimer] = useState(0); // Timer state
-    const { validateUser } = useAuth();
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (resendTimer > 0) {
@@ -65,8 +63,8 @@ const ForgetPassword = ({ onClose }) => {
             return;
         }
 
-        if (newPassword.length <= 8) {
-            toast.error("Password length should be greater than 8");
+        if (newPassword.length < 8) {
+            toast.error("Password length should be at least 8");
             return;
         }
 

@@ -32,7 +32,7 @@ const CountdownTimer = ({ startTime }) => {
   }, [startTime]);
 
   if (!timeLeft) {
-      return <div>Event has started or ended!</div>;
+      return <div>Exam has started!</div>;
   }
 
   return (
@@ -101,7 +101,7 @@ const UpcomingexamAdmin = () => {
           <div className="uheader-item">Duration</div>
           <div className="uheader-item">Start In</div>
         </div>
-        {exams.map((exam, index) => (
+        {exams.length ? exams.map((exam, index) => (
           <div key={index} className="utable-row">
             <div className="utable-cell">{exam.title}</div>
             <div className="utable-cell">{exam.creator}</div>
@@ -112,7 +112,7 @@ const UpcomingexamAdmin = () => {
             <CountdownTimer startTime={exam.startTime} />
             </div>
           </div>
-        ))}
+        )) : <div>No Upcoming Exams Found</div>}
       </div>
     </div>
   );

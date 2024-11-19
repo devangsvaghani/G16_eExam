@@ -1,6 +1,7 @@
 import Question from "../models/question.js";
 import Student from "../models/student.js";
 import Exam from "../models/exam.js";
+import User from "../models/user.js"
 
 // Create a new question
 export const create_question = async (req, res) => {
@@ -138,14 +139,10 @@ export const all_questions_subject_wise_student = async (req, res) => {
             branch: student.branch,
         });
 
-        console.log(pastExams);
-
         // Extract and flatten questionIds from past exams
         const questionIds = [
             ...new Set(pastExams.flatMap((exam) => exam.questions)),
         ];
-
-        console.log(questionIds);
 
         // Fetch and group questions by subject for the unique questionIds
         const groupedQuestions = await Question.aggregate([
@@ -259,5 +256,81 @@ export const delete_question_bookmark_student = async (req, res) => {
         return res
             .status(500)
             .json({ message: "Failed to unbookmark questions." });
+    }
+};
+
+// get all questions subject wise
+export const all_questions_subject_wise_examiner = async (req, res) => {
+    try {
+        const username = req?.user?.username;
+
+        if (!username) {
+            return res.status(404).json({ message: "No Examiner Found" });
+        }
+
+        const examiner = await User.findOne({ username });
+
+        if (!examiner) {
+            return res.status(404).json({ message: "No Student Found" });
+        }
+
+        const currentTime = new Date();
+
+        // Fetch exams that have ended (startTime + duration < currentTime)
+        const pastExams = await Exam.find({
+            $expr: {
+                $lt: [
+                    {
+                        $add: [
+                            "$startTime",
+                            { $multiply: ["$duration", 60000] },
+                        ],
+                    },
+                    currentTime,
+                ],
+            },
+            status: "Published",
+            batch: student.batch,
+            branch: student.branch,
+        });
+
+        // Extract and flatten questionIds from past exams
+        const questionIds = [
+            ...new Set(pastExams.flatMap((exam) => exam.questions)),
+        ];
+
+        // Fetch and group questions by subject for the unique questionIds
+        const groupedQuestions = await Question.aggregate([
+            {
+                $match: {
+                    questionId: { $in: questionIds }, // Filter questions by unique questionIds
+                },
+            },
+            {
+                $group: {
+                    _id: "$subject", // Group by the subject field
+                    questions: { $push: "$$ROOT" }, // Push the entire question document into the array
+                },
+            },
+            {
+                $project: {
+                    _id: 0, // Remove the _id field from the output
+                    subject: "$_id", // Rename _id to subject
+                    questions: 1, // Keep the questions array
+                },
+            },
+        ]);
+
+        return res
+            .status(200)
+            .json({
+                message: "Questions retrieved successfully.",
+                groupedQuestions,
+            });
+    } catch (error) {
+        console.error(error);
+        return res
+            .status(500)
+            .json({ message: "Failed to retrieve questions." });
     }
 };

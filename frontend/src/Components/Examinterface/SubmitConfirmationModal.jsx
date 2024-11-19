@@ -1,37 +1,74 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './SubmitConfirmationModal.css';
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./SubmitConfirmationModal.css";
+import config from "../../config.js";
+import axios from "axios";
+import Cookies from "js-cookie";
 
-const SubmitConfirmationModal = ({ onCancel, autoSubmit = false }) => {
+const SubmitConfirmationModal = ({ onCancel, autoSubmit, examId, toast }) => {
     const navigate = useNavigate();
 
     const handleConfirmClick = () => {
-        if(!autoSubmit)
-        alert('Your Exam Has been Successfully Submitted!!!');
-        navigate("/");
+        submit_exam();
+
+        setTimeout(() => {
+            navigate("/dashboard");
+        }, 1000);
     };
+
+    const submit_exam = async () => {
+        try {
+            const headers = {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+            };
+
+            const result = await axios.post(
+                (config.BACKEND_API || "http://localhost:8000") +
+                    `/submit-exam-student`,
+                {
+                    examId,
+                },
+                { headers }
+            );
+            console.log(result);
+
+            if (result.status !== 200) {
+                toast.error(result?.data?.message || "Internal server error");
+                return;
+            }
+            if(autoSubmit){
+                toast.warning("Tab Switched");
+            } 
+
+            toast.success(result.data.message);
+        } catch (e) {
+            console.log(e);
+            toast.error(e?.response?.data?.message || "Internal Server Error");
+        }
+    };
+
     useEffect(() => {
         if (autoSubmit) {
             handleConfirmClick();
         }
     }, [autoSubmit]);
-    if(!autoSubmit)
-    {
+    if (!autoSubmit) {
         return (
             <div className="modal-overlay">
-            <div className="submit-modal">
-                <h2>Confirm Submission</h2>
-                <p>Are you sure you want to submit your test?</p>
-                <div className="modal-buttons">
-                    <button onClick={handleConfirmClick}>Yes, Submit</button>
-                    <button onClick={onCancel}>Cancel</button>
+                <div className="submit-modal">
+                    <h2>Confirm Submission</h2>
+                    <p>Are you sure you want to submit your test?</p>
+                    <div className="modal-buttons">
+                        <button onClick={handleConfirmClick}>
+                            Yes, Submit
+                        </button>
+                        <button onClick={onCancel}>Cancel</button>
+                    </div>
                 </div>
-            </div> 
-        </div>
-        )
-    }
-    else
-    {
+            </div>
+        );
+    } else {
         return null;
     }
 };
