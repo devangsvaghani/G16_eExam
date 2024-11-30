@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import config from "../../config.js";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Loading from "../Loader/Loding.jsx"
+
 
 const CountdownTimer = ({ startTime, onExamStarted }) => {
     const [timeLeft, setTimeLeft] = useState(null);
@@ -57,6 +59,7 @@ const StartExam = () => {
     const [testCountdown, setTestCountdown] = useState(null);
     const [exam, setExam] = useState({});
     const [startBtn, setStartBtn] = useState(false);
+    const [isloaderon, setisloaderon] = useState(false);
 
     useEffect(() => {
         if (!Cookies.get("token") || Cookies.get("role") !== "Student") {
@@ -67,6 +70,7 @@ const StartExam = () => {
     }, []);
 
     const fetch_exam = async () => {
+        setisloaderon(true);
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -92,6 +96,8 @@ const StartExam = () => {
             toast.error(e?.response?.data?.message || "Internal Server Error");
             navigate(-1);
         }
+        setisloaderon(false);
+
     };
 
     useEffect(() => {
@@ -155,6 +161,7 @@ const StartExam = () => {
 
     return (
         <div className="start-exam-container">
+        {isloaderon && <Loading/>}
             <div className="exam-container">
                 <h1 className="heading">{exam?.title}</h1>
                 <div className="professor-name">

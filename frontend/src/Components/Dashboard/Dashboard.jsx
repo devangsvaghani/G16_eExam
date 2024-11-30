@@ -12,6 +12,8 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import axios from "axios";
 import config from "../../config.js";
+import Loading from "../Loader/Loding.jsx"
+
 
 const Calendar = ({ exams, changeMonth, events, setEvents, set_events }) => {
     const today = new Date();
@@ -158,16 +160,17 @@ function Dashboard() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth < 700);
     const { setIsLoggedIn, validateUser, LogOut, isLoggedIn } = useAuth();
-
+    
     const [opneStudentProfile, setOpneStudentProfile] = useState(false);
     const [username, setUsername] = useState(null);
-
+    
     const [upcomingexams5, setUpcomingexams5] = useState([]);
     const [pastexams5, setPastexams5] = useState([]);
     const [upcomingexams, setUpcomingexams] = useState([]);
     const [upcomingexamscurmonth, setUpcomingexamscurmonth] = useState([]);
     const [events, setEvents] = useState([]);
     const [performance, setPerformance] = useState(0);
+    const [isloaderon, setisloaderon] = useState(false);
 
     const navigate = useNavigate();
 
@@ -214,6 +217,8 @@ function Dashboard() {
     }, [upcomingexams]);
 
     const fetch_upcoming_exams_5 = async () => {
+        setisloaderon(true);
+
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -238,9 +243,13 @@ function Dashboard() {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
+
     };
 
     const fetch_past_exams_5 = async () => {
+        setisloaderon(true);
+
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -265,9 +274,13 @@ function Dashboard() {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
+
     };
 
     const fetch_upcoming_exams = async () => {
+        setisloaderon(true);
+
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -292,9 +305,13 @@ function Dashboard() {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
+
     };
 
     const fetch_student_performance = async () => {
+        setisloaderon(true);
+
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -319,6 +336,8 @@ function Dashboard() {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
+
     };
 
     const change_upcoming_exams_for_month = (month) => {
@@ -377,6 +396,7 @@ function Dashboard() {
 
     return (
         <div className="dashboard">
+        {isloaderon && <Loading/>}
             {isMobileView && (
                 <button
                     className="togglebtn"
@@ -498,7 +518,6 @@ function Dashboard() {
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
-                                        position: "relative",
                                     }}
                                 >
                                     <div
@@ -511,7 +530,6 @@ function Dashboard() {
                                             display: "flex",
                                             alignItems: "center",
                                             justifyContent: "center",
-                                            position: "relative",
                                         }}
                                     >
                                         <span>{performance}</span>

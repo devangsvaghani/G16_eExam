@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import axios from "axios";
 import config from "../../config.js";
+import Loading from "../Loader/Loding.jsx"
+
 
 // Sample student data
 // const studentData = [
@@ -21,6 +23,8 @@ const ExamResult = ({ exam }) => {
   const [studentData, setStudentData] = useState([]);
   const [filteredStudents, setfilteredStudents] = useState([]);
   const [currUser, setCurrUser] = useState(null);
+  const [isloaderon, setisloaderon] = useState(false);
+
 
   useEffect(() => {
         setfilteredStudents(studentData.filter((student) =>
@@ -48,6 +52,7 @@ const ExamResult = ({ exam }) => {
   }, []);
 
   const fetch_exam_result = async () => {
+    setisloaderon(true);
     try {
         const headers = {
             "Content-Type": "application/json",
@@ -73,6 +78,7 @@ const ExamResult = ({ exam }) => {
         console.log(e);
         toast.error(e?.response?.data?.message || "Internal server error");
     }
+    setisloaderon(false);
 };
 
   const getTime = (datetime) => {
@@ -82,6 +88,7 @@ const ExamResult = ({ exam }) => {
   
   return (
     <div className="exam-result-container">
+      {isloaderon && <Loading/>}
       { !isExamreportopen &&
       <>
       <h2>Exam Results</h2>

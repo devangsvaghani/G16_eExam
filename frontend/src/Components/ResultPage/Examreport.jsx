@@ -5,10 +5,14 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import config from "../../config.js";
 import { useNavigate } from "react-router-dom";
+import Loading from "../Loader/Loding.jsx"
+
 
 const ExamResultCard = ({ exam, username, obtainedPoints }) => {
     const navigate = useNavigate();
     const [examDetails, setExamDetails] = useState(null);
+    const [isloaderon, setisloaderon] = useState(false);
+
 
     useEffect(() => {
         if (!Cookies.get("token") || !Cookies.get("token")) {
@@ -18,6 +22,8 @@ const ExamResultCard = ({ exam, username, obtainedPoints }) => {
     }, []);
 
     const fetch_exam_details = async () => {
+      setisloaderon(true);
+
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -40,38 +46,14 @@ const ExamResultCard = ({ exam, username, obtainedPoints }) => {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
+
     }
 
-//   const examDetails = {
-//     name: "Mathematics Final Exam",
-//     subject: "Mathematics",
-//     studentId: "12345",
-//     totalMarks: 100,
-//     obtainedMarks: 85,
-//     questions: [
-//       {
-//         question: "What is 2 + 2?",
-//         options: ["A) 3", "B) 4", "C) 5", "D) 6"],
-//         studentAnswer: "C) 5",
-//         correctAnswer: "B) 4",
-//       },
-//       {
-//         question: "What is the square root of 16?",
-//         options: ["A) 2", "B) 3", "C) 4", "D) 5"],
-//         studentAnswer: "C) 4",
-//         correctAnswer: "C) 4",
-//       },
-//       {
-//         question: "What is 10 / 2?",
-//         options: ["A) 4", "B) 5", "C) 6", "D) 7"],
-//         studentAnswer: "B) 5",
-//         correctAnswer: "B) 5",
-//       },
-//     ],
-//   };
 
   return (
     <div id="card-container">
+    {isloaderon && <Loading/>}
       <div id="exam-card">
         <h2>{exam?.title}</h2>
         <p><strong>Subject:</strong> {exam?.subject}</p>

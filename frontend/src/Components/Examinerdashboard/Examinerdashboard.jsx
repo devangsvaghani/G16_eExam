@@ -15,125 +15,14 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import config from "../../config.js";
 import ExaminerProfile from "../../Components/Profile/ExaminerProfile.jsx";
+import Loading from "../Loader/Loding.jsx"
 
-const exams = [
-    {
-        name: "Mathematics Final Exam",
-        subject: "Mathematics",
-        duration: "2 hours",
-        startTime: "10:00 AM",
-        questions: 50,
-    },
-    {
-        name: "Physics Quiz",
-        subject: "Physics",
-        duration: "1 hour",
-        startTime: "2:00 PM",
-        questions: 30,
-    },
-    {
-        name: "History Test",
-        subject: "History",
-        duration: "1.5 hours",
-        startTime: "11:00 AM",
-        questions: 40,
-    },
-    {
-        name: "History Test",
-        subject: "History",
-        duration: "1.5 hours",
-        startTime: "11:00 AM",
-        questions: 40,
-    },
-    {
-        name: "History Test",
-        subject: "History",
-        duration: "1.5 hours",
-        startTime: "11:00 AM",
-        questions: 40,
-    },
-    {
-        name: "History Test",
-        subject: "History",
-        duration: "1.5 hours",
-        startTime: "11:00 AM",
-        questions: 40,
-    },
-    {
-        name: "History Test",
-        subject: "History",
-        duration: "1.5 hours",
-        startTime: "11:00 AM",
-        questions: 40,
-    },
-    {
-        name: "History Test",
-        subject: "History",
-        duration: "1.5 hours",
-        startTime: "11:00 AM",
-        questions: 40,
-    },
-    {
-        name: "History Test",
-        subject: "History",
-        duration: "1.5 hours",
-        startTime: "11:00 AM",
-        questions: 40,
-    },
-    {
-        name: "History Test",
-        subject: "History",
-        duration: "1.5 hours",
-        startTime: "11:00 AM",
-        questions: 40,
-    },
-    {
-        name: "History Test",
-        subject: "History",
-        duration: "1.5 hours",
-        startTime: "11:00 AM",
-        questions: 40,
-    },
-    {
-        name: "History Test",
-        subject: "History",
-        duration: "1.5 hours",
-        startTime: "11:00 AM",
-        questions: 40,
-    },
-    // Add more exam objects as needed
-];
 
-// const questions = [
-//   {
-//     id: 1,
-//     qText: "What is the capital of France?",
-//     options: ["Paris", "Berlin", "Madrid", "Rome"],
-//     answer: "Paris",
-//     difficulty: "Easy",
-//     points: 5,
-//   },
-//   {
-//     id: 2,
-//     qText: 'Which programming language is known as the "language of the web"?',
-//     options: ["Python", "JavaScript", "Java"],
-//     answer: "JavaScript",
-//     difficulty: "Medium",
-//     points: 10,
-//   },
-//   {
-//     id: 3,
-//     qText: "What is the square root of 64?",
-//     options: ["6", "8", "10", "12"],
-//     answer: "8",
-//     difficulty: "Easy",
-//     points: 5,
-//   },
-// ];
 
 const Calendar = ({ exams, changeMonth, events, setEvents, set_events }) => {
     const today = new Date();
     const [currentDate, setCurrentDate] = useState(today);
+
     // const [events, setEvents] = useState({});
     const [selectedDate, setSelectedDate] = useState(null);
     const [eventText, setEventText] = useState("");
@@ -300,6 +189,8 @@ function Examinerdashboard() {
     const [upcomingexamsofexaminer, setupcomingexamsofexaminer] = useState([]);
 
     const [currExam, setCurrExam] = useState("");
+    const [isloaderon, setisloaderon] = useState(false);
+
 
     useEffect(() => {
         if (
@@ -350,6 +241,7 @@ function Examinerdashboard() {
     }, [upcomingexams]);
 
     const fetch_upcoming_exams_5 = async () => {
+        setisloaderon(true);
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -374,9 +266,12 @@ function Examinerdashboard() {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
+
     };
 
     const fetch_past_exams_5 = async () => {
+        setisloaderon(true);
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -401,9 +296,11 @@ function Examinerdashboard() {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
     };
 
     const fetch_upcoming_exams = async () => {
+        setisloaderon(true);
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -428,9 +325,13 @@ function Examinerdashboard() {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
+
     };
 
     const fetch_upcoming_exams_of_examiner = async () => {
+        setisloaderon(true);
+
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -455,9 +356,12 @@ function Examinerdashboard() {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
+
     };
 
     const fetch_past_exams_of_examiner = async () => {
+        setisloaderon(true);
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -482,6 +386,8 @@ function Examinerdashboard() {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
+
     };
 
     const getSubjectsArray = (questions) => {
@@ -494,6 +400,8 @@ function Examinerdashboard() {
     };
 
     const fetch_all_questions = async () => {
+        setisloaderon(true);
+
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -519,6 +427,8 @@ function Examinerdashboard() {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
+
     };
 
     const change_upcoming_exams_for_month = (month) => {
@@ -576,9 +486,6 @@ function Examinerdashboard() {
         setisEditExam(true);
     };
 
-    // const handleProfileClose = () => {
-    //     setisprofileopen(false);
-    // };
 
     const handleopenprofile = () => {
         setActiveIndex(4);
@@ -608,6 +515,7 @@ function Examinerdashboard() {
 
     return (
         <div className="dashboard">
+        {isloaderon && <Loading/>}
             {isMobileView && (
                 <button
                     className="togglebtn"

@@ -3,8 +3,11 @@ import "./CreateExaminer.css";
 import axios from "axios";
 import Cookies from "js-cookie";
 import config from "../../config.js";
+import Loading from "../Loader/Loding.jsx"
 
 const CreateExaminer = ({ onClose, setExaminers, toast }) => {
+
+    const [isloaderon, setisloaderon] = useState(false);
     const [formData, setFormData] = useState({
         firstname: "",
         lastname: "",
@@ -34,32 +37,33 @@ const CreateExaminer = ({ onClose, setExaminers, toast }) => {
             toast.error("Contact number must be 10 digits");
             return;
         }
+        setisloaderon(true);
+        try {
 
-        try{
-            
             const headers = {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${Cookies.get("token")}`,
             };
-    
-            const result = await axios.post((config.BACKEND_API || "http://localhost:8000") + "/create-examiner", formData, {headers});
+
+            const result = await axios.post((config.BACKEND_API || "http://localhost:8000") + "/create-examiner", formData, { headers });
 
             // console.log(result);
-    
-            if(result.status !== 200){
+
+            if (result.status !== 200) {
                 toast.error((result?.data?.message) || ("Internal server error"));
                 return;
             }
 
             toast.success(result.data.message);
             onClose();
-            
+
             setExaminers(prev => [...prev, result.data.user]);
-        } catch(e){
+        } catch (e) {
             console.log(e);
-            
+
             toast.error((e?.response?.data?.message) || ("Internal server error"));
         }
+        setisloaderon(false);
     };
 
     const handleClose = () => {
@@ -80,6 +84,7 @@ const CreateExaminer = ({ onClose, setExaminers, toast }) => {
 
     return (
         <div className="create-examiner-container">
+            {isloaderon && <Loading />}
             <h3 className="createexaminerheader">Create Examiner Profile</h3>
             <form onSubmit={handleSubmit} className="examiner-form">
                 <div className="form-group">

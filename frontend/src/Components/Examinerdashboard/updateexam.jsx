@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import config from "../../config.js";
 import { useNavigate } from "react-router-dom";
+import Loading from "../Loader/Loding.jsx"
+
 
 const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
   const [exam, setExam] = useState({});
@@ -16,6 +18,8 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
   const [showCancelExamModal, setShowCancelExamModal] = useState(false);
   const [Isclosepage, setIsclosepage] = useState(false);
   const navigate = useNavigate();
+  const [isloaderon, setisloaderon] = useState(false);
+
 
 
   useEffect(() => {
@@ -27,6 +31,8 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
   }, []);
 
   const fetch_exam = async () => {
+    setisloaderon(true);
+
     try {
         const headers = {
             "Content-Type": "application/json",
@@ -55,9 +61,13 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
         console.log(e);
         toast.error(e?.response?.data?.message || "Internal server error");
     }
+    setisloaderon(false);
+
 };
 
 const delete_exam = async () => {
+  setisloaderon(true);
+
     try {
         const headers = {
             "Content-Type": "application/json",
@@ -85,6 +95,8 @@ const delete_exam = async () => {
         console.log(e);
         toast.error(e?.response?.data?.message || "Internal server error");
     }
+    setisloaderon(false);
+
 };
 
   // Function to calculate total marks
@@ -112,6 +124,8 @@ const delete_exam = async () => {
   };
 
   const saveExamDetails = async () => {
+    setisloaderon(true);
+
     try {
         const headers = {
             "Content-Type": "application/json",
@@ -140,6 +154,8 @@ const delete_exam = async () => {
         console.log(e);
         toast.error(e?.response?.data?.message || "Internal server error");
     }
+    setisloaderon(false);
+
   };
 
   const handleclosepage = () => {
@@ -223,7 +239,8 @@ const delete_exam = async () => {
   };
 
   const confirmCancelExam = async () => {
-    
+    setisloaderon(true);
+
     try{
         await delete_exam();
 
@@ -233,7 +250,8 @@ const delete_exam = async () => {
         console.log(e);
         toast.error(e?.response?.data?.message || "Internal server error");
     }
-    
+    setisloaderon(false);
+
   };
 
   const addNewQuestion = () => {
@@ -276,6 +294,7 @@ const delete_exam = async () => {
 
   return (
     <div className="update-exam-div">
+    {isloaderon && <Loading/>}
     <div className="update-exam-container">
       <h1>Update Exam</h1>
 

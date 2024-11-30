@@ -4,6 +4,8 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import axios from "axios";
 import config from "../../config.js";
+import Loading from "../Loader/Loding.jsx"
+
 
 const FetchedQuestions = ({ subjects, onClose, setSubjects, setQuestions }) => {
 
@@ -15,6 +17,8 @@ const FetchedQuestions = ({ subjects, onClose, setSubjects, setQuestions }) => {
     const [difficulty, setDifficulty] = useState("");
     const [subject, setSubject] = useState("");
     const [newSubject, setNewSubject] = useState('');
+    const [isloaderon, setisloaderon] = useState(false);
+
 
     const handleAddSubject = () => {
         if (newSubject.trim() && !subjects.includes(newSubject)) {
@@ -26,6 +30,8 @@ const FetchedQuestions = ({ subjects, onClose, setSubjects, setQuestions }) => {
 
     // Function to handle adding a new question
     const handleAddQuestion = async () => {
+        setisloaderon(true);
+
         if (
             currentQuestion &&
             correctOption !== null &&
@@ -89,6 +95,8 @@ const FetchedQuestions = ({ subjects, onClose, setSubjects, setQuestions }) => {
         } else {
             toast.error("Please fill in all fields and select a correct option.");
         }
+        setisloaderon(false);
+
     };
 
     // Handle updating the options list when the number of options changes
@@ -114,35 +122,10 @@ const FetchedQuestions = ({ subjects, onClose, setSubjects, setQuestions }) => {
 
     return (
         <div className="fetched-exam-container">
+            {isloaderon && <Loading/>}
             <h1>
                 <center>Online Examination System</center>
             </h1>
-            {/* <h2>Fetched Questions</h2>
-      {questions.length > 0 && (
-        <div className="existing-questions">
-          <ul className="question-list">
-            {questions.map((question) => (
-              <li key={question.id} className="question-item">
-                <strong>Q:</strong> {question.text}
-                <ul className="options-list">
-                  {question.options.map((option, index) => (
-                    <li
-                      key={index}
-                      className={`option ${index === question.correctOption ? "correct" : ""}`}
-                    >
-                      {option}
-                    </li>
-                  ))}
-                </ul>
-                <p><strong>Correct Answer:</strong> {question.correctAnswer}</p>
-                <p><strong>Difficulty:</strong> {question.difficulty}</p>
-                <p><strong>Points:</strong> {question.points}</p>
-                <p><strong>Subject:</strong> {question.subject}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )} */}
 
             {/* Add new question */}
             <div className="create-question">

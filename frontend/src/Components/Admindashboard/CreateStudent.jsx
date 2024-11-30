@@ -3,9 +3,12 @@ import "./CreateStudent.css";
 import axios from "axios";
 import Cookies from "js-cookie";
 import config from "../../config.js";
+import Loading from "../Loader/Loding.jsx"
+
 
 const CreateStudent = ({ onClose, setStudents, toast }) => {
     const currentYear = new Date().getFullYear();
+    const [isloaderon, setisloaderon] = useState(false);
 
     const [formData, setFormData] = useState({
         firstname: "",
@@ -42,14 +45,15 @@ const CreateStudent = ({ onClose, setStudents, toast }) => {
             toast.error("Please select your graduation type (UG or PG)");
             return;
         }
+        setisloaderon(true);
 
-        try{
-            
+        try {
+
             const headers = {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${Cookies.get("token")}`,
             };
-    
+
             const result = await axios.post((config.BACKEND_API || "http://localhost:8000") + "/create-student", {
                 firstname: formData.firstname,
                 lastname: formData.lastname,
@@ -61,24 +65,25 @@ const CreateStudent = ({ onClose, setStudents, toast }) => {
                 batch: formData.admissionYear,
                 branch: formData.branch,
                 graduation: formData.studentType
-            }, {headers});
+            }, { headers });
 
             // console.log((result));
-    
-            if(result.status !== 200){
+
+            if (result.status !== 200) {
                 toast.error((result?.data?.message) || ("Internal server error"));
                 return;
             }
 
             toast.success(result.data.message);
             onClose();
-            
+
             setStudents(prev => [...prev, result.data.user]);
-        } catch(e){
+        } catch (e) {
             console.log(e);
-            
+
             toast.error((e?.response?.data?.message) || ("Internal server error"));
         }
+        setisloaderon(false);
     };
 
     // Reset form data
@@ -100,6 +105,7 @@ const CreateStudent = ({ onClose, setStudents, toast }) => {
 
     return (
         <div className="create-student-container">
+            {isloaderon && <Loading />}
             <h2 className="createstudentheader">Create Student</h2>
             <form onSubmit={handleSubmit} className="student-form">
                 <div className="form-group">
@@ -218,7 +224,7 @@ const CreateStudent = ({ onClose, setStudents, toast }) => {
                                 Mathematics and Computation
                             </option>
                             <option value="EVD">
-                            Electronics and VLSI Design
+                                Electronics and VLSI Design
                             </option>
                         </select>
                     </div>

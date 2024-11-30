@@ -20,6 +20,8 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import config from "../../config.js";
 import { useNavigate } from "react-router-dom";
+import Loading from "../Loader/Loding.jsx"
+
 
 const COLORS = [
     "#8884d8",
@@ -38,6 +40,8 @@ const PerformanceResultPage = () => {
     const navigate = useNavigate();
     const [isexamreportopen, setisexamreportopen] = useState(false);
     const [currExam, setCurrExam] = useState(null);
+    const [isloaderon, setisloaderon] = useState(false);
+
 
     useEffect(() => {
         if (!Cookies.get("token") || Cookies.get("role") !== "Student") {
@@ -75,6 +79,8 @@ const PerformanceResultPage = () => {
     }, [pastExams]);
 
     const fetch_past_exams = async () => {
+        setisloaderon(true);
+
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -99,10 +105,13 @@ const PerformanceResultPage = () => {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
     };
 
     return (
         <div>
+        {isloaderon && <Loading/>}
+
             {!isexamreportopen && (
                 <div>
                     <div className="overall-performance">
@@ -141,7 +150,6 @@ const PerformanceResultPage = () => {
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
-                                        position: "relative",
                                     }}
                                 >
                                     <div
@@ -154,7 +162,6 @@ const PerformanceResultPage = () => {
                                             display: "flex",
                                             alignItems: "center",
                                             justifyContent: "center",
-                                            position: "relative",
                                         }}
                                     >
                                         <span>{finalPercentage}%</span>

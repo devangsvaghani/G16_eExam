@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import config from "../../config.js";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Loading from "../Loader/Loding.jsx"
+
 
 function Examinterface() {
     const { examId } = useParams();
@@ -25,6 +27,8 @@ function Examinterface() {
     const [totalpoints, setTotalPoints] = useState(0);
     const [questions, setQuestions] = useState([]);
     const navigate = useNavigate();
+    const [isloaderon, setisloaderon] = useState(false);
+
 
     useEffect(() => {
         if (!Cookies.get("token") || Cookies.get("role") !== "Student") {
@@ -35,6 +39,7 @@ function Examinterface() {
     }, []);
 
     const fetch_exam = async () => {
+        setisloaderon(true);
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -87,9 +92,11 @@ function Examinterface() {
             toast.error(e?.response?.data?.message || "Internal Server Error");
             navigate(-1);
         }
+        setisloaderon(false);
     };
 
     const submit_answer = async (questionId, answer) => {
+        setisloaderon(true);
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -117,6 +124,7 @@ function Examinterface() {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal Server Error");
         }
+        setisloaderon(false);
     };
 
     useEffect(() => {
@@ -267,6 +275,7 @@ function Examinterface() {
 
     return (
         <>
+            {isloaderon && <Loading/>}
             {(examAlreadyDone || examNotStart) ? (
                 examAlreadyDone ? <div>Exam is Already Ended.</div> : <div>Exam is not yet started.</div>
             ) : (

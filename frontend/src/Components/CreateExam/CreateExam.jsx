@@ -4,10 +4,14 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import axios from "axios";
 import config from "../../config.js";
+import Loading from "../Loader/Loding.jsx"
+
 
 const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
   const [step, setStep] = useState(1);
   const [filteredQuestions, setFilteredQuestions] = useState([]);
+  const [isloaderon, setisloaderon] = useState(false);
+
 
   // Step 1: Basic Details
   const [examTitle, setExamTitle] = useState("");
@@ -149,7 +153,7 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
 
     //   console.log(examData);
       
-
+      setisloaderon(true);
       try {
         const headers = {
             "Content-Type": "application/json",
@@ -193,6 +197,7 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
     } else {
       toast.error("Please complete all fields and add at least one question.");
     }
+    setisloaderon(false);
   };
   
   useEffect(() => {
@@ -208,6 +213,7 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
 
   return (
     <div className="create-exam-container">
+    {isloaderon && <Loading/>}
       <div className="create-exam-form">
         {step === 1 && (
           <div className="step-one">

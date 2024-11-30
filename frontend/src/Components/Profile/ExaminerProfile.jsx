@@ -6,6 +6,8 @@ import Cookies from "js-cookie";
 import config from "../../config.js";
 import { useAuth } from "../../context/auth.jsx";
 import axios from "axios";
+import Loading from "../Loader/Loding.jsx"
+
 
 function ExaminerProfile({ onClose, toast, username, setExaminers }) {
     const [userData, setUserData] = useState({
@@ -21,6 +23,8 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
     const [isAdmin, setIsAdmin] = useState(false); // New state to check if user is an admin
     const { setIsLoggedIn, validateUser, isLoggedIn } = useAuth();
     const navigate = useNavigate();
+    const [isloaderon, setisloaderon] = useState(false);
+
 
     useEffect(() => {
         if (!Cookies.get("role")) {
@@ -35,6 +39,8 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
     }, []);
 
     const fetch_data = async () => {
+
+        setisloaderon(true);
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -55,6 +61,7 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
 
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
     };
 
     const handleresetpass = () => {
@@ -75,7 +82,7 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
         e.preventDefault();
 
         const contactRegex = /^\d{10}$/;
-
+        setisloaderon(true);
         if (!contactRegex.test(userData.mobileno)) {
             toast.error("Contact number must be 10 digits");
             return;
@@ -125,6 +132,7 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
 
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
     };
 
     if (loading) {
@@ -133,6 +141,7 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
 
     return (
         <div className="studentpdiv">
+        {isloaderon && <Loading/>}
             <div id="profilecontainer">
                 <div id="profile-card">
                     <div id="content">

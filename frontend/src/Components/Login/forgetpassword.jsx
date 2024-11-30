@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import config from "../../config.js";
+import Loading from "../Loader/Loding.jsx"
+
 
 const ForgetPassword = ({ onClose }) => {
     const [email, setEmail] = useState("");
@@ -14,6 +16,7 @@ const ForgetPassword = ({ onClose }) => {
     const [confirmPassword, setConfirmNewPassword] = useState("");
     const [error, setError] = useState("");
     const [resendTimer, setResendTimer] = useState(0); // Timer state
+    const [isloaderon, setisloaderon] = useState(false);
 
     useEffect(() => {
         if (resendTimer > 0) {
@@ -25,6 +28,7 @@ const ForgetPassword = ({ onClose }) => {
     }, [resendTimer]);
 
     const handleSubmit = async (e) => {
+        setisloaderon(true);
         e.preventDefault();
 
         if (validateEmail(email)) {
@@ -48,10 +52,12 @@ const ForgetPassword = ({ onClose }) => {
         } else {
             toast.error("Please enter a valid email address");
         }
+        setisloaderon(false);
     };
 
     const handleSubmitOtp = async (e) => {
         e.preventDefault();
+        setisloaderon(true);
 
         if (!otp || !newPassword || !confirmPassword) {
             toast.error("Fields should not be empty");
@@ -85,11 +91,12 @@ const ForgetPassword = ({ onClose }) => {
         } catch (e) {
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
     };
 
     const handleResendOtp = async () => {
+        setisloaderon(true);
         if (resendTimer > 0) return;
-
         try {
             const results = await axios.post(
                 (config.BACKEND_API || "http://localhost:8000") + "/resend-otp",
@@ -105,6 +112,7 @@ const ForgetPassword = ({ onClose }) => {
         } catch (e) {
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
     };
 
     const validateEmail = (email) => {
@@ -114,6 +122,7 @@ const ForgetPassword = ({ onClose }) => {
 
     return (
         <div className="forget-password-wrapper">
+        {isloaderon && <Loading/>}
             <div className="forget-password-container">
                 <h2>Forgot Your Password?</h2>
                 {submitted ? (

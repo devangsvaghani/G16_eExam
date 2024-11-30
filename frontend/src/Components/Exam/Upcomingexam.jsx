@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import config from "../../config.js";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Loading from "../Loader/Loding.jsx"
+
 
 const CountdownTimer = ({ startTime, onExamStarted }) => {
     const [timeLeft, setTimeLeft] = useState(null);
@@ -52,6 +54,8 @@ const Upcomingexam = () => {
     const navigate = useNavigate();
     const [exams, setExams] = useState([]);
     const [examStarted, setExamStarted] = useState({});
+    const [isloaderon, setisloaderon] = useState(false);
+
 
     useEffect(() => {
         if (!Cookies.get("token") || Cookies.get("role") !== "Student") {
@@ -68,6 +72,8 @@ const Upcomingexam = () => {
     }, [exams]);
 
     const fetch_exams = async () => {
+        setisloaderon(true);
+
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -89,6 +95,8 @@ const Upcomingexam = () => {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal Server Error");
         }
+        setisloaderon(false);
+
     };
 
     const getDate = (datetime) => {
@@ -115,6 +123,7 @@ const Upcomingexam = () => {
 
     return (
         <div className="uexam-list-container">
+        {isloaderon && <Loading/>}
             <h2 className="uhead">Upcoming Exams</h2>
             <div className="exam-table">
                 <div className="utable-header">

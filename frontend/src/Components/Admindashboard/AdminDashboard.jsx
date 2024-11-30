@@ -13,6 +13,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import StudentProf from "../Profile/StudentProf.jsx";
 import ExaminerProfile from "../Profile/ExaminerProfile.jsx";
+import Loading from "../Loader/Loding.jsx"
 
 function Admindashboard() {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -25,7 +26,7 @@ function Admindashboard() {
     const [isupdateexamineropen, setisupdateexamineropen] = useState(false);
     const [username, setUsername] = useState("");
     const { setIsLoggedIn, validateUser, isLoggedIn } = useAuth();
-
+    const [isloaderon, setisloaderon] = useState(false);
     const [students, setStudents] = useState([]);
     const [examiners, setExaminers] = useState([]);
 
@@ -87,6 +88,7 @@ function Admindashboard() {
     };
 
     const fetchAllStudents = async () => {
+        setisloaderon(true);
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -95,7 +97,7 @@ function Admindashboard() {
 
             const result = await axios.get(
                 (config.BACKEND_API || "http://localhost:8000") +
-                    "/all-students",
+                "/all-students",
                 { headers }
             );
 
@@ -107,9 +109,11 @@ function Admindashboard() {
         } catch (e) {
             throw e;
         }
+        setisloaderon(false);
     };
 
     const fetchAllExaminers = async () => {
+        setisloaderon(true);
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -118,7 +122,7 @@ function Admindashboard() {
 
             const result = await axios.get(
                 (config.BACKEND_API || "http://localhost:8000") +
-                    "/all-examiners",
+                "/all-examiners",
                 { headers }
             );
 
@@ -132,6 +136,7 @@ function Admindashboard() {
         } catch (e) {
             throw e;
         }
+        setisloaderon(false);
     };
 
     useEffect(() => {
@@ -157,6 +162,7 @@ function Admindashboard() {
     }, [activeIndex]);
 
     const handleDeleteStudent = async (username) => {
+        setisloaderon(true);
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -165,7 +171,7 @@ function Admindashboard() {
 
             const result = await axios.delete(
                 (config.BACKEND_API || "http://localhost:8000") +
-                    `/delete-student/${username}`,
+                `/delete-student/${username}`,
                 { headers }
             );
 
@@ -185,9 +191,11 @@ function Admindashboard() {
 
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
     };
 
     const handleDeleteExaminer = async (username) => {
+        setisloaderon(true);
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -196,7 +204,7 @@ function Admindashboard() {
 
             const result = await axios.delete(
                 (config.BACKEND_API || "http://localhost:8000") +
-                    `/delete-examiner/${username}`,
+                `/delete-examiner/${username}`,
                 { headers }
             );
 
@@ -216,6 +224,7 @@ function Admindashboard() {
 
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
     };
 
     const handleUpdateStudent = (username) => {
@@ -241,6 +250,7 @@ function Admindashboard() {
 
     return (
         <div className="dashboard">
+            {isloaderon && <Loading />}
             {isMobileView && (
                 <button
                     className="togglebtn"

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import config from "../../config.js";
 import axios from "axios";
+import Loading from "../Loader/Loding.jsx"
 
 const QuestionBank = () => {
     const [questions, setQuestions] = useState([]);
@@ -18,6 +19,9 @@ const QuestionBank = () => {
     const [feedback, setFeedback] = useState("");
     const [subjectQuestions, setSubjectQuestions] = useState({});
     const navigate = useNavigate();
+    const [isloaderon, setisloaderon] = useState(false);
+
+
 
     useEffect(() => {
         if (!Cookies.get("token") || !Cookies.get("username")) {
@@ -28,6 +32,8 @@ const QuestionBank = () => {
     }, []);
 
     const fetch_questions = async () => {
+        setisloaderon(true);
+
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -63,6 +69,8 @@ const QuestionBank = () => {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal Server Error");
         }
+        setisloaderon(false);
+
     };
 
     const loadQuestionsBySubject = (subject) => {
@@ -140,6 +148,7 @@ const QuestionBank = () => {
     };
 
     const handleBookmark = async (question) => {
+        setisloaderon(true);
 
         try{
             const headers = {
@@ -171,11 +180,15 @@ const QuestionBank = () => {
             console.log(e);
             toast.error((e?.response?.data?.message) || ("Internal server error"));
         }
+
+        setisloaderon(false);
+
         
     };
 
     return (
         <div className="question-bank-div">
+        {isloaderon && <Loading/>}
             <h2 className="title">Question Bank</h2>
             <center>
                 {Object.keys(subjectQuestions).length === 0 && <div>No Questions Found</div>}

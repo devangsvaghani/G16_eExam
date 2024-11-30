@@ -6,6 +6,8 @@ import Cookies from "js-cookie";
 import config from "../../config.js";
 import { useAuth } from "../../context/auth.jsx";
 import axios from "axios";
+import Loading from "../Loader/Loding.jsx"
+
 
 function StudentProf({ onClose, toast, username, setStudents }) {
     const [userData, setUserData] = useState({
@@ -24,6 +26,8 @@ function StudentProf({ onClose, toast, username, setStudents }) {
     const [isAdmin, setIsAdmin] = useState(false); // New state to check if user is an admin
     const { setIsLoggedIn, validateUser, isLoggedIn } = useAuth();
     const navigate = useNavigate();
+    const [isloaderon, setisloaderon] = useState(false);
+
 
     useEffect(() => {
         if (!Cookies.get("role")) {
@@ -43,6 +47,8 @@ function StudentProf({ onClose, toast, username, setStudents }) {
     }, []);
 
     const fetch_data = async () => {
+        setisloaderon(true);
+
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -63,6 +69,8 @@ function StudentProf({ onClose, toast, username, setStudents }) {
 
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
+
     };
 
     const handleresetpass = () => {
@@ -81,6 +89,8 @@ function StudentProf({ onClose, toast, username, setStudents }) {
 
     const handleSaveProfile = async (e) => {
         e.preventDefault();
+        setisloaderon(true);
+
 
         const contactRegex = /^\d{10}$/;
 
@@ -137,6 +147,8 @@ function StudentProf({ onClose, toast, username, setStudents }) {
 
             toast.error(e?.response?.data?.message || "Internal server error");
         }
+        setisloaderon(false);
+
     };
 
     if (loading) {
@@ -145,6 +157,7 @@ function StudentProf({ onClose, toast, username, setStudents }) {
 
     return (
         <div className="studentpdiv">
+        {isloaderon && <Loading/>}
             <div id="profilecontainer">
                 <div id="profile-card">
                     <div id="content">

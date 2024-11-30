@@ -7,6 +7,8 @@ import config from "../../config.js";
 import { useAuth } from "../../context/auth.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Loading from "../Loader/Loding.jsx"
+
 
 function ResetPassword() {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -17,6 +19,8 @@ function ResetPassword() {
 
   const { setIsLoggedIn, validateUser, isLoggedIn } = useAuth();
   const navigate = useNavigate();
+  const [isloaderon, setisloaderon] = useState(false);
+
 
   useEffect(() => {
     if (!Cookies.get("token")) {
@@ -31,6 +35,8 @@ function ResetPassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setisloaderon(true);
+
     if(newPassword !== confirmPassword){
         setError("Password Does not match");
         return;
@@ -69,6 +75,7 @@ function ResetPassword() {
 
         toast.error(e?.response?.data?.message || "Internal server error");
     }
+    setisloaderon(false);
   };
   
   ;
@@ -83,6 +90,7 @@ function ResetPassword() {
 
   return (
     <div className="resetpwdcont">
+    {isloaderon && <Loading/>}
       <div className={`container ${isForgetPassOpen ? "blur" : ""}`}>
         <h2>Reset Password</h2>
         <form onSubmit={handleSubmit}>
@@ -116,7 +124,7 @@ function ResetPassword() {
           {error && <p className="error">{error}</p>}
           <p type="button" className="forgetpass" onClick={handleForget}>Forget Password?</p>
           <button className="reset-button" type="submit" >Reset Password</button>
-          <button type="button" className="close-button" onClick={handleClose}>Close</button>
+          <button type="button" className="close-button-rst" onClick={handleClose}>Close</button>
         </form>
       </div>
       {isForgetPassOpen && <ForgetPassword onClose={handleCloseForget} />}

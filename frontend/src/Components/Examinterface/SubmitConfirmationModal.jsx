@@ -4,9 +4,13 @@ import "./SubmitConfirmationModal.css";
 import config from "../../config.js";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Loading from "../Loader/Loding.jsx"
+
 
 const SubmitConfirmationModal = ({ onCancel, autoSubmit, examId, toast }) => {
     const navigate = useNavigate();
+    const [isloaderon, setisloaderon] = useState(false);
+
 
     const handleConfirmClick = () => {
         submit_exam();
@@ -17,6 +21,7 @@ const SubmitConfirmationModal = ({ onCancel, autoSubmit, examId, toast }) => {
     };
 
     const submit_exam = async () => {
+        setisloaderon(true);
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -46,6 +51,7 @@ const SubmitConfirmationModal = ({ onCancel, autoSubmit, examId, toast }) => {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal Server Error");
         }
+        setisloaderon(false);
     };
 
     useEffect(() => {

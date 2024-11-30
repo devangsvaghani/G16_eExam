@@ -12,6 +12,7 @@ import axios from "axios";
 import MoonLoader from "react-spinners/MoonLoader";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import Loading from "../Loader/Loding.jsx"
 
 const Login = ({ onClose }) => {
   // States for form fields and password visibility
@@ -22,6 +23,7 @@ const Login = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
   const { setIsLoggedIn, validateUser, isLoggedIn } = useAuth();
   const navigate = useNavigate();
+  const [isloaderon, setisloaderon] = useState(false);
 
 
   useEffect(() => {
@@ -34,7 +36,9 @@ const Login = ({ onClose }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // setLoading(true);
+    setisloaderon(true);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
 
     if (!username || !password) {
       toast.error("Fields are missing");
@@ -72,7 +76,7 @@ const Login = ({ onClose }) => {
       toast.error((e?.response?.data?.message) || ("Internal server error"));
     }
 
-    // setLoading(false);
+    setisloaderon(true);
   };
 
   const handleForgotPasswordClick = () => {
@@ -91,6 +95,7 @@ const Login = ({ onClose }) => {
       </Helmet>
 
       <div className="login-container">
+        {isloaderon && <Loading/>}
         {showForgetPassword ? (
           // Render ForgetPassword component when state is true
           <ForgetPassword onClose={handleCloseForgetPassword} />

@@ -12,12 +12,16 @@ import { useAuth } from "../../context/auth.jsx";
 import { useNavigate } from "react-router-dom";
 import Admindashboard from '../Admindashboard/AdminDashboard.jsx';
 import Cookies from 'js-cookie';
+import Loading from "../Loader/Loding.jsx"
+
 
 const Login = () => {
   const [authorizationCode, setauthorizationCode] = useState('');
   const [showCode, setshowCode] = useState(false);
   const [loading, setLoading] = useState(false);
   const { setIsLoggedIn, validateUser, isLoggedIn } = useAuth();
+  const [isloaderon, setisloaderon] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,53 +33,52 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault(); // Prevents the default form submission
-
-    // setLoading(true);
-
+  
+    setisloaderon(true);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     if (!authorizationCode) {
       toast.error("Code is missing");
-      setLoading(false);
+      setisloaderon(false);
       return;
     }
-    
-    try{
+  
+    try {
       const results = await axios.post(
-        (config.BACKEND_API || "http://localhost:8000") +
-          "/admin-login",
+        (config.BACKEND_API || "http://localhost:8000") + "/admin-login",
         {
-          password: authorizationCode
+          password: authorizationCode,
         }
       );
-
-    //   console.log(results);
-      
-
-      if(results.status === 200){
-        Cookies.set("token", results.data.token, {expires : 7});
-        Cookies.set("username", results.data.username, {expires : 7});
-        Cookies.set("role", results.data.role, {expires : 7});
+  
+      if (results.status === 200) {
+        Cookies.set("token", results.data.token, { expires: 7 });
+        Cookies.set("username", results.data.username, { expires: 7 });
+        Cookies.set("role", results.data.role, { expires: 7 });
         setIsLoggedIn(true);
         toast.success("Login Successful");
         navigate("/admin");
-      }else{
+      } else {
         toast.error(results.data.error);
       }
-    }
-    catch(e){
+    } catch (e) {
       console.log(e);
-      
       toast.error("Internal server error");
     }
-
-    // setLoading(false);
-
+  
+    setisloaderon(false);
   };
+  
+  
 
   return (
     isLoggedIn && Cookies.get("role") === "Admin" ? 
+    <>
+      {isloaderon && <Loading/>}
       <Admindashboard />
+    </>
     :
     <div className="login-container">
+    {isloaderon && <Loading/>}
       <Helmet>
         <title>Administrator Login</title>
         <link rel="icon" href={logo} type="image/x-icon" />
