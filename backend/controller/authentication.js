@@ -93,23 +93,29 @@ export const create_student = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        console.log(batch, graduation);
+        
+
         const maxStudentID = await Student.aggregate([
             {
                 $match: {
-                  batch: batch,
+                  batch: Number(batch),
                   graduation: graduation
                 }
               },
             {
               $group: {
-                _id: null, // Group all documents together
-                maxStudentID: { $max: "$username" } // Find the maximum value of studentID
+                _id: null, 
+                maxStudentID: { $max: "$username" } 
               }
             }
         ]);
         
         // Extract the maximum student ID or handle case where no documents are found
         const maximumStudentID = maxStudentID.length > 0 ? maxStudentID[0].maxStudentID : null;
+
+        console.log(maxStudentID);
+        
         
         let studentId = generate_student_id(batch, graduation, 1)
         if(maximumStudentID){
