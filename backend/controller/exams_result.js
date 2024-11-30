@@ -45,7 +45,6 @@ export const exams_result = async (req,res) => {
     }
 };
 
-
 export const show_exam = async (req,res) => {
     try {
 

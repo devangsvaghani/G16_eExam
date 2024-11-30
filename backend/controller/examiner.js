@@ -88,7 +88,7 @@ export const update_profile = async (req, res) => {
         const { username } = req.params;  
         const { firstname, lastname, middlename, dob, mobileno, gender, email } = req.body;
 
-        if(!username || !firstname || !dob || !mobileno || !email || !gender){
+        if(!username || !firstname || !lastname || !dob || !mobileno || !email || !gender){
             return res.status(400).json({ message: 'All fields are required!' });
         }
 

@@ -145,7 +145,6 @@ const CreateStudent = ({ onClose, setStudents, toast }) => {
                             value={formData.middlename}
                             onChange={handleChange}
                             placeholder="Enter father's name"
-                            required
                         />
                     </div>
                     <div className="half-width">

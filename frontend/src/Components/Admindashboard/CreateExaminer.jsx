@@ -124,7 +124,6 @@ const CreateExaminer = ({ onClose, setExaminers, toast }) => {
                             value={formData.middlename}
                             onChange={handleChange}
                             placeholder="Enter middle name"
-                            required
                         />
                     </div>
 

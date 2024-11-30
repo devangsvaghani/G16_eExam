@@ -58,7 +58,7 @@ export const create_student = async (req, res) => {
     try {
         const { firstname, lastname, middlename, dob, mobileno, email, gender, batch, branch, graduation } = req.body;
 
-        if(!firstname || !dob || !mobileno || !email || !gender || !batch || !branch || !graduation){
+        if(!firstname || !lastname || !dob || !mobileno || !email || !gender || !batch || !branch || !graduation){
             return res.status(400).json({ message: 'All fields are required!' });
         }
 
@@ -161,7 +161,7 @@ export const create_examiner = async (req, res) => {
     try {
         const { username, firstname, lastname, middlename, dob, mobileno, email, gender } = req.body;
 
-        if(!username || !firstname || !dob || !mobileno || !email || !gender){
+        if(!username || !firstname || !lastname || !dob || !mobileno || !email || !gender){
             return res.status(400).json({ message: 'All fields are required!' });
         }
 

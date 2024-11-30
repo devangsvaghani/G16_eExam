@@ -245,7 +245,7 @@ export const update_student = async (req, res) => {
         const { firstname, lastname, middlename, dob, mobileno, email, gender, batch, branch, graduation } = req.body;
         
 
-        if(!username || !firstname || !dob || !mobileno || !email || !gender || !batch || !branch || !graduation){
+        if(!username || !firstname || !lastname || !dob || !mobileno || !email || !gender || !batch || !branch || !graduation){
             return res.status(400).json({ message: 'All fields are required!' });
         }
 
