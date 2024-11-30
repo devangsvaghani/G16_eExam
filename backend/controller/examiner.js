@@ -5,6 +5,10 @@ export const all_examiners = async (req, res) => {
     try{
         const examiners = await User.find({role: "Examiner"}).select("-password");
 
+        if(!examiners){
+            return res.status(404).json({message: "No Examiners Found"});
+        }
+
         return res.status(200).json({ examiners: examiners, message: "Examiners fetched successfully"});
     } catch(error){
         console.log(error);
@@ -72,7 +76,7 @@ export const get_examiner = async (req, res) => {
         };
         
 
-        return res.status(200).json({user: response, message: "Profile Feched Successfully"});
+        return res.status(200).json({user: response, message: "Profile Fetched Successfully"});
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: error.message });

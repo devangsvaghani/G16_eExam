@@ -42,3 +42,23 @@ export const send_otp = async (email, otp) => {
     }
     
 }
+
+export const send_mail = async (email, subject, html) => {
+    try{
+        
+        const mailOptions = {
+            from: process.env.AUTH_EMAIL,
+            to: email,
+            subject: subject,
+            html: html
+        };
+
+        await transporter.sendMail(mailOptions);
+        
+    }
+    catch (error){
+        console.log(error)
+        throw error
+    }
+    
+}
