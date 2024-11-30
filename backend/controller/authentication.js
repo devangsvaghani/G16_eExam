@@ -58,9 +58,6 @@ export const create_student = async (req, res) => {
     try {
         const { firstname, lastname, middlename, dob, mobileno, email, gender, batch, branch, graduation } = req.body;
 
-        // console.log(req.body);
-        
-
         if(!firstname || !dob || !mobileno || !email || !gender || !batch || !branch || !graduation){
             return res.status(400).json({ message: 'All fields are required!' });
         }
@@ -269,7 +266,7 @@ export const create_admin = async (req, res) => {
 export const forgot_password = async (req, res) => {
     try {
         const { email } = req.body;
-        if (!email) return res.status(400).send("An email is required.");
+        if (!email) return res.status(400).json({message : "An email is required." } );
 
         // Email validation (basic regex pattern for email format)
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -319,7 +316,7 @@ export const forgot_password = async (req, res) => {
 export const resend_otp = async (req, res) => {
     try {
         const { email } = req.body;
-        if (!email) return res.status(400).send("An email is required.");
+        if (!email) return res.status(400).json({message : "An email is required." });
 
         // Email validation (basic regex pattern for email format)
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
