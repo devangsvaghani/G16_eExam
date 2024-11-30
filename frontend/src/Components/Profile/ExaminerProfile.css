@@ -250,7 +250,11 @@
         padding: 15px;
     }
 }
-
+#profilecontainer .select-branch-select:disabled {
+    color: #333; /* Same text color as non-disabled state */
+    background-color: #fff; /* Same background as non-disabled state */
+    opacity: 1; /* Prevent dimming effect */
+}
 @media (max-width: 480px) {
     /* For very small screens */
     #profilecontainer {

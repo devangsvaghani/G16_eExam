@@ -231,7 +231,7 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
                                     onChange={handleChange}
                                     required
                                     aria-label="Select gender"
-                                    readOnly={!isAdmin}
+                                    disabled={!isAdmin}
                                 >
                                     <option value="">Select gender</option>
                                     <option value="Male">Male</option>

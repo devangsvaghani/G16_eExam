@@ -14,6 +14,14 @@
     overflow-y: auto;
 }
 
+.select-branch-select:disabled {
+    color: #333; /* Same text color as non-disabled state */
+    background-color: #fff; /* Same background as non-disabled state */
+    opacity: 1; /* Prevent dimming effect */
+}
+
+
+
 #profilecontainer {
     height: 80%;
     width: 70%;
