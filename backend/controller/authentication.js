@@ -2,9 +2,10 @@ import User from '../models/user.js'
 import Student from '../models/student.js'
 import Examiner from '../models/examiner.js'
 import Otp from '../models/otp.js'
-import { send_otp, generate_password, generate_student_id, generate_otp } from "../utils/authentication.js"
+import { send_otp, generate_password, generate_student_id, generate_otp, send_mail } from "../utils/authentication.js"
 import { generateToken } from '../config/jwtUtils.js'
 import bcrypt from "bcrypt"
+import { create_student_templet, create_examiner_templet } from '../utils/mailTemplets.js'
 
 
 export const create_session = async (req, res) => {
@@ -97,6 +98,12 @@ export const create_student = async (req, res) => {
 
         const maxStudentID = await Student.aggregate([
             {
+                $match: {
+                  batch: batch,
+                  graduation: graduation
+                }
+              },
+            {
               $group: {
                 _id: null, // Group all documents together
                 maxStudentID: { $max: "$username" } // Find the maximum value of studentID
@@ -137,6 +144,8 @@ export const create_student = async (req, res) => {
         });
 
         await student.save();
+
+        await send_mail(user.email, "Welcome to eExam", create_student_templet(`${user.firstname} ${user.lastname}`, user.username, password, process.env.FRONTEND_URL));
 
         return res.status(200).json({ message: "Student created successfully", user: savedUser });
     } catch (error) {
@@ -206,6 +215,8 @@ export const create_examiner = async (req, res) => {
         });
 
         await examiner.save();
+
+        await send_mail(user.email, "Welcome to eExam", create_examiner_templet(`${user.firstname} ${user.lastname}`, user.username, password, process.env.FRONTEND_URL));
 
         return res.status(200).json({ message: "Examiner created successfully", user: savedUser});
     } catch (error) {
