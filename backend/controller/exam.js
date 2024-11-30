@@ -345,6 +345,10 @@ export const delete_exam = async (req, res) => {
         // Find the exam by ID and delete it
         const exam = await Exam.findOne({ examId });
 
+        if(!exam){
+            return res.status(404).json({ message: "Exam not found"});
+        }
+
         if (exam.creatorUsername !== username) {
             return res
                 .status(401)
@@ -494,7 +498,7 @@ export const fetch_exam_student = async (req, res) => {
         const exam = await Exam.findOne({ examId }).lean();
 
         if (!exam) {
-            return res.status(404).json({ message: "Exam not found." });
+            return res.status(404).json({ message: "Exam not found" });
         }
 
         // Fetch all questions using their unique IDs
@@ -523,8 +527,8 @@ export const fetch_exam_examiner = async (req, res) => {
         const { examId } = req.params;
 
         // Find the exam by ID without fetching questions
-        const exam = await Exam.findOne({ examId }).lean();
-
+        const exam = await Exam.findOne({ examId });
+        
         if (!exam || exam.creatorUsername !== username) {
             return res.status(404).json({ message: "Exam not found." });
         }

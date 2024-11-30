@@ -170,7 +170,6 @@ export const get_past_exams_5_student = async (req, res) => {
     }
 };
 
-
 export const get_upcoming_exams_student = async (req, res) => {
     try {
         const username = req?.user?.username;
