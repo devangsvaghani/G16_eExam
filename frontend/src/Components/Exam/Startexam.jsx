@@ -196,6 +196,7 @@ const StartExam = () => {
                         }
                     </ul>
                 </div>
+                
                 <div className="consent">
                     <div className="checkbox">
                         <input

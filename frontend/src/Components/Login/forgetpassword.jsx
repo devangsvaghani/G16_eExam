@@ -61,16 +61,19 @@ const ForgetPassword = ({ onClose }) => {
 
         if (!otp || !newPassword || !confirmPassword) {
             toast.error("Fields should not be empty");
+            setisloaderon(false);
             return;
         }
 
         if (newPassword !== confirmPassword) {
             toast.error("Passwords do not match");
+            setisloaderon(false);
             return;
         }
 
         if (newPassword.length < 8) {
             toast.error("Password length should be at least 8");
+            setisloaderon(false);
             return;
         }
 

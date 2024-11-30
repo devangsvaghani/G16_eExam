@@ -204,7 +204,7 @@ function Examinterface() {
         };
     }, []);
 
-    const { hours, minutes, seconds } = formatTime(timeRemaining);
+    const { hours, minutes, seconds } = formatTime(timeRemaining+12);
 
     const handleQuestionClick = (index) => {
         setCurrentQuestionIndex(index);

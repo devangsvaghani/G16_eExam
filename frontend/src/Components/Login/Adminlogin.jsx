@@ -57,8 +57,8 @@ const Login = () => {
         setIsLoggedIn(true);
         toast.success("Login Successful");
         navigate("/admin");
-      } else {
-        toast.error(results.data.error);
+      }else{
+        toast.error(results.data.message);
       }
     } catch (e) {
       console.log(e);

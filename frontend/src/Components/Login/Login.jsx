@@ -76,7 +76,7 @@ const Login = ({ onClose }) => {
       toast.error((e?.response?.data?.message) || ("Internal server error"));
     }
 
-    setisloaderon(true);
+    setisloaderon(false);
   };
 
   const handleForgotPasswordClick = () => {

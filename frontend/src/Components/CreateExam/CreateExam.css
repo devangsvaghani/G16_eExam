@@ -34,10 +34,10 @@
     margin-bottom: 15px;
   }
   
-  .create-exam-form > input[type="text"],
-  .create-exam-form > input[type="date"],
-  .create-exam-form > input[type="time"],
-  .create-exam-form > input[type="number"] {
+  .create-exam-form input[type="text"],
+  .create-exam-form input[type="date"],
+  .create-exam-form input[type="time"],
+  .create-exam-form input[type="number"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -61,7 +61,7 @@
   }
   
   .option-div{
-    max-height: 260px;
+    max-height: 240px;
     overflow-y: auto;
   }
   
@@ -234,3 +234,149 @@
     border-color: #4CAF50;
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
   }
+/* Modal Overlay */
+.create-exam-container .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow: hidden; /* Prevent content overflow */
+}
+
+/* Modal Content - Fix for stable width */
+.create-exam-container .modal-content {
+  background: #fff;
+  padding: 20px;
+  width: 400px; /* Fixed width */
+  max-height: 80vh;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow-y: auto; /* Ensure scrolling for content overflow */
+  position: relative; 
+  text-align: center;
+  margin: 0 auto;
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Optional: Prevent content shifting due to scrollbar */
+.create-exam-container .modal-content {
+  overflow: overlay; /* Modern browsers: keeps scrollbar over content */
+}
+
+/* For better cross-browser support */
+.create-exam-container .instructionList {
+  scrollbar-gutter: stable; /* Ensures scrollbar space doesn't push content */
+}
+
+
+/* Close Button */
+.create-exam-container .modal-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #3F72AF;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.create-exam-container .modal-close-btn:hover {
+  background: #112D4E;
+}
+
+/* Instructions List */
+.create-exam-container .instructions-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.create-exam-container .instructions-list li {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.create-exam-container .instructions-list .exam-preview-deletebtn {
+  background-color: #3F72AF;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 3px 6px;
+  font-size: 12px;
+}
+
+.create-exam-container .instructions-list .exam-preview-deletebtn:hover {
+  background-color: #112D4E;
+}
+
+/* Add Spacing for Empty State */
+.no-instructions-message {
+  font-style: italic;
+  color: #888;
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Scoped styles for the CreateExam component */
+.create-exam-container .view-instructions-btn {
+  background-color: #3F72AF;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.create-exam-container .view-instructions-btn:hover {
+  background-color: #112D4E;
+}
+
+/* Scrollbar for instruction list inside modal */
+.create-exam-container .instructionList {
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 10px 0;
+  padding-right: 10px;
+}
+/* Scrollbar Styling */
+.create-exam-container .instructionList::-webkit-scrollbar {
+  width: 8px; /* Width of vertical scrollbar */
+  height: 8px; /* Height of horizontal scrollbar */
+}
+
+.create-exam-container .instructionList::-webkit-scrollbar-thumb {
+  background-color: #3F72AF; /* Scrollbar thumb color */
+  border-radius: 10px; /* Rounded edges for smooth appearance */
+}
+
+.create-exam-container .instructionList::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Light background for scrollbar track */
+}
+.clear-exam-btn {
+  background-color: #3F72AF;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.clear-exam-btn:hover {
+  background-color: #112D4E;
+}

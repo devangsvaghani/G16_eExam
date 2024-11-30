@@ -247,7 +247,7 @@ function StudentProf({ onClose, toast, username, setStudents }) {
                                     onChange={handleChange}
                                     required
                                     aria-label="Select gender"
-                                    readOnly={!isAdmin}
+                                    disabled={!isAdmin}
                                 >
                                     <option value="">Select gender</option>
                                     <option value="Male">Male</option>
@@ -277,7 +277,7 @@ function StudentProf({ onClose, toast, username, setStudents }) {
                                     onChange={handleChange}
                                     required
                                     aria-label="Select branch"
-                                    readOnly={!isAdmin}
+                                    disabled={!isAdmin}
                                 >
                                     <option value="">Select branch</option>
                                     <option value="ICT">
@@ -301,7 +301,7 @@ function StudentProf({ onClose, toast, username, setStudents }) {
                                     onChange={handleChange}
                                     required
                                     aria-label="Select graduation"
-                                    readOnly={!isAdmin}
+                                    disabled={!isAdmin}
                                 >
                                     <option value="">Select graduation</option>
                                     <option value="UG">UG</option>

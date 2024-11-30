@@ -218,7 +218,7 @@ function Admindashboard() {
             setExaminers((prev) =>
                 prev.filter((item) => item.username !== username)
             );
-            toast.success("Student Deleted Successfully");
+            toast.success("Examiner Deleted Successfully");
         } catch (e) {
             console.log(e);
 

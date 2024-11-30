@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SubmitConfirmationModal.css";
 import config from "../../config.js";
@@ -62,6 +62,7 @@ const SubmitConfirmationModal = ({ onCancel, autoSubmit, examId, toast }) => {
     if (!autoSubmit) {
         return (
             <div className="modal-overlay">
+                {isloaderon && <Loading/>}
                 <div className="submit-modal">
                     <h2>Confirm Submission</h2>
                     <p>Are you sure you want to submit your test?</p>
