@@ -527,7 +527,7 @@ export const fetch_exam_examiner = async (req, res) => {
         const { examId } = req.params;
 
         // Find the exam by ID without fetching questions
-        const exam = await Exam.findOne({ examId });
+        const exam = await Exam.findOne({ examId }).lean();
         
         if (!exam || exam.creatorUsername !== username) {
             return res.status(404).json({ message: "Exam not found." });

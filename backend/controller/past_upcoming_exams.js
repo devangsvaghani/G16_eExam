@@ -244,12 +244,7 @@ export const get_upcoming_exams_5_examiner = async (req, res) => {
         const upcomingExams = await Exam.find({
             $expr: {
                 $gt: [
-                    {
-                        $add: [
-                            "$startTime",
-                            { $multiply: ["$duration", 60000] },
-                        ],
-                    },
+                    "$startTime",
                     currentTime,
                 ],
             },
@@ -338,16 +333,10 @@ export const get_upcoming_exams_examiner = async (req, res) => {
         const upcomingExams = await Exam.find({
             $expr: {
                 $gt: [
-                    {
-                        $add: [
-                            "$startTime",
-                            { $multiply: ["$duration", 60000] },
-                        ],
-                    },
+                    "$startTime",
                     currentTime,
                 ],
             },
-            status: "Published",
             creatorUsername: username
         }).sort({ startTime: -1 }).lean();
 

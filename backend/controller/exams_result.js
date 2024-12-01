@@ -73,7 +73,7 @@ export const show_exam = async (req,res) => {
             return res.status(404).json({ message: 'Student not found' });
         }
 
-        const exam = student.givenExams.find(exam => exam.exam.examId === parseInt(examId));
+        const exam = student.givenExams.find(exam => exam?.exam?.examId === parseInt(examId));
 
         if (!exam) {
             return res.status(404).json({ message: 'Exam not found for this student' });
