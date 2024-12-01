@@ -20,6 +20,7 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
   const [Branch, setBranch] = useState("");
   const [semester, setSemester] = useState("");
   const [totalmarks, settotalmarks] = useState(0);
+
   const [instructions, setInstructions] = useState([]); // To store multiple instructions
 
   // Step 2: Timing Details
@@ -34,8 +35,8 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [numOptions, setNumOptions] = useState("");
   const [correctOption, setCorrectOption] = useState(null);
-  const [points, setpoints] = useState("");
-  const [currentOptions, setCurrentOptions] = useState(Array(numOptions).fill(""));
+  const [points, setpoints] = useState(null);
+  const [currentOptions, setCurrentOptions] = useState(Array(2).fill(""));
   const [instructionInput, setInstructionInput] = useState(""); // For input field
 
 
@@ -70,7 +71,7 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
     setStatus("Pending");
     setInstructions([]);
     setQuestions([]);
-    settotalmarks(0);
+    settotalmarks("");
     setDifficulty("Easy");
     setCurrentQuestion("");
     setNumOptions("");
@@ -100,24 +101,25 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
   const handlePrevious = () => {
     setStep((prevStep) => prevStep - 1);
   };
-
+  const allOptionsFilled = currentOptions.every((option) => option.trim() !== "");
   const handleAddQuestion = () => {
-    if (!currentQuestion || correctOption === null) {
-      toast.error("Please enter the question and select a correct answer.");
+    const parsedPoints = parseInt(points, 10);
+    if (!currentQuestion || correctOption === null || isNaN(parsedPoints) || !allOptionsFilled) {
+      toast.error("Please enter valid question details.");
       return;
     }
     const newQuestion = {
       desc: currentQuestion,
       options: [...currentOptions],
       answer: correctOption,
-      points,
-      difficulty, // Add difficulty here
+      points: parsedPoints, // Ensure points is a number
+      difficulty,
     };
     setQuestions([...questions, newQuestion]);
     setCurrentQuestion("");
-    setCurrentOptions(Array(numOptions).fill(""));
+    setCurrentOptions(Array(2).fill(""));
     setCorrectOption(null);
-    setpoints(); // Reset points
+    setpoints(""); // Reset points to empty string
   };
 
   const handleDeleteQuestion = (index) => {
@@ -212,6 +214,7 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
 
         if (result.status !== 200) {
           toast.error(result.data.message);
+          setisloaderon(false);
           return;
         }
 
@@ -250,9 +253,10 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
   }, [questionBank]);
 
   useEffect(() => {
-    const sum = questions.reduce((acc, question) => acc + question.points, 0);
-    settotalmarks(sum);
+    const sum = questions.reduce((acc, question) => acc + (question.points || 0), 0);
+    settotalmarks(sum); // sum will always be a number
   }, [questions]);
+  
 
   return (
     <div className="create-exam-container">

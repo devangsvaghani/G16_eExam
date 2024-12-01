@@ -284,3 +284,192 @@ overflow-y:auto ;
     max-height: 500px;
     overflow-y: auto;
 }
+/* Instruction Modal Container */
+.instruction-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensure it appears above other elements */
+}
+
+/* Modal Content Styling */
+.instruction-modal .modal-content {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    width: 60%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+/* Modal Header */
+.instruction-modal .modal-content h2 {
+    margin: 0 0 15px;
+    color: #3F72AF;
+    font-size: 22px;
+}
+
+/* Instruction List */
+.instruction-modal .instructions-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.instruction-modal .instructions-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    padding: 5px 0;
+}
+
+/* Instruction Input */
+.instruction-modal .instructions-list input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    margin-right: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* Delete Button for Instructions */
+.instruction-modal .instructions-list .delete-instruction-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.instruction-modal .instructions-list .delete-instruction-btn:hover {
+    background-color: #d32f2f;
+}
+
+/* Add Instruction Button */
+.instruction-modal .add-instruction-btn {
+    background-color: #3F72AF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.instruction-modal .add-instruction-btn:hover {
+    opacity: 0.9;
+}
+
+/* Modal Footer */
+.instruction-modal .modal-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.instruction-modal .modal-footer .cancel-btn,
+.instruction-modal .modal-footer .save-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    color: white;
+}
+
+.instruction-modal .modal-footer .cancel-btn {
+    background-color: #f44336;
+}
+
+.instruction-modal .modal-footer .cancel-btn:hover {
+    background-color: #d32f2f;
+}
+
+.instruction-modal .modal-footer .save-btn {
+    background-color: #3F72AF;
+}
+
+.instruction-modal .modal-footer .save-btn:hover {
+    opacity: 0.9;
+}
+
+/* Scrollbar Styling */
+.instruction-modal .modal-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.instruction-modal .modal-content::-webkit-scrollbar-thumb {
+    background-color: #3F72AF;
+    border-radius: 10px;
+}
+
+.instruction-modal .modal-content::-webkit-scrollbar-track {
+    background-color: #c0c6d2;
+}
+
+.update-exam-container label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  
+  .update-exam-container input,
+  .update-exam-container select {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px;
+  }
+  
+  .update-exam-container .readonly-field {
+    background-color: #f9f9f9;
+    cursor: not-allowed;
+  }
+  
+  .update-exam-container .status-dropdown {
+    background-color: #fff;
+    cursor: pointer;
+  }
+  
+  .buttons-container {
+    margin-top: 20px;
+  }
+  
+  .buttons-container button {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .buttons-container .save-btn {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .buttons-container .closebtn {
+    background-color: #f44336;
+    color: white;
+    margin-left: 10px;
+  }
+  

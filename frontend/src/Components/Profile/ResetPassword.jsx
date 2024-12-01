@@ -39,11 +39,13 @@ function ResetPassword() {
 
     if(newPassword !== confirmPassword){
         setError("Password Does not match");
+        setisloaderon(false);
         return;
     }
 
     if(newPassword.length < 8){
         toast.error("Password must be at least 8 characters long");
+        setisloaderon(false);
         return;
     }
 

@@ -36,13 +36,18 @@ const CreateStudent = ({ onClose, setStudents, toast }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const contactRegex = /^\d{10}$/;
-
+        const currentDate = new Date();
         if (!contactRegex.test(formData.contact)) {
             toast.error("Contact number must be 10 digits");
             return;
         }
         if (!formData.studentType) {
             toast.error("Please select your graduation type (UG or PG)");
+            return;
+        }
+        const dob = new Date(formData.dob);
+        if (dob >= currentDate) {
+            toast.error("Date of birth must be in the past");
             return;
         }
         setisloaderon(true);
@@ -71,6 +76,7 @@ const CreateStudent = ({ onClose, setStudents, toast }) => {
 
             if (result.status !== 200) {
                 toast.error((result?.data?.message) || ("Internal server error"));
+                setisloaderon(false);
                 return;
             }
 

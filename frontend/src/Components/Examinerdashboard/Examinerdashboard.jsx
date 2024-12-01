@@ -258,6 +258,7 @@ function Examinerdashboard() {
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
+                setisloaderon(false);
                 return;
             }
 
@@ -288,6 +289,7 @@ function Examinerdashboard() {
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
+                setisloaderon(false);
                 return;
             }
 
@@ -317,6 +319,7 @@ function Examinerdashboard() {
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
+                setisloaderon(false);
                 return;
             }
 
@@ -348,6 +351,7 @@ function Examinerdashboard() {
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
+                setisloaderon(false);
                 return;
             }
 
@@ -378,6 +382,7 @@ function Examinerdashboard() {
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
+                setisloaderon(false);
                 return;
             }
 
@@ -418,6 +423,7 @@ function Examinerdashboard() {
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
+                setisloaderon(false);
                 return;
             }
 

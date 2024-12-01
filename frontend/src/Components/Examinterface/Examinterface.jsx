@@ -55,6 +55,7 @@ function Examinterface() {
 
             if (result.status !== 200) {
                 toast.error(result?.data?.message || "Internal server error");
+                setisloaderon(false);
                 return;
             }
 
@@ -66,6 +67,7 @@ function Examinterface() {
 
             if (endTime < currentTime) {
                 setExamAlreadyDone(true);
+                setisloaderon(false);
                 return;
             }else if(startTime > currentTime){
                 setExamNotStart(true);
@@ -117,6 +119,7 @@ function Examinterface() {
 
             if (result.status !== 200) {
                 toast.error(result?.data?.message || "Internal server error");
+                setisloaderon(false);
                 return;
             }
 

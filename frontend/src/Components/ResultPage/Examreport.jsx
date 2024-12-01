@@ -38,6 +38,7 @@ const ExamResultCard = ({ exam, username, obtainedPoints }) => {
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
+                setisloaderon(false);
                 return;
             }
             

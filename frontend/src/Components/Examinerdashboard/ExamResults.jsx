@@ -69,6 +69,7 @@ const ExamResult = ({ exam }) => {
 
         if (result.status !== 200) {
             toast.error(result.data.message);
+            setisloaderon(false);
             return;
         }
 

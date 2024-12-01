@@ -237,6 +237,7 @@ function Dashboard() {
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
+                setisloaderon(false);
                 return;
             }
 
@@ -268,6 +269,7 @@ function Dashboard() {
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
+                setisloaderon(false);
                 return;
             }
 
@@ -299,6 +301,7 @@ function Dashboard() {
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
+                setisloaderon(false);
                 return;
             }
 
@@ -330,6 +333,7 @@ function Dashboard() {
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
+                setisloaderon(false);
                 return;
             }
 

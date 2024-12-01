@@ -96,10 +96,12 @@ function StudentProf({ onClose, toast, username, setStudents }) {
 
         if (!contactRegex.test(userData.mobileno)) {
             toast.error("Contact number must be 10 digits");
+            setisloaderon(false);
             return;
         }
         if (!userData.graduation) {
             toast.error("Please select your graduation type (UG or PG)");
+            setisloaderon(false);
             return;
         }
 
@@ -120,6 +122,7 @@ function StudentProf({ onClose, toast, username, setStudents }) {
 
             if (result.status !== 200) {
                 toast.error(result?.data?.message || "Internal server error");
+                setisloaderon(false);
                 return;
             }
 
@@ -137,8 +140,11 @@ function StudentProf({ onClose, toast, username, setStudents }) {
                             ...updatedItems[index],
                             ...userData,
                         }; // Update element
+                        setisloaderon(false);
                         return updatedItems;
+
                     }
+                    setisloaderon(false);
                     return prevItems;
                 });
             }

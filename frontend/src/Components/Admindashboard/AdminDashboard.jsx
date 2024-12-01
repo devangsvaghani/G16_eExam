@@ -103,6 +103,7 @@ function Admindashboard() {
 
             if (result.status !== 200) {
                 toast.error(result?.message || "Internal server error");
+                setisloaderon(false);
                 return;
             }
             setStudents(Object.values(result.data.students));
@@ -130,6 +131,7 @@ function Admindashboard() {
 
             if (result.status !== 200) {
                 toast.error(result?.message || "Internal server error");
+                setisloaderon(false);
                 return;
             }
             setExaminers(Object.values(result.data.examiners));
@@ -179,6 +181,7 @@ function Admindashboard() {
 
             if (result.status !== 200) {
                 toast.error(result?.message || "Internal server error");
+                setisloaderon(false);
                 return;
             }
 
@@ -212,6 +215,7 @@ function Admindashboard() {
 
             if (result.status !== 200) {
                 toast.error(result?.message || "Internal server error");
+                setisloaderon(false);
                 return;
             }
 

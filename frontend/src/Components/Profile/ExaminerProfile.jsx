@@ -85,6 +85,7 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
         setisloaderon(true);
         if (!contactRegex.test(userData.mobileno)) {
             toast.error("Contact number must be 10 digits");
+            setisloaderon(false);
             return;
         }
         
@@ -105,6 +106,7 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
 
             if (result.status !== 200) {
                 toast.error(result?.data?.message || "Internal server error");
+                setisloaderon(false);
                 return;
             }
 
@@ -122,8 +124,10 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
                             ...updatedItems[index],
                             ...userData,
                         }; // Update element
+                        setisloaderon(false);
                         return updatedItems;
                     }
+                    setisloaderon(false);
                     return prevItems;
                 });
             }

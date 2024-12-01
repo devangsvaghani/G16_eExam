@@ -42,6 +42,7 @@ const Login = ({ onClose }) => {
     if (!username || !password) {
       toast.error("Fields are missing");
       setLoading(false);
+      setisloaderon(false);
       return;
     }
 

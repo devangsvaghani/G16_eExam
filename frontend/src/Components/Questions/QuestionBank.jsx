@@ -50,6 +50,7 @@ const QuestionBank = () => {
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
+                setisloaderon(false);
                 return;
             }
 
@@ -171,6 +172,7 @@ const QuestionBank = () => {
 
             if (result.status !== 200) {
                 toast.error(result.data.message);
+                setisloaderon(false);
                 return;
             }
 

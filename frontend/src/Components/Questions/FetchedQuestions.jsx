@@ -68,6 +68,7 @@ const FetchedQuestions = ({ subjects, onClose, setSubjects, setQuestions }) => {
                     toast.error(
                         result?.data?.message || "Internal server error"
                     );
+                    setisloaderon(false);
                     return;
                 }
 

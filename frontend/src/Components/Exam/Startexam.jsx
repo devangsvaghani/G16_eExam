@@ -87,6 +87,7 @@ const StartExam = () => {
 
             if (result.status !== 200) {
                 toast.error(result?.data?.message || "Internal server error");
+                setisloaderon(false);
                 return;
             }
             

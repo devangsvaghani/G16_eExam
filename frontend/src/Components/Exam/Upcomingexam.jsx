@@ -88,6 +88,7 @@ const Upcomingexam = () => {
 
             if (result.status !== 200) {
                 toast.error(result?.message || "Internal server error");
+                setisloaderon(false);
                 return;
             }
             setExams(Object.values(result.data.upcomingExams));
@@ -120,7 +121,7 @@ const Upcomingexam = () => {
             [examId]: true, // Mark the exam as ready to start
         }));
     };
-
+    
     return (
         <div className="uexam-list-container">
         {isloaderon && <Loading/>}
