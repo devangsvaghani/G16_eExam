@@ -28,7 +28,7 @@ const Calendar = ({ exams, changeMonth, events, setEvents, set_events }) => {
     const [eventText, setEventText] = useState("");
 
     useEffect(() => {
-        changeMonth(currentDate.getMonth());
+        changeMonth(currentDate.getMonth(), currentDate.getFullYear());
     }, [currentDate]);
 
     const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
@@ -51,9 +51,12 @@ const Calendar = ({ exams, changeMonth, events, setEvents, set_events }) => {
     };
 
     const formatDate = (day) => {
-        return `${currentDate.getFullYear()}-${
-            currentDate.getMonth() + 1
-        }-${day}`;
+
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, "0"); 
+        const dayy = String(day).padStart(2, "0");
+        
+        return `${year}-${month}-${dayy}`;
     };
 
     const handleDateClick = (day) => {
@@ -213,8 +216,8 @@ function Examinerdashboard() {
     const formatDateYY = (date) => {
         date = new Date(date);
         const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0"); // Add leading zero
-        const day = String(date.getDate()).padStart(2, "0"); // Add leading zero
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0"); 
 
         return `${year}-${month}-${day}`;
     };
@@ -233,7 +236,7 @@ function Examinerdashboard() {
         });
 
         const curDate = new Date();
-        change_upcoming_exams_for_month(curDate.getMonth());
+        change_upcoming_exams_for_month(curDate.getMonth(), curDate.getFullYear());
     };
 
     useEffect(() => {
@@ -437,14 +440,12 @@ function Examinerdashboard() {
 
     };
 
-    const change_upcoming_exams_for_month = (month) => {
-        setUpcomingexamscurmonth([]); // Reset current month's exams
-    
-        const currentYear = new Date().getFullYear();
-    
+    const change_upcoming_exams_for_month = (month, year) => {
+        setUpcomingexamscurmonth([]);
+
         upcomingexams.forEach((exam) => {
-            let examDate = new Date(exam.startTime);
-            if (examDate.getMonth() === month && examDate.getFullYear() === currentYear) {
+            let curDate = new Date(exam.startTime);
+            if (curDate.getMonth() === month && curDate.getFullYear() === year) {
                 setUpcomingexamscurmonth((prev) => [...prev, exam]);
             }
         });
