@@ -336,8 +336,9 @@ function Dashboard() {
                 setisloaderon(false);
                 return;
             }
-
+            console.log(result.data.percentage); // Should log a number between 0 and 100
             setPerformance(result.data.percentage);
+            console.log(performance);
         } catch (e) {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal server error");
@@ -347,15 +348,18 @@ function Dashboard() {
     };
 
     const change_upcoming_exams_for_month = (month) => {
-        setUpcomingexamscurmonth([]);
-
+        setUpcomingexamscurmonth([]); // Reset current month's exams
+    
+        const currentYear = new Date().getFullYear();
+    
         upcomingexams.forEach((exam) => {
-            let curDate = new Date(exam.startTime);
-            if (curDate.getMonth() === month) {
+            let examDate = new Date(exam.startTime);
+            if (examDate.getMonth() === month && examDate.getFullYear() === currentYear) {
                 setUpcomingexamscurmonth((prev) => [...prev, exam]);
             }
         });
     };
+    
 
     const items = [
         { id: "home", label: "Home" },
@@ -469,7 +473,7 @@ function Dashboard() {
                     <div className="content">
                         {/* Upcoming Exams */}
                         <div className="firstcol">
-                            <div className="upcomingexambox">
+                            <div className="upcomingexambox" onClick={()=>setActiveIndex(2)}>
                                 <h2>Next 5 Upcoming Exams</h2>
                                 <div className="card">
                                     {upcomingexams5.length === 0 ? (
@@ -546,7 +550,7 @@ function Dashboard() {
                         </div>
 
                         <div className="thirdcol">
-                            <div className="anonouncementsBox">
+                            <div className="anonouncementsBox" onClick={()=>setActiveIndex(2)}>
                                 <h2>Upcoming Exam For Choosed Month</h2>
                                 <div className="card">
                                     {upcomingexamscurmonth.length === 0 ? (
@@ -587,7 +591,7 @@ function Dashboard() {
                                     )}
                                 </div>
                             </div>
-                            <div className="pastexambox">
+                            <div className="pastexambox" onClick={()=>setActiveIndex(3)}>
                                 <h2>Past 5 Exams</h2>
                                 <div className="card">
                                     {pastexams5.length === 0 ? (

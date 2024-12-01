@@ -26,7 +26,7 @@ export const student_performance = async (req, res) => {
         let totalPointsEarned = 0;
 
         // Iterate through each exam
-        if(student?.givenExams && student.g)
+        if(student?.givenExams && student.givenExams)
         student.givenExams.forEach((examRecord) => {
             totalPointsPossible += examRecord.exam.total_points;
 

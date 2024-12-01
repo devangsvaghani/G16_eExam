@@ -438,11 +438,13 @@ function Examinerdashboard() {
     };
 
     const change_upcoming_exams_for_month = (month) => {
-        setUpcomingexamscurmonth([]);
-
+        setUpcomingexamscurmonth([]); // Reset current month's exams
+    
+        const currentYear = new Date().getFullYear();
+    
         upcomingexams.forEach((exam) => {
-            let curDate = new Date(exam.startTime);
-            if (curDate.getMonth() === month) {
+            let examDate = new Date(exam.startTime);
+            if (examDate.getMonth() === month && examDate.getFullYear() === currentYear) {
                 setUpcomingexamscurmonth((prev) => [...prev, exam]);
             }
         });
@@ -631,7 +633,7 @@ function Examinerdashboard() {
                         </div>
 
                         <div className="thirdcol">
-                            <div className="anonouncementsBox">
+                            <div className="anonouncementsBox" onClick={() => setActiveIndex(2)}>
                                 <h2>Upcoming Exams For Choosed Month</h2>
                                 <div className="card">
                                     {upcomingexamscurmonth.length === 0 ? (

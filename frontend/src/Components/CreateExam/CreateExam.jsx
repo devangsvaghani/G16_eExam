@@ -247,10 +247,13 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
   };
 
   useEffect(() => {
-    setFilteredQuestions(questionBank.filter((q) =>
-      q.desc.toLowerCase().includes(searchQuery.toLowerCase())
-    ));
-  }, [questionBank]);
+    setFilteredQuestions(
+      questionBank.filter((q) =>
+        q.desc.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        q.subject.toLowerCase() === subject.toLowerCase() // Match subject exactly
+      )
+    );
+  }, [questionBank, searchQuery, subject]); 
 
   useEffect(() => {
     const sum = questions.reduce((acc, question) => acc + (question.points || 0), 0);
