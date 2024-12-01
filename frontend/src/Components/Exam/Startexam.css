@@ -119,3 +119,14 @@
   position: absolute;
   bottom: 0px; /* Stick to bottom */
 }
+.start-btn:disabled {
+  background-color: #BCC4D6; /* Gray color for disabled state */
+  color: #FFFFFF; /* Keep text white for consistency */
+  cursor: not-allowed; /* Show a "not-allowed" cursor */
+  opacity: 0.6; /* Make it slightly transparent */
+}
+
+/* Hover effect should not apply to disabled button */
+.start-btn:disabled:hover {
+  background-color: #BCC4D6;
+}

@@ -51,26 +51,22 @@ const StartExam = () => {
     const { examId } = useParams();
     const navigate = useNavigate();
 
-    const targetDate = new Date("November 16, 2024 16:35:00").getTime();
-    const [currentTime, setCurrentTime] = useState(new Date().getTime());
-    const [countdown, setCountdown] = useState(targetDate - currentTime);
     const [consentGiven, setConsentGiven] = useState(false);
     const [showError, setShowError] = useState(false);
     const [testCountdown, setTestCountdown] = useState(null);
     const [exam, setExam] = useState({});
     const [startBtn, setStartBtn] = useState(false);
-    const [isloaderon, setisloaderon] = useState(false);
+    const [isLoaderOn, setIsLoaderOn] = useState(false);
 
     useEffect(() => {
         if (!Cookies.get("token") || Cookies.get("role") !== "Student") {
             navigate("/");
         }
-
-        fetch_exam();
+        fetchExam();
     }, []);
 
-    const fetch_exam = async () => {
-        setisloaderon(true);
+    const fetchExam = async () => {
+        setIsLoaderOn(true);
         try {
             const headers = {
                 "Content-Type": "application/json",
@@ -82,45 +78,21 @@ const StartExam = () => {
                     `/fetch-exam-student/${examId}`,
                 { headers }
             );
-            // console.log(result);
-            
 
             if (result.status !== 200) {
                 toast.error(result?.data?.message || "Internal server error");
-                setisloaderon(false);
+                setIsLoaderOn(false);
                 return;
             }
-            
+
             setExam(result.data.exam);
         } catch (e) {
             console.log(e);
             toast.error(e?.response?.data?.message || "Internal Server Error");
             navigate(-1);
         }
-        setisloaderon(false);
-
+        setIsLoaderOn(false);
     };
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const now = new Date().getTime();
-            setCurrentTime(now);
-            setCountdown(targetDate - now);
-        }, 1000);
-
-        return () => clearInterval(interval);
-    }, [targetDate]);
-
-    useEffect(() => {
-        if (testCountdown === 0) {
-            navigate(`/exams/${examId}`);
-        } else if (testCountdown > 0) {
-            const timer = setInterval(() => {
-                setTestCountdown((prevCountdown) => prevCountdown - 1);
-            }, 1000);
-            return () => clearInterval(timer);
-        }
-    }, [testCountdown, navigate]);
 
     const handleConsentChange = () => {
         setConsentGiven(!consentGiven);
@@ -135,34 +107,20 @@ const StartExam = () => {
         setTestCountdown(10);
     };
 
-    const formatCountdown = (time) => {
-        const days = Math.floor(time / (1000 * 60 * 60 * 24)); // Calculate days
-        const hours = Math.floor(
-            (time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        ); // Remaining hours
-        const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)); // Remaining minutes
-        const seconds = Math.floor((time % (1000 * 60)) / 1000); // Remaining seconds
-
-        if (days > 0) {
-            // Format to include days
-            return `${days} days ${hours
-                .toString()
-                .padStart(2, "0")} hours ${minutes
-                .toString()
-                .padStart(2, "0")} minutes`;
-        } else {
-            // Format without days
-            return `${hours.toString().padStart(2, "0")}:${minutes
-                .toString()
-                .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    useEffect(() => {
+        if (testCountdown === 0) {
+            navigate(`/exams/${examId}`);
+        } else if (testCountdown > 0) {
+            const timer = setInterval(() => {
+                setTestCountdown((prevCountdown) => prevCountdown - 1);
+            }, 1000);
+            return () => clearInterval(timer);
         }
-    };
-
-    const showStartButton = countdown <= 0;
+    }, [testCountdown, navigate]);
 
     return (
         <div className="start-exam-container">
-        {isloaderon && <Loading/>}
+            {isLoaderOn && <Loading />}
             <div className="exam-container">
                 <h1 className="heading">{exam?.title}</h1>
                 <div className="professor-name">
@@ -180,24 +138,22 @@ const StartExam = () => {
                     <div>
                         <CountdownTimer
                             startTime={exam.startTime}
-                            onExamStarted={() => setStartBtn(true)}
+                            onExamStarted={() => setStartBtn(true)} // Enable button after start time
                         />
                     </div>
-                    
                 </div>
                 <div className="instructions">
                     <p>
                         <strong>Instructions:</strong>
                     </p>
                     <ul>
-                        {
-                            exam?.instructions && exam?.instructions.map((line, index) => (
+                        {exam?.instructions &&
+                            exam?.instructions.map((line, index) => (
                                 <li key={index}>{line}</li>
-                            ))
-                        }
+                            ))}
                     </ul>
                 </div>
-                
+
                 <div className="consent">
                     <div className="checkbox">
                         <input
@@ -220,18 +176,17 @@ const StartExam = () => {
                         the test.
                     </div>
                 )}
-                {!showStartButton ? (
-                    <div className="countdown">
-                        Time until the Start button appears:{" "}
-                        <strong>{formatCountdown(countdown)}</strong>
-                    </div>
-                ) : testCountdown !== null ? (
+                {testCountdown !== null ? (
                     <div className="countdown">
                         The test will start in <strong>{testCountdown}</strong>{" "}
                         seconds.
                     </div>
                 ) : (
-                    <button className="start-btn" onClick={startTest} disabled={!startBtn}>
+                    <button
+                        className="start-btn"
+                        onClick={startTest}
+                        disabled={!startBtn} // Disable until exam starts
+                    >
                         Start Test
                     </button>
                 )}
@@ -246,5 +201,6 @@ const StartExam = () => {
         </div>
     );
 };
+
 
 export default StartExam;
