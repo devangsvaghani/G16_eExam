@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import config from "../../config.js";
 import Loading from "../Loader/Loding.jsx"
+import Examinerdashboard from "../Examinerdashboard/Examinerdashboard.jsx";
 
 
 const Calendar = ({ exams, changeMonth, events, setEvents, set_events }) => {
@@ -177,7 +178,8 @@ function Dashboard() {
     useEffect(() => {
         if (!Cookies.get("token") || !Cookies.get("role") || Cookies.get("role") === "Admin") {
             navigate("/");
-        } else {
+        }
+        else{
             setUsername(Cookies.get("username"));
             fetch_upcoming_exams();
             fetch_upcoming_exams_5();

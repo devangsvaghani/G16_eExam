@@ -37,7 +37,6 @@ const Login = ({ onClose }) => {
     e.preventDefault();
 
     setisloaderon(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
 
 
     if (!username || !password) {
@@ -61,12 +60,18 @@ const Login = ({ onClose }) => {
 
 
       if (results.status === 200) {
-        Cookies.set("token", results.data.token);
-        Cookies.set("username", results.data.username);
-        Cookies.set("role", results.data.role);
+        Cookies.set("token", results.data.token, { expires: 7 });
+        Cookies.set("username", results.data.username, { expires: 7 });
+        Cookies.set("role", results.data.role, { expires: 7 });
         setIsLoggedIn(true);
+
+        // await new Promise((resolve) => setTimeout(resolve, 2000));
+
         toast.success("Login Successful");
-        navigate("/dashboard");
+        setTimeout(() => {
+          window.location.href = "/";
+          window.location.reload();
+        }, 1000);
       } else {
         toast.error(results.data.error);
       }

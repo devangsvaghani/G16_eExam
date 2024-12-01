@@ -6,6 +6,7 @@ import './Homepage.css';
 import Login from '../Login/Login.jsx';
 import { useAuth } from "../../context/auth.jsx";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Homepage = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -14,7 +15,8 @@ const Homepage = () => {
 
   const handleLoginClick = () => {
     
-    if (window.localStorage.getItem("token") !== null) {
+    
+    if (Cookies.get("token")) {
       navigate("/dashboard");
     }
 
@@ -24,6 +26,12 @@ const Homepage = () => {
   const handleCloseLogin = () => {
     setIsLoginOpen(false);
   };
+
+  useEffect(() => {
+    if (Cookies.get("token")) {
+        navigate("/dashboard");
+      }
+  }, []);
 
   useEffect(() => {
     if (isLoginOpen) {
