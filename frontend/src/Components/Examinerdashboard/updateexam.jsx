@@ -39,7 +39,7 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
 
       const result = await axios.get(
         (config.BACKEND_API || "http://localhost:8000") +
-        `/fetch-exam-examiner/${examId}`,
+          `/fetch-exam-examiner/${examId}`,
         { headers }
       );
 
@@ -57,8 +57,13 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
       setInstructions(fetchedExam.instructions || []);
       setExamStatus(fetchedExam.status || "Pending");
       const localDateTime = new Date(fetchedExam.startTime);
-      setExamDate(localDateTime.toLocaleDateString('en-CA'));
-      setExamTime(localDateTime.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }));
+      setExamDate(localDateTime.toLocaleDateString("en-CA"));
+      setExamTime(
+        localDateTime.toLocaleTimeString("en-GB", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      );
     } catch (e) {
       console.log(e);
       toast.error(e?.response?.data?.message || "Internal server error");
@@ -74,7 +79,7 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
 
       const result = await axios.delete(
         (config.BACKEND_API || "http://localhost:8000") +
-        `/delete-exam/${examId}`,
+          `/delete-exam/${examId}`,
         { headers }
       );
 
@@ -95,7 +100,10 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
 
   const calculateTotalMarks = () => {
     if (exam?.questions) {
-      const sum = exam.questions.reduce((acc, question) => acc + question.points, 0);
+      const sum = exam.questions.reduce(
+        (acc, question) => acc + question.points,
+        0
+      );
       setTotalMarks(sum);
     }
   };
@@ -107,15 +115,12 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
     });
   };
 
-
   const addNewInstruction = () => {
     setInstructions((prev) => [...prev, ""]);
   };
   const deleteInstruction = (index) => {
     setInstructions((prev) => prev.filter((_, i) => i !== index));
   };
-
-
 
   useEffect(() => {
     calculateTotalMarks();
@@ -132,6 +137,15 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
   };
 
   const saveExamDetails = async () => {
+    if (!exam?.duration || exam.duration < 10) {
+      toast.error("Exam duration must be at least 10 minutes.");
+      return;
+    }
+    if (exam.subject.length < 5 || exam.subject.length > 30) {
+      toast.error("Please enter subject of valid length");
+      return;
+    }
+
     try {
       const headers = {
         "Content-Type": "application/json",
@@ -139,7 +153,9 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
       };
 
       const result = await axios.put(
-        `${config.BACKEND_API || "http://localhost:8000"}/update-exam/${examId}`,
+        `${
+          config.BACKEND_API || "http://localhost:8000"
+        }/update-exam/${examId}`,
         {
           ...exam,
           startTime: new Date(`${examDate}T${examTime}`).toISOString(),
@@ -162,7 +178,6 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
       toast.error(e?.response?.data?.message || "Internal server error");
     }
   };
-
 
   const handleclosepage = () => {
     setIsclosepage(true);
@@ -204,6 +219,35 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
   };
 
   const saveQuestionUpdate = () => {
+    if (!selectedQuestion?.desc?.trim()) {
+      toast.error("Question text cannot be empty.");
+      return;
+    }
+
+    const uniqueOptions = new Set(
+      selectedQuestion.options.map((opt) => opt.trim())
+    );
+    if (uniqueOptions.size !== selectedQuestion.options.length) {
+      toast.error("Options must be unique.");
+      return;
+    }
+
+    if (selectedQuestion.options.length < 2) {
+      toast.error("A question must have at least two options.");
+      return;
+    }
+
+    if (!selectedQuestion.difficulty) {
+      toast.error("Please select a difficulty level.");
+      return;
+    }
+    if (
+      !selectedQuestion.difficulty ||
+      selectedQuestion.difficulty === "Select difficulty"
+    ) {
+      toast.error("Please select a difficulty level.");
+      return;
+    }
     setExam((prevExam) => ({
       ...prevExam,
       questions: prevExam.questions.map((q) =>
@@ -215,6 +259,29 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
   };
 
   const saveNewQuestion = () => {
+    if (!selectedQuestion?.desc?.trim()) {
+      toast.error("Question text cannot be empty.");
+      return;
+    }
+
+    const uniqueOptions = new Set(
+      selectedQuestion.options.map((opt) => opt.trim())
+    );
+    if (uniqueOptions.size !== selectedQuestion.options.length) {
+      toast.error("Options must be unique.");
+      return;
+    }
+
+    if (selectedQuestion.options.length < 2) {
+      toast.error("A question must have at least two options.");
+      return;
+    }
+
+    if (!selectedQuestion.difficulty) {
+      toast.error("Please select a difficulty level.");
+      return;
+    }
+
     setExam((prevExam) => ({
       ...prevExam,
       questions: [
@@ -259,10 +326,10 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
   const addNewQuestion = () => {
     setSelectedQuestion({
       desc: "",
-      options: ["Option 1", "Option 2"],
+      options: ["", ""],
       answer: 0,
       points: 1,
-      difficulty: "Easy",
+      difficulty: "",
     });
     setShowModal(true);
   };
@@ -278,7 +345,6 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
   const handleStatusChange = (e) => {
     setExamStatus(e.target.value);
   };
-  
 
   return (
     <div className="update-exam-div">
@@ -318,9 +384,9 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
             Exam Name:
             <input
               type="text"
-              name="name"
-              value={exam?.title}
-              onChange={(e) => setExam({ ...exam, name: e.target.value })}
+              name="title"
+              value={exam?.title || ""}
+              onChange={(e) => setExam({ ...exam, title: e.target.value })}
             />
           </label>
 
@@ -441,7 +507,9 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
         {showModal && selectedQuestion && (
           <div className="modal-overlay">
             <div className="modal-content">
-              <h3>{selectedQuestion.id ? "Edit Question" : "Add New Question"}</h3>
+              <h3>
+                {selectedQuestion.id ? "Edit Question" : "Add New Question"}
+              </h3>
               <label>
                 Question Text:
                 <textarea
@@ -458,7 +526,9 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
                       <input
                         type="text"
                         value={option}
-                        onChange={(e) => handleOptionUpdate(index, e.target.value)}
+                        onChange={(e) =>
+                          handleOptionUpdate(index, e.target.value)
+                        }
                       />
                       <input
                         type="radio"
@@ -497,15 +567,15 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
               <label>
                 Difficulty:
                 <select
-                  type="String"
-                  value={selectedQuestion?.difficulty}
+                  value={selectedQuestion?.difficulty || "Select difficulty"}
                   onChange={(e) =>
                     handleQuestionUpdate("difficulty", e.target.value)
                   }
                 >
-                  <option value="Easy" selected>
-                    Easy
+                  <option value="Select difficulty" disabled>
+                    Select difficulty
                   </option>
+                  <option value="Easy">Easy</option>
                   <option value="Medium">Medium</option>
                   <option value="Hard">Hard</option>
                 </select>
@@ -543,7 +613,9 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
                     <input
                       type="text"
                       value={instruction}
-                      onChange={(e) => handleInstructionChange(index, e.target.value)}
+                      onChange={(e) =>
+                        handleInstructionChange(index, e.target.value)
+                      }
                     />
                     <button
                       className="delete-instruction-btn"
@@ -554,7 +626,10 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
                   </li>
                 ))}
               </ul>
-              <button className="add-instruction-btn" onClick={addNewInstruction}>
+              <button
+                className="add-instruction-btn"
+                onClick={addNewInstruction}
+              >
                 Add New Instruction
               </button>
               <div className="modal-buttons">

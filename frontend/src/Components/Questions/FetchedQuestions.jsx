@@ -31,7 +31,24 @@ const FetchedQuestions = ({ subjects, onClose, setSubjects, setQuestions }) => {
     // Function to handle adding a new question
     const handleAddQuestion = async () => {
         setisloaderon(true);
-
+        if (points < 1) {
+            toast.error("Points should be at least 1.");
+            setisloaderon(false);
+            return;
+        }
+        const hasEmptyOption = currentOptions.some(option => option.trim() === "");
+    if (hasEmptyOption) {
+        toast.error("Options cannot be empty.");
+        setisloaderon(false);
+        return;
+    }
+        const optionsSet = new Set(currentOptions.map(option => option.trim()));
+    if (optionsSet.size !== currentOptions.length) {
+        toast.error("Options must be unique.");
+        setisloaderon(false);
+        return;
+        }
+        
         if (
             currentQuestion &&
             correctOption !== null &&

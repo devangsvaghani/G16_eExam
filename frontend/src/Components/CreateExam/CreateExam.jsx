@@ -4,22 +4,22 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import axios from "axios";
 import config from "../../config.js";
-import Loading from "../Loader/Loding.jsx"
-
+import Loading from "../Loader/Loding.jsx";
 
 const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
   const [step, setStep] = useState(1);
   const [filteredQuestions, setFilteredQuestions] = useState([]);
   const [isloaderon, setisloaderon] = useState(false);
 
-
   // Step 1: Basic Details
   const [examTitle, setExamTitle] = useState("");
   const [subject, setSubject] = useState("");
   const [degree, setDegree] = useState("B.Tech");
-  const [Branch, setBranch] = useState("");
   const [semester, setSemester] = useState("");
   const [totalmarks, settotalmarks] = useState(0);
+  const [examType, setExamType] = useState(""); // Default: "Select Exam Type"
+  const [status, setStatus] = useState(""); // Default: "Select Status"
+  const [Branch, setBranch] = useState(""); // Default: "Select Branch"
 
   const [instructions, setInstructions] = useState([]); // To store multiple instructions
 
@@ -27,8 +27,7 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
   const [duration, setDuration] = useState("");
   const [date, setDate] = useState("");
   const [startTime, setStartTime] = useState("");
-  const [difficulty, setDifficulty] = useState("Easy");
-
+  const [difficulty, setDifficulty] = useState("");
 
   // Step 3: Questions
   const [questions, setQuestions] = useState([]);
@@ -38,7 +37,6 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
   const [points, setpoints] = useState(null);
   const [currentOptions, setCurrentOptions] = useState(Array(2).fill(""));
   const [instructionInput, setInstructionInput] = useState(""); // For input field
-
 
   useEffect(() => {
     // Adjust the options array whenever the number of options changes
@@ -52,7 +50,8 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
   }, [numOptions]);
 
   const handleAddInstruction = () => {
-    if (!instructionInput.trim()) return toast.error("Instruction cannot be empty!");
+    if (!instructionInput.trim())
+      return toast.error("Instruction cannot be empty!");
     setInstructions([...instructions, instructionInput.trim()]);
     setInstructionInput(""); // Clear input
   };
@@ -80,18 +79,12 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
     toast.success("Exam cleared successfully!");
   };
 
-
-
   // Modal for Question Bank
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBankQuestions, setSelectedBankQuestions] = useState([]);
   const [showInstructionsModal, setShowInstructionsModal] = useState(false);
-  const [status, setStatus] = useState("Pending");
-  const [examType, setExamType] = useState("Insem1");
   const [batch, setBatch] = useState("");
-
-
 
   // Handlers
   const handleNext = () => {
@@ -101,11 +94,27 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
   const handlePrevious = () => {
     setStep((prevStep) => prevStep - 1);
   };
-  const allOptionsFilled = currentOptions.every((option) => option.trim() !== "");
+  const allOptionsFilled = currentOptions.every(
+    (option) => option.trim() !== ""
+  );
   const handleAddQuestion = () => {
     const parsedPoints = parseInt(points, 10);
-    if (!currentQuestion || correctOption === null || isNaN(parsedPoints) || !allOptionsFilled) {
+    if (
+      !currentQuestion ||
+      correctOption === null ||
+      isNaN(parsedPoints) ||
+      !allOptionsFilled
+    ) {
       toast.error("Please enter valid question details.");
+      return;
+    }
+    if (!difficulty) {
+      toast.error("Please enter difficulty of the question.");
+      return;
+    }
+    const uniqueOptions = new Set(currentOptions.map((opt) => opt.trim()));
+    if (uniqueOptions.size !== currentOptions.length) {
+      toast.error("Options must be unique.");
       return;
     }
     const newQuestion = {
@@ -140,13 +149,16 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
   };
 
   const handleQuestionSelect = (question) => {
-
-    if (selectedBankQuestions.some((q) => q.questionId === question.questionId)) {
+    if (
+      selectedBankQuestions.some((q) => q.questionId === question.questionId)
+    ) {
       // If question is already selected, deselect it
-      setSelectedBankQuestions(prev => prev.filter((q) => q.questionId !== question.questionId));
+      setSelectedBankQuestions((prev) =>
+        prev.filter((q) => q.questionId !== question.questionId)
+      );
     } else {
       // If not selected, add it to the selection
-      setSelectedBankQuestions(prev => [...prev, question]);
+      setSelectedBankQuestions((prev) => [...prev, question]);
     }
   };
 
@@ -156,7 +168,6 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
   };
 
   const mergeDateAndTimeIST = (date, time) => {
-
     // Combine the date and time strings
     const dateTimeString = `${date}T${time}:00`;
 
@@ -173,7 +184,6 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
   };
 
   const handleSubmitExam = async () => {
-
     if (examTitle && subject && Branch && semester && questions.length) {
       const examData = {
         title: examTitle,
@@ -187,15 +197,44 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
         total_points: totalmarks,
         difficulty,
         instructions, // Pass the array of instructions
-        examType: examType == "Insem 1" ? (1) : (examType == "Insem 2" ? (2) : (3)),
+        examType: examType == "Insem 1" ? 1 : examType == "Insem 2" ? 2 : 3,
         status, // Include status here
       };
-
+      if (!examType || examType === "Select Examtype") {
+        toast.error("Please select a valid Exam Type.");
+        return;
+      }
+      if (duration < 10) {
+        toast.error("Duration should be greater than 10 minutes");
+        return;
+      }
+      if (!status || status === "Select Status") {
+        toast.error("Please select a valid Exam Status.");
+        return;
+      }
+      if (!Branch || Branch === "Select Branch") {
+        toast.error("Please select a valid Branch.");
+        return;
+      }
+      if (
+        examTitle.length < 5 ||
+        examTitle.length > 30 ||
+        subject.length < 5 ||
+        subject.length > 50
+      ) {
+        toast.error(
+          "Please ensure the Exam Title and Subject are within the required character limits."
+        );
+        return;
+      }
+      if (batch < 2020 || batch > 2028) {
+        toast.error("Batch must be between 2020 and 2028.");
+        return;
+      }
       console.log(examData);
 
+      //   console.log(examData);
 
-    //   console.log(examData);
-      
       setisloaderon(true);
       try {
         const headers = {
@@ -204,8 +243,7 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
         };
 
         const result = await axios.post(
-          (config.BACKEND_API || "http://localhost:8000") +
-          "/create-exam",
+          (config.BACKEND_API || "http://localhost:8000") + "/create-exam",
           examData,
           { headers }
         );
@@ -235,7 +273,6 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
         setQuestions([]);
         setStep(1);
         setBatch(""); // Reset batch
-
       } catch (e) {
         console.log(e);
         toast.error(e?.response?.data?.message || "Internal server error");
@@ -248,22 +285,25 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
 
   useEffect(() => {
     setFilteredQuestions(
-      questionBank.filter((q) =>
-        q.desc.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        q.subject.toLowerCase() === subject.toLowerCase() // Match subject exactly
+      questionBank.filter(
+        (q) =>
+          q.desc.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          q.subject.toLowerCase() === subject.toLowerCase() // Match subject exactly
       )
     );
-  }, [questionBank, searchQuery, subject]); 
+  }, [questionBank, searchQuery, subject]);
 
   useEffect(() => {
-    const sum = questions.reduce((acc, question) => acc + (question.points || 0), 0);
+    const sum = questions.reduce(
+      (acc, question) => acc + (question.points || 0),
+      0
+    );
     settotalmarks(sum); // sum will always be a number
   }, [questions]);
-  
 
   return (
     <div className="create-exam-container">
-    {isloaderon && <Loading/>}
+      {isloaderon && <Loading />}
       <div className="create-exam-form">
         {step === 1 && (
           <div className="step-one">
@@ -275,7 +315,13 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
               placeholder="Exam Title"
             />
 
-            <select value={examType} onChange={(e) => setExamType(e.target.value)}>
+            <select
+              value={examType}
+              onChange={(e) => setExamType(e.target.value)}
+            >
+              <option value="" disabled>
+                Select Examtype
+              </option>
               <option value="Insem1">Insem 1</option>
               <option value="Insem2">Insem 2</option>
               <option value="Endsem">Endsem</option>
@@ -286,7 +332,7 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
               onChange={(e) => setBatch(e.target.value)}
               placeholder="Batch (e.g., 2022)"
               min="1900" // Optional: set minimum year for validation
-              step="1"   // Optional: increments by 1
+              step="1" // Optional: increments by 1
             />
             <input
               type="text"
@@ -294,10 +340,7 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
               onChange={(e) => setSubject(e.target.value)}
               placeholder="Subject"
             />
-            <select
-              value={Branch}
-              onChange={(e) => setBranch(e.target.value)}
-            >
+            <select value={Branch} onChange={(e) => setBranch(e.target.value)}>
               <option value="" disabled>
                 Select Branch
               </option>
@@ -305,12 +348,8 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
                 Information and Communication Technology
               </option>
               <option value="CS">Computer Science</option>
-              <option value="MnC">
-                Mathematics and Computation
-              </option>
-              <option value="EVD">
-                Electronics and VLSI Design
-              </option>
+              <option value="MnC">Mathematics and Computation</option>
+              <option value="EVD">Electronics and VLSI Design</option>
             </select>
             <input
               type="number"
@@ -324,16 +363,15 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
               placeholder="Semester"
               min="1"
             />
-            <label>
-              <strong>Status:</strong>
-            </label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-            >
+
+            <select value={status} onChange={(e) => setStatus(e.target.value)}>
+              <option value="" disabled>
+                Select Status
+              </option>
               <option value="Published">Published</option>
               <option value="Pending">Pending</option>
             </select>
+
             <div className="instructions-input">
               <input
                 type="text"
@@ -355,7 +393,7 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
               placeholder="Duration (in minutes)"
-              min="1"
+              min="10"
               step="1"
             />
             <input
@@ -373,7 +411,6 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
           </div>
         )}
 
-
         {step === 3 && (
           <div className="step-three">
             <h2>Step 3: Add Questions</h2>
@@ -388,7 +425,7 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
               value={points}
               onChange={(e) => {
                 const value = parseInt(e.target.value);
-                if ((value >= 1) || e.target.value === "") {
+                if (value >= 1 || e.target.value === "") {
                   setpoints(e.target.value); // Allow positive values or empty string
                 }
               }}
@@ -401,7 +438,7 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
               value={numOptions}
               onChange={(e) => {
                 const value = parseInt(e.target.value);
-                if ((value >= 2) || e.target.value === "") {
+                if (value >= 2 || e.target.value === "") {
                   setNumOptions(e.target.value); // Allow positive values or empty string
                 }
               }}
@@ -412,10 +449,14 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
               value={difficulty}
               onChange={(e) => setDifficulty(e.target.value)}
             >
+              <option value="" disabled>
+                Select Difficulty
+              </option>
               <option value="Easy">Easy</option>
               <option value="Medium">Medium</option>
               <option value="Hard">Hard</option>
             </select>
+
             <div className="option-div">
               {Array.from({ length: numOptions }).map((_, index) => (
                 <div key={index} className="option-input">
@@ -432,7 +473,9 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
                     value={currentOptions[index] || ""}
                     onChange={(e) =>
                       setCurrentOptions((prevOptions) =>
-                        prevOptions.map((opt, i) => (i === index ? e.target.value : opt))
+                        prevOptions.map((opt, i) =>
+                          i === index ? e.target.value : opt
+                        )
                       )
                     }
                     placeholder={`Option ${index + 1}`}
@@ -441,10 +484,18 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
               ))}
             </div>
 
-            <button className="create-exam-btn1" onClick={handleAddQuestion}>Add Question</button>
-            <button className="create-exam-btn1" onClick={handleOpenModal}>Add from Question Bank</button>
-            <button className="create-exam-btn1" onClick={handlePrevious}>Previous</button>
-            <button className="create-exam-btn1" onClick={handleSubmitExam}>Submit Exam</button>
+            <button className="create-exam-btn1" onClick={handleAddQuestion}>
+              Add Question
+            </button>
+            <button className="create-exam-btn1" onClick={handleOpenModal}>
+              Add from Question Bank
+            </button>
+            <button className="create-exam-btn1" onClick={handlePrevious}>
+              Previous
+            </button>
+            <button className="create-exam-btn1" onClick={handleSubmitExam}>
+              Submit Exam
+            </button>
           </div>
         )}
       </div>
@@ -459,26 +510,53 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
           >
             View Instructions
           </button>
-          <p><strong>Title:</strong> {examTitle}</p>
-          <p><strong>Exam Type:</strong> {examType}</p>
-          <p><strong>Subject:</strong> {subject}</p>
-          <p><strong>Branch:</strong> {Branch}</p>
-          <p><strong>Semester:</strong> {semester}</p>
-          <p><strong>Duration:</strong> {duration}</p>
-          <p><strong>Date:</strong> {date}</p>
-          <p><strong>Status:</strong> {status}</p>
-          <p><strong>Start Time:</strong> {startTime}</p>
-          <p><strong>Total Marks:</strong> {totalmarks}</p>
-          <p><strong>Batc:</strong> {batch}</p>
+          <p>
+            <strong>Title:</strong> {examTitle}
+          </p>
+          <p>
+            <strong>Exam Type:</strong> {examType}
+          </p>
+          <p>
+            <strong>Subject:</strong> {subject}
+          </p>
+          <p>
+            <strong>Branch:</strong> {Branch}
+          </p>
+          <p>
+            <strong>Semester:</strong> {semester}
+          </p>
+          <p>
+            <strong>Duration:</strong> {duration}
+          </p>
+          <p>
+            <strong>Date:</strong> {date}
+          </p>
+          <p>
+            <strong>Status:</strong> {status}
+          </p>
+          <p>
+            <strong>Start Time:</strong> {startTime}
+          </p>
+          <p>
+            <strong>Total Marks:</strong> {totalmarks}
+          </p>
+          <p>
+            <strong>Batch:</strong> {batch}
+          </p>
           <h4>Questions:</h4>
           {questions.map((q, index) => (
             <div key={index} className="question-preview">
               <p>
-                Q{index + 1}: {q.desc} (Points: {q.points} Difficulty: {q.difficulty})
-                <button className="exam-preview-deletebtn" onClick={() => handleDeleteQuestion(index)}>Delete</button>
+                Q{index + 1}: {q.desc} (Points: {q.points} Difficulty:{" "}
+                {q.difficulty})
+                <button
+                  className="exam-preview-deletebtn"
+                  onClick={() => handleDeleteQuestion(index)}
+                >
+                  Delete
+                </button>
               </p>
               <ul>
-
                 {q.options.map((option, i) => (
                   <li
                     key={i}
@@ -509,13 +587,14 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
 
               <div className="question-bank">
                 {filteredQuestions.map((question) => {
-
                   return (
                     <label key={question.questionId} className="question-item">
                       <input
                         className="question-item-input"
                         type="checkbox"
-                        checked={selectedBankQuestions.some((q) => q.questionId === question.questionId)}
+                        checked={selectedBankQuestions.some(
+                          (q) => q.questionId === question.questionId
+                        )}
                         onChange={() => {
                           handleQuestionSelect(question);
                         }}
@@ -524,15 +603,15 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
                     </label>
                   );
                 })}
-
               </div>
 
-              <button onClick={handleAddSelectedQuestions}>Add Selected Questions</button>
+              <button onClick={handleAddSelectedQuestions}>
+                Add Selected Questions
+              </button>
               <button onClick={handleCloseModal}>Close</button>
             </div>
           </div>
         )}
-
       </div>
       {showInstructionsModal && (
         <div className="modal-overlay">
@@ -556,7 +635,6 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
               </div>
             ) : (
               <p className="no-instructions-message">No instructions added.</p>
-
             )}
             <button
               className="modal-close-btn"
@@ -567,8 +645,6 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
           </div>
         </div>
       )}
-
-
     </div>
   );
 };

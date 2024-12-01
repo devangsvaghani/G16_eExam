@@ -32,66 +32,99 @@ const CreateStudent = ({ onClose, setStudents, toast }) => {
         });
     };
 
-    // Validate form data and submit
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const contactRegex = /^\d{10}$/;
+    
+        const contactRegex = /^\d{10}$/; // Must be 10 digits
+        const nameRegex = /^[A-Za-z\s]{1,30}$/; // Letters and spaces, 1-30 characters
         const currentDate = new Date();
-        if (!contactRegex.test(formData.contact)) {
-            toast.error("Contact number must be 10 digits");
+        const currentYear = currentDate.getFullYear();
+    
+        // Validate firstname
+        if (!nameRegex.test(formData.firstname.trim())) {
+            toast.error("First Name must only contain letters and be between 1 and 30 characters.");
             return;
         }
+    
+        // Validate middlename (if provided)
+        if (formData.middlename.trim() && !nameRegex.test(formData.middlename.trim())) {
+            toast.error("Middle Name must only contain letters and be between 1 and 30 characters.");
+            return;
+        }
+    
+        // Validate lastname
+        if (!nameRegex.test(formData.lastname.trim())) {
+            toast.error("Last Name must only contain letters and be between 1 and 30 characters.");
+            return;
+        }
+    
+        // Validate contact number
+        if (!contactRegex.test(formData.contact.trim())) {
+            toast.error("Contact number must be 10 digits.");
+            return;
+        }
+    
+        // Validate student type
         if (!formData.studentType) {
-            toast.error("Please select your graduation type (UG or PG)");
+            toast.error("Please select your graduation type (UG or PG).");
             return;
         }
+    
+        // Validate admission year
+        if (formData.admissionYear < currentYear) {
+            toast.error("Admission year cannot be in the past.");
+            return;
+        }
+    
+        // Validate date of birth
         const dob = new Date(formData.dob);
         if (dob >= currentDate) {
-            toast.error("Date of birth must be in the past");
+            toast.error("Date of birth must be in the past.");
             return;
         }
+    
+        // All validations passed, proceed with the submission
         setisloaderon(true);
-
+    
         try {
-
             const headers = {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${Cookies.get("token")}`,
             };
-
-            const result = await axios.post((config.BACKEND_API || "http://localhost:8000") + "/create-student", {
-                firstname: formData.firstname,
-                lastname: formData.lastname,
-                middlename: formData.middlename,
-                dob: formData.dob,
-                mobileno: formData.contact,
-                email: formData.email,
-                gender: formData.gender,
-                batch: formData.admissionYear,
-                branch: formData.branch,
-                graduation: formData.studentType
-            }, { headers });
-
-            // console.log((result));
-
+    
+            const result = await axios.post(
+                (config.BACKEND_API || "http://localhost:8000") + "/create-student",
+                {
+                    firstname: formData.firstname.trim(),
+                    lastname: formData.lastname.trim(),
+                    middlename: formData.middlename.trim(),
+                    dob: formData.dob,
+                    mobileno: formData.contact.trim(),
+                    email: formData.email.trim(),
+                    gender: formData.gender,
+                    batch: formData.admissionYear,
+                    branch: formData.branch,
+                    graduation: formData.studentType,
+                },
+                { headers }
+            );
+    
             if (result.status !== 200) {
-                toast.error((result?.data?.message) || ("Internal server error"));
+                toast.error(result?.data?.message || "Internal server error");
                 setisloaderon(false);
                 return;
             }
-
+    
             toast.success(result.data.message);
             onClose();
-
-            setStudents(prev => [...prev, result.data.user]);
+            setStudents((prev) => [...prev, result.data.user]);
         } catch (e) {
             console.log(e);
-
-            toast.error((e?.response?.data?.message) || ("Internal server error"));
+            toast.error(e?.response?.data?.message || "Internal server error");
         }
         setisloaderon(false);
     };
-
+    
     // Reset form data
     const handleClose = () => {
         setFormData({
