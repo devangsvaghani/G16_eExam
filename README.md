@@ -74,8 +74,8 @@ eExam is a comprehensive platform designed to streamline online examinations. It
 ---
 
 ## Demo
-•⁠  ⁠*YouTube Demo*: <a href="https://youtu.be/1LJDCQ3Ihsc" target="_blank">eExam Demo</a>
-•⁠  ⁠*Live Website*: <a href="https://eexam-five.vercel.app/" target="_blank">eExam Website</a>
+- **YouTube Demo**: [eExam_Demo](https://youtu.be/1LJDCQ3Ihsc)
+- **Live Website**: [eExam_web](https://eexam-five.vercel.app/)
 
 ---
 
