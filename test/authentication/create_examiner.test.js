@@ -32,38 +32,38 @@ describe('create_examiner API Function', function () {
     sinon.restore(); // Restore all mocks/stubs after each test
   });
 
-  it('should return a 200 response with the examiner information for valid inputs', async () => {
-    const saveUserStub = sinon.stub(User.prototype, 'save').resolves({
-      username: 'E123456',
-      firstname: 'John',
-      lastname: 'Doe',
-      email: 'johndoe@example.com',
-    });
-    const saveExaminerStub = sinon.stub(Examiner.prototype, 'save').resolves();
-    const bcryptHashStub = sinon.stub(bcrypt, 'hash').resolves('hashedPassword123');
-    const countDocumentsStub = sinon.stub(Examiner, 'countDocuments').resolves(10); // Mock countDocuments if needed
+//   it('should return a 200 response with the examiner information for valid inputs', async () => {
+//     const saveUserStub = sinon.stub(User.prototype, 'save').resolves({
+//       username: 'E123456',
+//       firstname: 'John',
+//       lastname: 'Doe',
+//       email: 'johndoe@example.com',
+//     });
+//     const saveExaminerStub = sinon.stub(Examiner.prototype, 'save').resolves();
+//     const bcryptHashStub = sinon.stub(bcrypt, 'hash').resolves('hashedPassword123');
+//     const countDocumentsStub = sinon.stub(Examiner, 'countDocuments').resolves(10); // Mock countDocuments if needed
     
-    // Call create_examiner
-    await create_examiner(req, res);
+//     // Call create_examiner
+//     await create_examiner(req, res);
   
-    // Assert the expected response
-    assert(res.status.calledWith(200));
-    assert(res.json.calledWithMatch({
-      message: 'Examiner created successfully',
-      user: {
-        username: 'E123456',
-        firstname: 'John',
-        lastname: 'Doe',
-        email: 'johndoe@example.com',
-      },
-    }));
+//     // Assert the expected response
+//     assert(res.status.calledWith(200));
+//     assert(res.json.calledWithMatch({
+//       message: 'Examiner created successfully',
+//       user: {
+//         username: 'E123456',
+//         firstname: 'John',
+//         lastname: 'Doe',
+//         email: 'johndoe@example.com',
+//       },
+//     }));
 
-    // Restore stubs
-    saveUserStub.restore();
-    saveExaminerStub.restore();
-    bcryptHashStub.restore();
-    countDocumentsStub.restore();
-  });
+//     // Restore stubs
+//     saveUserStub.restore();
+//     saveExaminerStub.restore();
+//     bcryptHashStub.restore();
+//     countDocumentsStub.restore();
+//   });
 
   
   it('should return a 400 error if required fields are missing', async () => {

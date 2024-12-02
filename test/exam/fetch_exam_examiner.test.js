@@ -24,7 +24,9 @@ describe("fetch_exam_examiner API Function", function () {
     });
 
     it("should return a 404 if the exam is not found", async () => {
-        sinon.stub(Exam, "findOne").resolves(null);
+        const findOneStub = sinon.stub(Exam, "findOne").returns({
+            lean: sinon.stub().resolves(null)
+        });
 
         await fetch_exam_examiner(req, res);
 
@@ -38,7 +40,9 @@ describe("fetch_exam_examiner API Function", function () {
             creatorUsername: "otherExaminer",
         };
 
-        sinon.stub(Exam, "findOne").resolves(mockExam);
+        sinon.stub(Exam, "findOne").returns({
+            lean: sinon.stub().resolves(mockExam)
+        });
 
         await fetch_exam_examiner(req, res);
 
@@ -61,10 +65,12 @@ describe("fetch_exam_examiner API Function", function () {
         req.params = { examId: 1 };  // Match stubbed examId
     
         // Stub database calls
-        sinon.stub(Exam, "findOne").resolves({
-            examId: 1,
-            creatorUsername: "examinerUsername",
-            questions: [101, 102],
+        sinon.stub(Exam, "findOne").returns({
+            lean: sinon.stub().resolves({
+                examId: 1,
+                creatorUsername: "examinerUsername",
+                questions: [101, 102],
+            })
         });
     
         sinon.stub(Question, "find").resolves([
@@ -76,7 +82,7 @@ describe("fetch_exam_examiner API Function", function () {
         await fetch_exam_examiner(req, res);
     
         // Log to debug
-        console.log("res.status calls:", res.status.getCalls());
+        // console.log("res.status calls:", res.status.getCalls());
     
         // Assertions
         assert(res.status.calledWith(200), "Expected status 200 but did not get it.");
@@ -104,7 +110,7 @@ describe("fetch_exam_examiner API Function", function () {
             startTime: "2024-11-25T10:00:00Z",
         };
 
-        sinon.stub(Exam, "findOne").resolves(mockExam);
+        sinon.stub(Exam, "findOne").returns({ lean: sinon.stub().resolves(mockExam) });
         sinon.stub(Question, "find").throws(new Error("Database error"));
 
         await fetch_exam_examiner(req, res);
@@ -112,4 +118,5 @@ describe("fetch_exam_examiner API Function", function () {
         assert(res.status.calledWith(500));
         assert(res.json.calledWith({ message: "Database error" }));
     });
+
 });

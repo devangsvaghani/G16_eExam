@@ -8,51 +8,69 @@ describe('get_past_exams_5_student API Function', () => {
     let req, res;
 
     beforeEach(() => {
-        // Mock the response object
         res = {
             status: sinon.stub().returnsThis(),
             json: sinon.stub().returnsThis(),
         };
 
-        // Mock the request object
         req = {
             user: {
-                username: 'testStudent', // Set a default username for the tests
+                username: 'testStudent', 
             },
         };
     });
 
     afterEach(() => {
-        sinon.restore(); // Restore stubs after each test
+        sinon.restore();
     });
 
-    it('should return 404 if no username found', async () => {
-        req.user.username = undefined; // Simulate missing username
+    it('should return 404 if no username is found', async () => {
+        req.user.username = undefined;
 
         await get_past_exams_5_student(req, res);
 
-        // Assertions
         assert(res.status.calledOnceWith(404));
-        assert(res.json.calledWith({ message: "No Username Found" }));
+        assert(res.json.calledOnceWith({message: "No Username Found"}));
     });
 
     it('should return 404 if no student found for the username', async () => {
-        sinon.stub(Student, 'findOne').resolves(null); // Simulate no student found
+        sinon.stub(Student, 'findOne').resolves(null);
 
         await get_past_exams_5_student(req, res);
 
-        // Assertions
         assert(res.status.calledOnceWith(404));
-        assert(res.json.calledWith({ message: "No Student Found" }));
+        assert(res.json.calledOnceWith({message: "No Student Found"}));
     });
 
     it('should return 500 if there is a server error', async () => {
-        sinon.stub(Student, 'findOne').throws(new Error('Database error')); // Simulate a database error
+        sinon.stub(Student, 'findOne').throws(new Error('Database error'));
 
         await get_past_exams_5_student(req, res);
 
-        // Assertions
         assert(res.status.calledOnceWith(500));
-        assert(res.json.calledWithMatch({ message: 'Database error' }));
+        assert(res.json.calledOnceWithMatch({ message: 'Database error' }));
+    });
+
+    it('should return 200 and past exams if successful', async () => {
+        const student = { username: 'testStudent', batch: '2021', branch: 'CSE' };
+        const pastExams = [
+            { _id: 'exam1', startTime: new Date(), duration: 60, status: 'Published' },
+            { _id: 'exam2', startTime: new Date(), duration: 60, status: 'Published' },
+        ];
+
+        sinon.stub(Student, 'findOne').resolves(student);
+        sinon.stub(Exam, 'find').returns({
+            sort: () => ({
+                limit: sinon.stub().resolves(pastExams)
+            })
+        });
+
+        await get_past_exams_5_student(req, res);
+
+        assert(res.status.calledOnceWith(200));
+        assert(res.json.calledOnceWith({
+            message: "Past exams retrieved successfully.",
+            pastExams,
+        }));
     });
 });
