@@ -80,7 +80,26 @@ function ExaminerProfile({ onClose, toast, username, setExaminers }) {
 
     const handleSaveProfile = async (e) => {
         e.preventDefault();
-
+        
+        const today = new Date();
+        const dob = new Date(userData.dob);
+        // Check first name, middle name, and last name length
+        if (
+            userData.firstname.length < 1 ||
+            userData.firstname.length > 30 ||
+            userData.middlename.length < 1 ||
+            userData.middlename.length > 30 ||
+            userData.lastname.length < 1 ||
+            userData.lastname.length > 30
+        ) {
+            toast.error("First name, middle name, and last name must be between 1 and 30 characters");
+            return;
+        }
+        // Check date of birth
+        if (dob >= today) {
+            toast.error("Date of birth must be before the current date");
+            return;
+        }
         const contactRegex = /^\d{10}$/;
         setisloaderon(true);
         if (!contactRegex.test(userData.mobileno)) {

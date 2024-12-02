@@ -216,14 +216,17 @@ const CreateExam = ({ onClose, questionBank, toast, fetchAgain }) => {
         toast.error("Please select a valid Branch.");
         return;
       }
+      if(examTitle.length < 5 ||
+        examTitle.length > 50)
+        {
+          toast.error("ExamTitle Must be between 5 to 30 character!!");
+        }
       if (
-        examTitle.length < 5 ||
-        examTitle.length > 30 ||
         subject.length < 5 ||
         subject.length > 50
       ) {
         toast.error(
-          "Please ensure the Exam Title and Subject are within the required character limits."
+          "Subject Must be between 5 to 30 character!!"
         );
         return;
       }

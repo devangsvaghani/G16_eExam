@@ -39,7 +39,7 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
 
       const result = await axios.get(
         (config.BACKEND_API || "http://localhost:8000") +
-          `/fetch-exam-examiner/${examId}`,
+        `/fetch-exam-examiner/${examId}`,
         { headers }
       );
 
@@ -79,7 +79,7 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
 
       const result = await axios.delete(
         (config.BACKEND_API || "http://localhost:8000") +
-          `/delete-exam/${examId}`,
+        `/delete-exam/${examId}`,
         { headers }
       );
 
@@ -141,10 +141,11 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
       toast.error("Exam duration must be at least 10 minutes.");
       return;
     }
-    if (exam.subject.length < 5 || exam.subject.length > 30) {
-      toast.error("Please enter subject of valid length");
+    if (!exam?.title || exam.title.length < 5 || exam.title.length > 50) {
+      toast.error("Exam name must be between 5 to 50 characters.");
       return;
     }
+
 
     try {
       const headers = {
@@ -153,8 +154,7 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
       };
 
       const result = await axios.put(
-        `${
-          config.BACKEND_API || "http://localhost:8000"
+        `${config.BACKEND_API || "http://localhost:8000"
         }/update-exam/${examId}`,
         {
           ...exam,
@@ -379,6 +379,16 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
             className="readonly-field"
           />
         </label>
+        <label>
+          Subject:
+          <input
+            type="text"
+            name="subject"
+            value={exam?.subject}
+            readOnly
+            className="readonly-field"
+          />
+        </label>
         <div className="exam-details">
           <label>
             Exam Name:
@@ -422,15 +432,6 @@ const UpdateExam = ({ onClose, toast, examId, fetchAgain }) => {
 
           <label>
             Total Marks: <b>{totalMarks}</b>
-          </label>
-
-          <label>
-            Subject:
-            <textarea
-              name="subject"
-              value={exam?.subject}
-              onChange={(e) => setExam({ ...exam, subject: e.target.value })}
-            />
           </label>
           <label>
             Status:

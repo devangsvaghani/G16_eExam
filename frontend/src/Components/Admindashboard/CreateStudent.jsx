@@ -36,7 +36,7 @@ const CreateStudent = ({ onClose, setStudents, toast }) => {
         e.preventDefault();
     
         const contactRegex = /^\d{10}$/; // Must be 10 digits
-        const nameRegex = /^[A-Za-z\s]{1,30}$/; // Letters and spaces, 1-30 characters
+        const nameRegex = /^[A-Za-z]{1,30}$/; // Only letters, 1-30 characters, no spaces
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
     

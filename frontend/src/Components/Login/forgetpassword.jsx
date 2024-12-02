@@ -58,31 +58,57 @@ const ForgetPassword = ({ onClose }) => {
     const handleSubmitOtp = async (e) => {
         e.preventDefault();
         setisloaderon(true);
-
+    
         if (!otp || !newPassword || !confirmPassword) {
             toast.error("Fields should not be empty");
             setisloaderon(false);
             return;
         }
-
+    
+        
+    
+        // Password validation checks
+        if (newPassword.length < 8 || newPassword.length > 30) {
+            toast.error("Password must be between 8 and 30 characters long");
+            setisloaderon(false);
+            return;
+        }
+    
+        if (!/[a-z]/.test(newPassword)) {
+            toast.error("Password must contain at least one lowercase letter");
+            setisloaderon(false);
+            return;
+        }
+    
+        if (!/[A-Z]/.test(newPassword)) {
+            toast.error("Password must contain at least one uppercase letter");
+            setisloaderon(false);
+            return;
+        }
+    
+        if (!/\d/.test(newPassword)) {
+            toast.error("Password must contain at least one number");
+            setisloaderon(false);
+            return;
+        }
+    
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(newPassword)) {
+            toast.error("Password must contain at least one special character");
+            setisloaderon(false);
+            return;
+        }
         if (newPassword !== confirmPassword) {
             toast.error("Passwords do not match");
             setisloaderon(false);
             return;
         }
-
-        if (newPassword.length < 8) {
-            toast.error("Password length should be at least 8");
-            setisloaderon(false);
-            return;
-        }
-
+    
         try {
             const results = await axios.post(
                 (config.BACKEND_API || "http://localhost:8000") + "/verify-otp",
                 { email, otp, password: newPassword }
             );
-
+    
             if (results.status === 200) {
                 toast.success(results.data.message);
                 setTimeout(() => {
@@ -96,7 +122,8 @@ const ForgetPassword = ({ onClose }) => {
         }
         setisloaderon(false);
     };
-
+    
+    
     const handleResendOtp = async () => {
         setisloaderon(true);
         if (resendTimer > 0) return;

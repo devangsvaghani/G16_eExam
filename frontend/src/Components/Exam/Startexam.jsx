@@ -194,9 +194,9 @@ const StartExam = () => {
             <footer className="footer">
                 <p>
                     For technical support, contact:{" "}
-                    <a href="mailto:support@example.com">support@example.com</a>
+                    <a href="mailto:admin@daiict.ac.in">admin@daiict.ac.in</a>
                 </p>
-                <p>&copy; 2024 Mathematics Department, Example University</p>
+                <p>&copy;Dhirubhai Ambani Institute Of Information and Communication Technology</p>
             </footer>
         </div>
     );

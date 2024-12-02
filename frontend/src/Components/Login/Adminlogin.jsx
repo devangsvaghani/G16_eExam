@@ -58,11 +58,12 @@ const Login = () => {
         toast.success("Login Successful");
         navigate("/admin");
       }else{
+        
         toast.error(results.data.message);
       }
     } catch (e) {
       console.log(e);
-      toast.error("Internal server error");
+      toast.error((e?.response?.data?.message) || ("Internal server error"));
     }
   
     setisloaderon(false);

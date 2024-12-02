@@ -30,8 +30,45 @@ const CreateExaminer = ({ onClose, setExaminers, toast }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Regular expression to match exactly 10 digits
-        const contactRegex = /^\d{10}$/;
+        const nameRegex = /^[A-Za-z]{1,30}$/; // Only letters, 1-30 characters, no spaces
+        const contactRegex = /^\d{10}$/; // Must be 10 digits
+        const currentDate = new Date(); // Today's date for comparison
+    
+        // Validate firstname
+        if (!nameRegex.test(formData.firstname.trim())) {
+            toast.error("First Name must only contain letters and be between 1 and 30 characters.");
+            return;
+        }
+    
+        
+        // Validate middlename (if provided)
+        if (formData.middlename.trim() && !nameRegex.test(formData.middlename.trim())) {
+            toast.error("Middle Name must only contain letters and be between 1 and 30 characters.");
+            return;
+        }
+    
+        // Validate lastname
+        if (!nameRegex.test(formData.lastname.trim())) {
+            toast.error("Last Name must only contain letters and be between 1 and 30 characters.");
+            return;
+        }
+    
+        // Validate contact number
+        if (!contactRegex.test(formData.mobileno.trim())) {
+            toast.error("Mobile number must be 10 digits.");
+            return;
+        }
+    
+        // Validate date of birth
+        const dob = new Date(formData.dob); // Convert dob string to Date object
+        if (isNaN(dob.getTime()) || dob > currentDate) {
+            toast.error("Date of birth must be a valid date in the past.");
+            return;
+        }
+        if (!formData.username.trim() || formData.username.length > 30) {
+            toast.error("Username must be between 1 and 30 characters.");
+            return;
+        }
 
         if (!contactRegex.test(formData.mobileno)) {
             toast.error("Contact number must be 10 digits");

@@ -34,7 +34,7 @@ function StudentProf({ onClose, toast, username, setStudents }) {
             navigate("/");
         }
 
-        if(!username){
+        if (!username) {
             toast.error("Profile not found");
             navigate(-1);
         }
@@ -57,7 +57,7 @@ function StudentProf({ onClose, toast, username, setStudents }) {
 
             const result = await axios.get(
                 (config.BACKEND_API || "http://localhost:8000") +
-                    `/get-student/${username}`,
+                `/get-student/${username}`,
                 { headers }
             );
 
@@ -89,6 +89,34 @@ function StudentProf({ onClose, toast, username, setStudents }) {
 
     const handleSaveProfile = async (e) => {
         e.preventDefault();
+        const today = new Date();
+        const dob = new Date(userData.dob);
+        // Check first name, middle name, and last name length
+        if (
+            userData.firstname.length < 1 ||
+            userData.firstname.length > 30 ||
+            userData.middlename.length < 1 ||
+            userData.middlename.length > 30 ||
+            userData.lastname.length < 1 ||
+            userData.lastname.length > 30
+        ) {
+            toast.error("First name, middle name, and last name must be between 1 and 30 characters");
+            return;
+        }
+        // Check date of birth
+        if (dob >= today) {
+            toast.error("Date of birth must be before the current date");
+            return;
+        }
+
+        // Check if batch is in the future (if batch field exists in userData)
+        if (userData.batch) {
+            const batchYear = parseInt(userData.batch, 10);
+            if (batchYear < today.getFullYear()) {
+                toast.error("Batch year must be in the future");
+                return;
+            }
+        }
         setisloaderon(true);
 
 
@@ -113,7 +141,7 @@ function StudentProf({ onClose, toast, username, setStudents }) {
 
             const result = await axios.put(
                 (config.BACKEND_API || "http://localhost:8000") +
-                    `/update-student/${username}`,
+                `/update-student/${username}`,
                 userData,
                 { headers }
             );
@@ -163,7 +191,7 @@ function StudentProf({ onClose, toast, username, setStudents }) {
 
     return (
         <div className="studentpdiv">
-        {isloaderon && <Loading/>}
+            {isloaderon && <Loading />}
             <div id="profilecontainer">
                 <div id="profile-card">
                     <div id="content">
@@ -329,14 +357,14 @@ function StudentProf({ onClose, toast, username, setStudents }) {
                             <p id="profile-email">{userData.email}</p>
                         </div>
                         <div className="profilebtns">
-                            { !isAdmin && 
-                            <button
-                                type="button"
-                                id="reset-button"
-                                onClick={handleresetpass}
-                            >
-                                Reset Password
-                            </button>
+                            {!isAdmin &&
+                                <button
+                                    type="button"
+                                    id="reset-button"
+                                    onClick={handleresetpass}
+                                >
+                                    Reset Password
+                                </button>
                             }
                             {isAdmin && ( // Only render the "Edit Profile" button if the user is an admin
                                 <button
