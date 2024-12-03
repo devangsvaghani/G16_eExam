@@ -7,14 +7,25 @@ export const generate_otp = () => {
     return otp;
 }
 
-// Generate 8 length random password
+// Generate 8 length random password with at least one special character, one uppercase letter, one lowercase letter, and one digit
 export const generate_password = () => {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const upperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lowerCase = 'abcdefghijklmnopqrstuvwxyz';
+    const digits = '0123456789';
+    const specialChars = '!@#$%^&*()_+[]{}|;:,.<>?';
+    const allChars = upperCase + lowerCase + digits + specialChars;
+
     let password = '';
-    for (let i = 0; i < 8; i++) {
-        password += characters.charAt(Math.floor(Math.random() * characters.length));
+    password += upperCase.charAt(Math.floor(Math.random() * upperCase.length));
+    password += lowerCase.charAt(Math.floor(Math.random() * lowerCase.length));
+    password += digits.charAt(Math.floor(Math.random() * digits.length));
+    password += specialChars.charAt(Math.floor(Math.random() * specialChars.length));
+
+    for (let i = 4; i < 8; i++) {
+        password += allChars.charAt(Math.floor(Math.random() * allChars.length));
     }
-    return password;
+
+    return password.split('').sort(() => 0.5 - Math.random()).join('');
 }
 
 export const generate_student_id = (batch, programType, studentNo) => {
